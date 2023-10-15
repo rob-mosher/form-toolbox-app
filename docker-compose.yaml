@@ -1,0 +1,17 @@
+# For now, to ease development, this config acts as the dev build. Eventually
+# it will be renamed to docker-compose-dev.yaml and docker-compose.yaml will
+# be in place for non-dev builds.
+
+version: '3.9'
+
+services:
+  web:
+    build: ./src/web
+    command: npm run dev:docker
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./src/web/:/code
+      # Exclude host's node_modules for container and processor architecture
+      # compatibility.
+      - /code/node_modules/
