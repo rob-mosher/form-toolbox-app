@@ -1,0 +1,15 @@
+#header {
+  display: flex;
+}
+
+#sub-header {
+  /* display: flex; */
+  background-color: #fff;
+  z-index: 100;
+  border-bottom: 2px solid #eee;
+}
+
+#main {
+  position: relative;
+  top: 90px;
+}
