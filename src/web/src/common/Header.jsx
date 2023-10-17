@@ -21,7 +21,7 @@ function Header() {
             Forms
           </Link>
           <div className='ui item'>
-            <Button primary as={Link} to='/'>
+            <Button primary as={Link} to='/upload'>
               Upload
             </Button>
           </div>
