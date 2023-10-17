@@ -44,11 +44,11 @@ uploadRouter.get('/', (req, res) => {
 
 uploadRouter.post(
   '/',
-  upload.single('user-upload'),
+  upload.single('user-upload'), // Creates a 'file' property on the 'req' object
+  fileController.extractFileProps,
   bucketController.putObject,
-  // fileController.clearStoredUploads,
+  // fileController.clearStoredUploads, // Only applicable if diskStorage is used, i.e. useMemory === false
   (req, res) => {
-    // file type validation, use env variables
     res.sendStatus(201);
   }
 );
