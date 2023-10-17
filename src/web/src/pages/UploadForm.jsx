@@ -42,10 +42,13 @@ export default function UploadForm() {
               return formData;
             })
             .then((formData) =>
-              fetch(`//localhost:${import.meta.env.VITE_API_PORT || 3000}/api/upload`, {
-                body: formData,
-                method: 'POST',
-              })
+              fetch(
+                `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/upload`,
+                {
+                  body: formData,
+                  method: 'POST',
+                }
+              )
             )
             .then((fetchResult) => {
               if (!fetchResult) throw new Error('Server did not provide a response');
