@@ -28,7 +28,6 @@ export default function UploadForm() {
       <br />
       <Button
         onClick={() => {
-          console.table(import.meta.env);
           Promise.resolve()
             .then(() => {
               if (!fileRef?.current?.files?.[0]) throw new Error('No file selected');
