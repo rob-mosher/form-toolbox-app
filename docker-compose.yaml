@@ -24,9 +24,9 @@ services:
       - api
     environment:
       - VITE_API_PORT=${VITE_API_PORT}
-      - VITE_WEB_PORT=${VITE_WEB_PORT}
+      - WEB_PORT=${WEB_PORT}
     ports:
-      - '${VITE_WEB_PORT}:${VITE_WEB_PORT}'
+      - '${WEB_PORT}:${WEB_PORT}'
     volumes:
       - ./src/web/:/code
       # Exclude host's node_modules for container and processor architecture compatibility.
