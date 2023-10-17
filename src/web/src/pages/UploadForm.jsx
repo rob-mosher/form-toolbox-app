@@ -28,6 +28,7 @@ export default function UploadForm() {
       <br />
       <Button
         onClick={() => {
+          console.table(import.meta.env);
           Promise.resolve()
             .then(() => {
               if (!fileRef?.current?.files?.[0]) throw new Error('No file selected');
@@ -42,27 +43,24 @@ export default function UploadForm() {
               return formData;
             })
             .then((formData) =>
-              fetch('//localhost:3001/api/upload', {
-                // tentative URI, set up to use env variables
+              fetch(`//localhost:${import.meta.env.VITE_API_PORT || 3000}/api/upload`, {
                 body: formData,
                 method: 'POST',
               })
             )
             .then((fetchResult) => {
-              // response
-              if (!fetchResult) throw new Error('Server did not respond');
+              if (!fetchResult) throw new Error('Server did not provide a response');
               if (!fetchResult.ok) throw new Error(`${fetchResult.status} ${fetchResult.statusText}`);
               if (fetchResult.status === 201) return fetchResult.text();
               throw new Error('Unknown error occured');
             })
             .then((textResult) => {
-              // processing
-              // update web application state
+              // TODO update web application state
               console.log(textResult);
             })
             .catch((error) => {
               // error handling
-              console.error(error);
+              console.error(error); // TODO May want to replace with ErrorBoundary
             });
         }}
         primary
