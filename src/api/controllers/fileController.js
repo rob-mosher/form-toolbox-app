@@ -7,7 +7,7 @@ const fileController = {};
 fileController.validateSingleFileType = (req, res, next) => {
   if (!(req?.file?.mimetype)) {
     return next(createError({
-      method: 'validateSingleFileType',
+      method: `${__filename}:validateSingleFileType`,
       err: 'Missing file',
     }));
   }
@@ -19,7 +19,7 @@ fileController.validateSingleFileType = (req, res, next) => {
   ];
   if (!acceptedMimeTypes.includes(req.file.mimetype)) {
     return next(createError({
-      method: 'validateSingleFileType',
+      method: `${__filename}:validateSingleFileType`,
       err: 'Uploaded file includes an invalid file type',
       status: 500,
     }));
@@ -34,7 +34,7 @@ fileController.clearStoredUploads = async (req, res, next) => {
     .then((fileNames) => Promise.all(fileNames.map((fileName) => fs.unlink(path.resolve(dirName, fileName)))))
     .then(() => next())
     .catch((err) => next(createError({
-      method: 'clearStoredUploads',
+      method: `${__filename}:clearStoredUploads`,
       err,
     })));
 };

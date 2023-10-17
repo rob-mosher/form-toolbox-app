@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 
-// const fileController = require('../controllers/fileController');
+const fileController = require('../controllers/fileController');
 // const storageController = require('../controllers/storageController');
 
 const upload = multer({ dest: 'public/data/uploads/' });
@@ -15,7 +15,7 @@ uploadRouter.get('/', (req, res) => {
 uploadRouter.post(
   '/',
   upload.single('user-upload'),
-  // fileController.validateSingleFileType,
+  fileController.validateSingleFileType,
   // storageController.putObject,
   // fileController.clearStoredUploads,
   (req, res) => {
