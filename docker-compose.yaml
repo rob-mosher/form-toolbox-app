@@ -1,17 +1,33 @@
 # For now, to ease development, this config acts as the dev build. Eventually
-# it will be renamed to docker-compose-dev.yaml and docker-compose.yaml will
+# it will be renamed to docker-compose-dev.yaml, and docker-compose.yaml will
 # be in place for non-dev builds.
 
 version: '3.9'
 
 services:
+  api:
+    build: ./src/api
+    command: npm run dev:docker
+    environment:
+      - API_PORT=${API_PORT}
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    volumes:
+      - ./src/api/:/code
+      # NOTE: Below exclusion for API may not be needed, but including for consistency since 'web' includes it.
+      # Exclude host's node_modules for container and processor architecture compatibility.
+      - /code/node_modules/
   web:
     build: ./src/web
     command: npm run dev:docker
+    depends_on:
+      - api
+    environment:
+      - VITE_API_PORT=${VITE_API_PORT}
+      - VITE_WEB_PORT=${VITE_WEB_PORT}
     ports:
-      - '5173:5173'
+      - '${VITE_WEB_PORT}:${VITE_WEB_PORT}'
     volumes:
       - ./src/web/:/code
-      # Exclude host's node_modules for container and processor architecture
-      # compatibility.
+      # Exclude host's node_modules for container and processor architecture compatibility.
       - /code/node_modules/

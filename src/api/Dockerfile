@@ -9,4 +9,4 @@ RUN npm install
 
 COPY . .
 
-EXPOSE ${VITE_WEB_PORT}
+EXPOSE ${API_PORT}
