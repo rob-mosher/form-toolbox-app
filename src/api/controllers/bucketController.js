@@ -10,17 +10,23 @@ const {
 } = process.env;
 
 bucketController.putObject = (req, res, next) => {
-  if (!req.file) return next(createError({
-    err: 'File not found',
-    method: `${__filename}:putObject`,
-    status: 500,
-  }));
+  if (!req.file) {
+    return next(createError({
+      err: 'File not found',
+      method: `${__filename}:putObject`,
+      status: 500,
+    }));
+  }
+
   const { buffer, date, originalname } = res.locals;
-  if (!originalname || !buffer) return next(createError({
-    err: 'Missing file properties',
-    method: `${__filename}:putObject`,
-    status: 500,
-  }));
+  if (!originalname || !buffer) {
+    return next(createError({
+      err: 'Missing file properties',
+      method: `${__filename}:putObject`,
+      status: 500,
+    }));
+  }
+
   try {
     sendPutObjectCommand({
       Bucket: AWS_USER_UPLOAD_BUCKET_NAME, // string
@@ -29,11 +35,12 @@ bucketController.putObject = (req, res, next) => {
     });
   } catch (err) {
     return next(createError({
-      err: err,
+      err,
       method: `${__filename}:putObject`,
-      status: 500
+      status: 500,
     }));
   }
+
   return next();
 };
 

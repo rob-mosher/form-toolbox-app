@@ -13,22 +13,22 @@ function fileFilter(req, file, cb) {
   ]);
   if (!file) return cb(new Error('Missing file')); // TODO: Refactor with custom error handler
   if (!acceptedMimeTypes.has(file.mimetype)) return cb(new Error('Invalid file type')); // TODO: Refactor with custom error handler
-  return cb(null, true)
+  return cb(null, true);
 }
 
 const limits = {
-  fileSize: 26214400 // 25 MB
-}
+  fileSize: 26214400, // 25 MB
+};
 
-const useMemory = true,
-  storage = useMemory ?
-    multer.memoryStorage() :
-    multer.diskStorage({
-      destination: 'public/data/uploads',
-      filename(req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
-      },
-    });
+const useMemory = true;
+const storage = useMemory
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+    destination: 'public/data/uploads',
+    filename(req, file, cb) {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 
 const upload = multer({
   fileFilter,

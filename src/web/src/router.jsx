@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/forms', element: <Forms /> },
-      { path: '/upload', element: <UploadForm /> }
+      { path: '/upload', element: <UploadForm /> },
     ],
   },
 ])

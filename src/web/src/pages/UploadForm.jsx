@@ -1,28 +1,28 @@
-import React, { useRef, useState } from 'react';
-import { Button, Header, Input } from 'semantic-ui-react';
+import { useRef, useState } from 'react'
+import { Button, Header, Input } from 'semantic-ui-react'
 
 export default function UploadForm() {
-  const fileRef = useRef(null);
-  const [imageFile, setImageFile] = useState(null);
+  const fileRef = useRef(null)
+  const [imageFile, setImageFile] = useState(null)
   return (
     <>
-      <Header as="h2">Upload</Header>
-      <Input type="file">
+      <Header as='h2'>Upload</Header>
+      <Input type='file'>
         <input
-          accept=".jpg, .jpeg, .png, .pdf"
-          id="uploadpicker"
+          accept='.jpg, .jpeg, .png, .pdf'
+          id='uploadpicker'
           // multiple
-          name="user-upload"
+          name='user-upload'
           onInput={(event) => {
-            event.preventDefault();
+            event.preventDefault()
             if (fileRef?.current?.files?.[0]?.type?.includes('image')) {
-              setImageFile(() => fileRef?.current?.files?.[0]);
+              setImageFile(() => fileRef?.current?.files?.[0])
             } else {
-              setImageFile(() => null);
+              setImageFile(() => null)
             }
           }}
           ref={fileRef}
-          type="file"
+          type='file'
         />
       </Input>
       <br />
@@ -30,40 +30,37 @@ export default function UploadForm() {
         onClick={() => {
           Promise.resolve()
             .then(() => {
-              if (!fileRef?.current?.files?.[0]) throw new Error('No file selected');
+              if (!fileRef?.current?.files?.[0]) throw new Error('No file selected')
               if (
                 !['image/jpg', 'image/jpeg', 'image/png', 'application/pdf'].includes(
                   fileRef?.current?.files?.[0]?.type || ''
                 )
-              )
-                throw new Error('Invalid file type');
-              const formData = new FormData();
-              formData.append('user-upload', fileRef.current.files[0]);
-              return formData;
+              ) { throw new Error('Invalid file type') }
+              const formData = new FormData()
+              formData.append('user-upload', fileRef.current.files[0])
+              return formData
             })
-            .then((formData) =>
-              fetch(
-                `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/upload`,
-                {
-                  body: formData,
-                  method: 'POST',
-                }
-              )
-            )
+            .then((formData) => fetch(
+              `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/upload`,
+              {
+                body: formData,
+                method: 'POST',
+              }
+            ))
             .then((fetchResult) => {
-              if (!fetchResult) throw new Error('Server did not provide a response');
-              if (!fetchResult.ok) throw new Error(`${fetchResult.status} ${fetchResult.statusText}`);
-              if (fetchResult.status === 201) return fetchResult.text();
-              throw new Error('Unknown error occured');
+              if (!fetchResult) throw new Error('Server did not provide a response')
+              if (!fetchResult.ok) throw new Error(`${fetchResult.status} ${fetchResult.statusText}`)
+              if (fetchResult.status === 201) return fetchResult.text()
+              throw new Error('Unknown error occured')
             })
             .then((textResult) => {
               // TODO update web application state
-              console.log(textResult);
+              console.log(textResult)
             })
             .catch((error) => {
               // error handling
-              console.error(error); // TODO May want to replace with ErrorBoundary
-            });
+              console.error(error) // TODO May want to replace with ErrorBoundary
+            })
         }}
         primary
       >
@@ -73,9 +70,9 @@ export default function UploadForm() {
       {imageFile?.type?.includes('image') && (
         <>
           <br />
-          <img src={URL.createObjectURL(imageFile)} alt="" />
+          <img src={URL.createObjectURL(imageFile)} alt='' />
         </>
       )}
     </>
-  );
+  )
 }
