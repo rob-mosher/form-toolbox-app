@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { Button, Header, Input } from 'semantic-ui-react'
+import ACCEPTED_UPLOAD_MIME_TYPES from '../common/acceptedUploadMimeTypes'
 
 export default function UploadForm() {
   const fileRef = useRef(null)
@@ -9,12 +10,7 @@ export default function UploadForm() {
     function checkFilePromise() {
       const file = fileRef?.current?.files?.[0]
       if (!file) throw new Error('No file provided.')
-      if (![
-        'image/jpg',
-        'image/jpeg',
-        'image/png',
-        'application/pdf',
-      ].includes(file.type)
+      if (!ACCEPTED_UPLOAD_MIME_TYPES.includes(file.type)
       ) { throw new Error('Invalid file type.') }
 
       const formData = new FormData()
@@ -50,7 +46,7 @@ export default function UploadForm() {
       <Header as='h2'>Upload</Header>
       <Input type='file'>
         <input
-          accept='.jpg, .jpeg, .png, .pdf'
+          accept={ACCEPTED_UPLOAD_MIME_TYPES.join(', ')}
           id='uploadpicker'
           // multiple
           name='user-upload'
