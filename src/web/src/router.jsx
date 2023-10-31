@@ -4,6 +4,7 @@ import App from './App'
 import ErrorPage from './common/ErrorPage'
 import Home from './pages/Home'
 import Forms from './pages/Forms'
+import UploadForm from './pages/UploadForm'
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/forms', element: <Forms /> },
+      { path: '/upload', element: <UploadForm /> },
     ],
   },
 ])
