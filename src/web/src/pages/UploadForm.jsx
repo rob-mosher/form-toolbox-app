@@ -47,7 +47,7 @@ export default function UploadForm() {
           render: 'Upload complete!',
           type: toast.TYPE.SUCCESS,
         })
-        fileRef.current.value = null
+        if (fileRef.current) fileRef.current.value = null
       })
       .catch((error) => {
         toast.update(toastRef.current, {
