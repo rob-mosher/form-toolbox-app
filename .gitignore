@@ -1,7 +1,30 @@
+# System files
 .DS_Store
+
+# Environment variables
 .env
-build
-coverage
-dist
-node_modules
+
+# Build directories
+build/
+dist/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Package managers
 package-lock.json
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform/
+*.plan
+.terraform.lock.hcl
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
