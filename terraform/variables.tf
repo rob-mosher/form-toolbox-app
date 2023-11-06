@@ -3,13 +3,12 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "lambda_function_arn_on_upload" {
-  description = "ARN of the Lambda function for when I file is uploaded."
-  type        = string
-}
-
 variable "region" {
   description = "The AWS region to create resources in."
   type        = string
 }
 
+variable "state_machine_arn" {
+  description = "The ARN of the Step Function state machine that the Lambda function will trigger."
+  type        = string
+}

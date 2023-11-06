@@ -8,6 +8,7 @@
 build/
 dist/
 coverage/
+*.zip
 
 # Dependencies
 node_modules/
