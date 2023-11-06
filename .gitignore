@@ -19,6 +19,7 @@ package-lock.json
 # Terraform
 *.tfstate
 *.tfstate.backup
+*.tfstate.lock.info
 *.tfvars
 .terraform/
 *.plan

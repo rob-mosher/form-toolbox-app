@@ -120,6 +120,27 @@ resource "aws_lambda_function" "lambda_on_upload" {
   }
 }
 
+resource "aws_iam_policy" "sfn_sqs_send_message_policy" {
+  name        = "ftbx-SfnSQSSendMessagePolicy"
+  description = "Policy that allows the Step Function to send messages to SQS queues"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "sqs:SendMessage",
+        Resource = "arn:aws:sqs:${var.region}:${data.aws_caller_identity.current.account_id}:${var.queue_name}.fifo"
+      },
+    ],
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "sfn_sqs_send_message_attach" {
+  role       = aws_iam_role.sfn_role.name
+  policy_arn = aws_iam_policy.sfn_sqs_send_message_policy.arn
+}
+
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
   name              = "/aws/lambda/${aws_lambda_function.lambda_on_upload.function_name}"
   retention_in_days = 7
@@ -129,7 +150,11 @@ resource "aws_sfn_state_machine" "state_machine" {
   name     = "FormToolboxStateMachine"
   role_arn = aws_iam_role.sfn_role.arn
 
-  definition = file("${path.module}/../functions/analyzeDocument/definition.json")
+  definition = templatefile("${path.module}/../functions/analyzeDocument/definition.json", {
+    Region    = var.region
+    AccountId = data.aws_caller_identity.current.account_id
+    QueueName = var.queue_name
+  })
 
   logging_configuration {
     include_execution_data = true
@@ -220,8 +245,43 @@ resource "aws_iam_role_policy_attachment" "xray_access_attach" {
 }
 
 resource "aws_cloudwatch_log_group" "sfn_log_group" {
-  name              = "/aws/states/ftbx-temporaryloggroup" # TODO resolve circular dependancy when dynamically referenced
+  name              = "/aws/states/ftbx-temporaryloggroup" # TODO make dynamic BUG resolve circular dependency when dynamically referenced
   retention_in_days = 7
+}
+
+resource "aws_sqs_queue" "form_toolbox_manual_fifo" {
+  name                        = format("%s.fifo", var.queue_name)
+  fifo_queue                  = true
+  content_based_deduplication = true
+  visibility_timeout_seconds  = 30
+  message_retention_seconds   = 345600 # 4 days in seconds
+  max_message_size            = 262144 # 256 KB in bytes
+  deduplication_scope         = "queue"
+  fifo_throughput_limit       = "perQueue"
+
+  tags = {
+    Environment = "development"
+  }
+}
+
+resource "aws_sqs_queue_policy" "form_toolbox_manual_fifo_policy" {
+  queue_url = aws_sqs_queue.form_toolbox_manual_fifo.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Id      = "__default_policy_ID",
+    Statement = [
+      {
+        Sid    = "__owner_statement",
+        Effect = "Allow",
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        },
+        Action   = "SQS:*",
+        Resource = aws_sqs_queue.form_toolbox_manual_fifo.arn
+      },
+    ]
+  })
 }
 
 output "s3_bucket_name" {
