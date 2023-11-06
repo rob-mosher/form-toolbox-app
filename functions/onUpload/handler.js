@@ -14,7 +14,7 @@ module.exports.handler = async (event) => {
 
   const params = {
     stateMachineArn: process.env.STATE_MACHINE_ARN,
-    input: JSON.stringify({ bucketName, objectKey }),
+    input: JSON.stringify({ bucket: bucketName, key: objectKey }),
     name: id,
   };
 

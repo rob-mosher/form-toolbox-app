@@ -1,3 +1,2 @@
-bucket_name       =
-region            =
-state_machine_arn =
+bucket_name =
+region      =

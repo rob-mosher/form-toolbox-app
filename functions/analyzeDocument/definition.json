@@ -1,0 +1,73 @@
+{
+  "Comment": "Form Toolbox State Machine",
+  "StartAt": "Choice",
+  "States": {
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "And": [
+            {
+              "Variable": "$.key",
+              "IsPresent": true
+            },
+            {
+              "Or": [
+                {
+                  "Variable": "$.key",
+                  "StringMatches": "*.jpg"
+                },
+                {
+                  "Variable": "$.key",
+                  "StringMatches": "*.jpeg"
+                },
+                {
+                  "Variable": "$.key",
+                  "StringMatches": "*.png"
+                },
+                {
+                  "Variable": "$.key",
+                  "StringMatches": "*.pdf"
+                }
+              ]
+            }
+          ],
+          "Next": "Pass"
+        }
+      ],
+      "Default": "Fail"
+    },
+    "Pass": {
+      "Type": "Pass",
+      "Comment": "The input matched the file type.",
+      "Next": "StartDocumentAnalysis"
+    },
+    "StartDocumentAnalysis": {
+      "Type": "Task",
+      "End": true,
+      "Parameters": {
+        "DocumentLocation": {
+          "S3Object": {
+            "Bucket.$": "$.bucket",
+            "Name.$": "$.key"
+          }
+        },
+        "FeatureTypes": [
+          "FORMS",
+          "TABLES"
+        ],
+        "OutputConfig": {
+          "S3Bucket.$": "$.bucket",
+          "S3Prefix": "analysis"
+        }
+      },
+      "Resource": "arn:aws:states:::aws-sdk:textract:startDocumentAnalysis"
+    },
+    "Fail": {
+      "Type": "Fail",
+      "Error": "InputError",
+      "Cause": "Invalid file input type",
+      "Comment": "The file provider did not have a supported file extension."
+    }
+  }
+}

@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 
 data "archive_file" "on_upload_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/../lambda/onUpload"
+  source_dir  = "${path.module}/../functions/onUpload"
   output_path = "${path.module}/on_upload_lambda_function.zip"
 }
 
@@ -37,7 +37,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role"
+  name = "ftbx-lambda_exec_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -88,7 +88,7 @@ resource "aws_iam_policy" "lambda_step_function_policy" {
       {
         Effect   = "Allow",
         Action   = "states:StartExecution",
-        Resource = var.state_machine_arn
+        Resource = aws_sfn_state_machine.state_machine.arn
       },
     ],
   })
@@ -100,7 +100,7 @@ resource "aws_iam_role_policy_attachment" "lambda_step_function_policy_attach" {
 }
 
 resource "aws_lambda_function" "lambda_on_upload" {
-  function_name = "onUpload"
+  function_name = "ftbx-onUpload"
   handler       = "handler.handler"
   runtime       = "nodejs18.x"
   role          = aws_iam_role.lambda_exec_role.arn
@@ -115,9 +115,113 @@ resource "aws_lambda_function" "lambda_on_upload" {
 
   environment {
     variables = {
-      STATE_MACHINE_ARN = var.state_machine_arn
+      STATE_MACHINE_ARN = aws_sfn_state_machine.state_machine.arn
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "lambda_log_group" {
+  name              = "/aws/lambda/${aws_lambda_function.lambda_on_upload.function_name}"
+  retention_in_days = 7
+}
+
+resource "aws_sfn_state_machine" "state_machine" {
+  name     = "FormToolboxStateMachine"
+  role_arn = aws_iam_role.sfn_role.arn
+
+  definition = file("${path.module}/../functions/analyzeDocument/definition.json")
+
+  logging_configuration {
+    include_execution_data = true
+    level                  = "ALL"
+    log_destination        = "${aws_cloudwatch_log_group.sfn_log_group.arn}:*"
+  }
+}
+
+resource "aws_iam_role" "sfn_role" {
+  name = "ftbx-sfn_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "states.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "s3_full_access" {
+  role       = aws_iam_role.sfn_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "textract_full_access" {
+  role       = aws_iam_role.sfn_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonTextractFullAccess"
+}
+
+resource "aws_iam_policy" "cloudwatch_logs_delivery" {
+  name = "ftbx-CloudWatchLogsDeliveryFullAccessPolicy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogDelivery",
+          "logs:GetLogDelivery",
+          "logs:UpdateLogDelivery",
+          "logs:DeleteLogDelivery",
+          "logs:ListLogDeliveries",
+          "logs:PutResourcePolicy",
+          "logs:DescribeResourcePolicies",
+          "logs:DescribeLogGroups"
+        ],
+        "Resource" : "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs_delivery_attach" {
+  role       = aws_iam_role.sfn_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs_delivery.arn
+}
+
+resource "aws_iam_policy" "xray_access" {
+  name = "ftbx-XRayAccessPolicy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords",
+          "xray:GetSamplingRules",
+          "xray:GetSamplingTargets"
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "xray_access_attach" {
+  role       = aws_iam_role.sfn_role.name
+  policy_arn = aws_iam_policy.xray_access.arn
+}
+
+resource "aws_cloudwatch_log_group" "sfn_log_group" {
+  name              = "/aws/states/ftbx-temporaryloggroup" # TODO resolve circular dependancy when dynamically referenced
+  retention_in_days = 7
 }
 
 output "s3_bucket_name" {
