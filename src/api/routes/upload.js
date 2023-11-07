@@ -4,13 +4,10 @@ const multer = require('multer');
 const fileController = require('../controllers/fileController');
 const bucketController = require('../controllers/bucketController');
 
+const { ACCEPTED_UPLOAD_MIME_TYPES } = require('../constants/acceptedUploadMimeTypes');
+
 function fileFilter(req, file, cb) {
-  const acceptedMimeTypes = new Set([
-    'application/pdf',
-    'image/jpg',
-    'image/jpeg',
-    'image/png',
-  ]);
+  const acceptedMimeTypes = new Set([...ACCEPTED_UPLOAD_MIME_TYPES]);
   if (!file) return cb(new Error('Missing file')); // TODO: Refactor with custom error handler
   if (!acceptedMimeTypes.has(file.mimetype)) return cb(new Error('Invalid file type')); // TODO: Refactor with custom error handler
   return cb(null, true);
@@ -48,9 +45,13 @@ uploadRouter.post(
   fileController.extractFileProps,
   bucketController.putObject,
   // fileController.clearStoredUploads, // Only applicable if diskStorage is used, i.e. useMemory === false
-  (req, res) => {
+  (req, res, next) => {
     res.sendStatus(201);
   }
 );
+
+uploadRouter.get('/acceptedMimeTypes', (req, res, next) => {
+  res.status(200).send(JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES));
+});
 
 module.exports = uploadRouter;

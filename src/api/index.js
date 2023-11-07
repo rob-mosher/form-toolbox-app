@@ -14,7 +14,11 @@ const { API_PORT } = process.env;
 const sqsPoller = require('./services/aws/sqs/poller');
 const apiRouter = require('./routes/api');
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
+  res.sendStatus(200);
+});
+
+app.get('/healthcheck', (req, res, next) => {
   res.sendStatus(200);
 });
 
