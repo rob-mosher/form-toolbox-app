@@ -6,7 +6,7 @@ const { createError } = require('../utils/error');
 const bucketController = {};
 
 const {
-  AWS_USER_UPLOAD_BUCKET_NAME,
+  AWS_BUCKET_NAME,
 } = process.env;
 
 bucketController.putObject = (req, res, next) => {
@@ -29,7 +29,7 @@ bucketController.putObject = (req, res, next) => {
 
   try {
     sendPutObjectCommand({
-      Bucket: AWS_USER_UPLOAD_BUCKET_NAME, // string
+      Bucket: AWS_BUCKET_NAME, // string
       Key: `uploads/${date}-${originalname}`, // string
       Body: buffer,
     });

@@ -11,6 +11,7 @@ app.use(express.json());
 const { API_HOST } = process.env;
 const { API_PORT } = process.env;
 
+const sqsPoller = require('./services/aws/sqs/poller');
 const apiRouter = require('./routes/api');
 
 app.get('/', (req, res) => {
@@ -43,4 +44,5 @@ app.use((err, req, res, next) => {
 
 app.listen(API_PORT, API_HOST, () => {
   console.log(`Server listening on ${API_HOST}:${API_PORT}`);
+  sqsPoller.startPolling();
 });
