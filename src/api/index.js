@@ -42,7 +42,11 @@ app.use((err, req, res, next) => {
   res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(API_PORT, API_HOST, () => {
-  console.log(`Server listening on ${API_HOST}:${API_PORT}`);
-  sqsPoller.startPolling();
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(API_PORT, API_HOST, () => {
+    console.log(`Server listening on ${API_HOST}:${API_PORT}`);
+    sqsPoller.startPolling();
+  });
+}
+
+module.exports = app;
