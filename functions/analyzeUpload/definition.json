@@ -1,61 +1,7 @@
 {
   "Comment": "Form Toolbox State Machine",
-  "StartAt": "Choice",
+  "StartAt": "StartDocumentAnalysis",
   "States": {
-    "Choice": {
-      "Type": "Choice",
-      "Choices": [
-        {
-          "And": [
-            {
-              "Variable": "$.key",
-              "IsPresent": true
-            },
-            {
-              "Or": [
-                {
-                  "Variable": "$.key",
-                  "StringMatches": "*.jpg"
-                },
-                {
-                  "Variable": "$.key",
-                  "StringMatches": "*.jpeg"
-                },
-                {
-                  "Variable": "$.key",
-                  "StringMatches": "*.png"
-                },
-                {
-                  "Variable": "$.key",
-                  "StringMatches": "*.pdf"
-                }
-              ]
-            }
-          ],
-          "Next": "Pass"
-        }
-      ],
-      "Default": "SendInputFailureMessage"
-    },
-    "SendInputFailureMessage": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::aws-sdk:sqs:sendMessage",
-      "Parameters": {
-        "QueueUrl": "https://sqs.${Region}.amazonaws.com/${AccountId}/${QueueName}.fifo",
-        "MessageGroupId": "FormToolboxGroup",
-        "MessageDeduplicationId.$": "$.textract.JobId",
-        "MessageBody": {
-          "Status": "FAILED",
-          "KeyId.$": "$.key"
-        }
-      },
-      "Next": "Fail"
-    },
-    "Pass": {
-      "Type": "Pass",
-      "Comment": "The input matched the file type.",
-      "Next": "StartDocumentAnalysis"
-    },
     "StartDocumentAnalysis": {
       "Type": "Task",
       "Next": "SendSuccessMessage",

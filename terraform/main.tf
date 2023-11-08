@@ -150,7 +150,7 @@ resource "aws_sfn_state_machine" "state_machine" {
   name     = "FormToolboxStateMachine"
   role_arn = aws_iam_role.sfn_role.arn
 
-  definition = templatefile("${path.module}/../functions/analyzeDocument/definition.json", {
+  definition = templatefile("${path.module}/../functions/analyzeUpload/definition.json", {
     Region    = var.region
     AccountId = data.aws_caller_identity.current.account_id
     QueueName = var.queue_name

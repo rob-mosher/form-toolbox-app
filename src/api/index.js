@@ -26,7 +26,7 @@ app.use('/api', apiRouter);
 
 app.use('*', (req, res, next) => {
   const errorObj = {
-    log: 'Page not found',
+    log: `No matching path for incoming request to '${req.originalUrl}'`,
     status: 404,
     message: { err: 'Error 404: Page not Found' },
   };
