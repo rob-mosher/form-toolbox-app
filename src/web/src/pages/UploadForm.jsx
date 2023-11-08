@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import ACCEPTED_UPLOAD_MIME_TYPES from '../common/acceptedUploadMimeTypes'
 
 export default function UploadForm() {
   const fileRef = useRef(null)
@@ -81,7 +80,7 @@ export default function UploadForm() {
           reject(new Error('No file provided.'))
         }
 
-        if (!ACCEPTED_UPLOAD_MIME_TYPES.includes(file.type)) {
+        if (!acceptedMimeTypes.includes(file.type)) {
           reject(new Error('Invalid file type.'))
         }
 
