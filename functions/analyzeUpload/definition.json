@@ -13,8 +13,7 @@
           }
         },
         "FeatureTypes": [
-          "FORMS",
-          "TABLES"
+          "LAYOUT"
         ],
         "OutputConfig": {
           "S3Bucket.$": "$.bucket",
@@ -42,7 +41,8 @@
         "MessageDeduplicationId.$": "$.textract.JobId",
         "MessageBody": {
           "Status": "SUCCEEDED",
-          "DocumentId.$": "$.textract.JobId"
+          "TextractJobId.$": "$.textract.JobId",
+          "ToolboxJobId.$": "$.toolboxjobid"
         }
       }
     },
@@ -56,7 +56,8 @@
         "MessageDeduplicationId.$": "$.textract.JobId",
         "MessageBody": {
           "Status": "FAILED",
-          "DocumentId.$": "$.textract.JobId",
+          "TextractJobId.$": "$.textract.JobId",
+          "ToolboxJobId.$": "$.toolboxjobid",
           "Reason.$": "$.Error"
         }
       }

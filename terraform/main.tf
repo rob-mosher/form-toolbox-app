@@ -99,6 +99,32 @@ resource "aws_iam_role_policy_attachment" "lambda_step_function_policy_attach" {
   policy_arn = aws_iam_policy.lambda_step_function_policy.arn
 }
 
+resource "aws_iam_policy" "lambda_s3_head_policy" {
+  name        = "lambda_s3_head_policy"
+  description = "IAM policy for Lambda function to obtain object metadata such as toolboxJobId."
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:HeadObject"
+        ],
+        Resource = [
+          "${module.s3_bucket.s3_bucket_arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_s3_head_policy_attach" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_s3_head_policy.arn
+}
+
 resource "aws_lambda_function" "lambda_on_upload" {
   function_name = "ftbx-onUpload"
   handler       = "handler.handler"
@@ -115,6 +141,7 @@ resource "aws_lambda_function" "lambda_on_upload" {
 
   environment {
     variables = {
+      REGION            = var.region
       STATE_MACHINE_ARN = aws_sfn_state_machine.state_machine.arn
     }
   }

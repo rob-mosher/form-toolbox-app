@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const crypto = require('crypto');
 const { sendPutObjectCommand } = require('../services/aws/s3/put');
 const { createError } = require('../utils/error');
 
@@ -27,11 +28,17 @@ bucketController.putObject = (req, res, next) => {
     }));
   }
 
+  const toolboxJobId = `random-toolbox-job-id-${crypto.randomUUID()}`;
+
   try {
+    console.log(`Uploading document with the following toolboxJobId: '${toolboxJobId}'`);
     sendPutObjectCommand({
       Bucket: AWS_BUCKET_NAME, // string
       Key: `uploads/${date}-${originalname}`, // string
       Body: buffer,
+      Metadata: {
+        toolboxJobId, // string (NOTE: key will be converted to lower-case)
+      },
     });
   } catch (err) {
     return next(createError({
