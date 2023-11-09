@@ -11,8 +11,9 @@ app.use(express.json());
 const { API_HOST } = process.env;
 const { API_PORT } = process.env;
 
-const sqsPoller = require('./services/aws/sqs/poller');
 const apiRouter = require('./routes/api');
+const sqsPoller = require('./services/aws/sqs/poller');
+const { sequelize } = require('./models');
 
 app.get('/', (req, res, next) => {
   res.sendStatus(200);
@@ -47,10 +48,18 @@ app.use((err, req, res, next) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(API_PORT, API_HOST, () => {
-    console.log(`Server listening on ${API_HOST}:${API_PORT}`);
-    sqsPoller.startPolling();
-  });
+  console.log('Syncronizing database schema:');
+  sequelize.sync()
+    .then(() => {
+      console.log('Successfully syncronized database schema.');
+      app.listen(API_PORT, API_HOST, () => {
+        console.log(`Server listening on ${API_HOST}:${API_PORT}`);
+        sqsPoller.startPolling();
+      });
+    })
+    .catch(() => {
+      console.error('Error syncronizing database schema. API will not load as a result.');
+    });
 }
 
 module.exports = app;

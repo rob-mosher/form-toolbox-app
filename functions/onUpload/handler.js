@@ -10,7 +10,7 @@ module.exports.handler = async (event) => {
   const objectKey = event.Records[0].s3.object.key;
   const id = crypto.randomUUID();
 
-  // Retrieve object metadata, such as the toolboxjobid (NOTE was case-converted from toolboxJobId earlier)
+  // Retrieve object metadata, such as the formid (NOTE was case-converted from formId earlier)
   const headObjectParams = {
     Bucket: bucketName,
     Key: objectKey,
@@ -33,7 +33,7 @@ module.exports.handler = async (event) => {
     bucket: bucketName,
     id,
     key: objectKey,
-    toolboxjobid: metadata.toolboxjobid, 
+    formid: metadata.formid, 
   });
 
   const sfnParams = {

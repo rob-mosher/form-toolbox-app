@@ -101,7 +101,7 @@ resource "aws_iam_role_policy_attachment" "lambda_step_function_policy_attach" {
 
 resource "aws_iam_policy" "lambda_s3_head_policy" {
   name        = "lambda_s3_head_policy"
-  description = "IAM policy for Lambda function to obtain object metadata such as toolboxJobId."
+  description = "IAM policy for Lambda function to obtain object metadata such as formId."
 
   policy = jsonencode({
     Version = "2012-10-17",

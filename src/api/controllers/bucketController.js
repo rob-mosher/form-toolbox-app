@@ -1,8 +1,9 @@
 require('dotenv').config();
 
-const crypto = require('crypto');
 const { sendPutObjectCommand } = require('../services/aws/s3/put');
 const { createError } = require('../utils/error');
+
+const { Form } = require('../models');
 
 const bucketController = {};
 
@@ -10,7 +11,7 @@ const {
   AWS_BUCKET_NAME,
 } = process.env;
 
-bucketController.putObject = (req, res, next) => {
+bucketController.putObject = async (req, res, next) => {
   if (!req.file) {
     return next(createError({
       err: 'File not found',
@@ -28,16 +29,24 @@ bucketController.putObject = (req, res, next) => {
     }));
   }
 
-  const toolboxJobId = `random-toolbox-job-id-${crypto.randomUUID()}`;
+  const fileNameS3 = `uploads/${date}-${originalname}`;
+
+  const newForm = await Form.create({
+    fileName: originalname,
+    fileNameS3,
+    status: 'uploading',
+  });
+
+  const formId = newForm.id;
 
   try {
-    console.log(`Uploading document with the following toolboxJobId: '${toolboxJobId}'`);
+    console.log(`Uploading document with the following formId: '${formId}'`);
     sendPutObjectCommand({
       Bucket: AWS_BUCKET_NAME, // string
-      Key: `uploads/${date}-${originalname}`, // string
+      Key: fileNameS3, // string
       Body: buffer,
       Metadata: {
-        toolboxJobId, // string (NOTE: key will be converted to lower-case)
+        formId, // string (NOTE: key will be converted to lower-case)
       },
     });
   } catch (err) {

@@ -40,9 +40,9 @@
         "MessageGroupId": "FormToolboxGroup",
         "MessageDeduplicationId.$": "$.textract.JobId",
         "MessageBody": {
-          "Status": "SUCCEEDED",
+          "Status": "ANALYZING",
           "TextractJobId.$": "$.textract.JobId",
-          "ToolboxJobId.$": "$.toolboxjobid"
+          "FormId.$": "$.formid"
         }
       }
     },
@@ -57,7 +57,7 @@
         "MessageBody": {
           "Status": "FAILED",
           "TextractJobId.$": "$.textract.JobId",
-          "ToolboxJobId.$": "$.toolboxjobid",
+          "FormId.$": "$.formid",
           "Reason.$": "$.Error"
         }
       }
