@@ -2,7 +2,8 @@
 import { createBrowserRouter } from 'react-router-dom'
 import App from './App'
 import ErrorPage from './common/ErrorPage'
-import Form from './pages/Form'
+import FormEdit from './pages/FormEdit'
+import FormView from './pages/FormView'
 import Forms from './pages/Forms'
 import Home from './pages/Home'
 import UploadForm from './pages/UploadForm'
@@ -14,7 +15,9 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/forms', element: <Forms /> },
-      { path: '/forms/:formId', element: <Form /> },
+      { path: '/forms/:formId', element: <FormView /> },
+      { path: '/forms/:formId/view', element: <FormView /> },
+      { path: '/forms/:formId/edit', element: <FormEdit /> },
       { path: '/upload', element: <UploadForm /> },
     ],
   },

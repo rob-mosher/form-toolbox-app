@@ -21,10 +21,11 @@ module.exports = (sequelize) => {
       status: {
         type: DataTypes.ENUM,
         values: [
-          'error',
-          'uploading',
           'analyzing',
+          'deleted',
+          'error',
           'ready',
+          'uploading',
         ],
         allowNull: false,
       },

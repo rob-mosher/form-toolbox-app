@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Form } = require('../../../models');
 
 const processMessage = async (message) => {
@@ -11,28 +12,51 @@ const processMessage = async (message) => {
   } = JSON.parse(message.Body);
 
   switch (status) {
-    case 'ANALYZING':
+    case 'ANALYZING': {
       console.log(`Form ${formId} is being analyzed on textract.`);
-      await Form.update(
+      const [updatedRows] = await Form.update(
         {
           status: 'analyzing',
           textractJobId,
         },
-        { where: { id: formId } }
+        {
+          where: {
+            id: formId,
+            status: {
+              [Op.not]: 'deleted',
+            },
+          },
+        }
       );
+      if (updatedRows === 0) {
+        console.log(`Form ${formId} was not set to 'analyzing' because its status is 'deleted' or it does not exist.`);
+      }
       break;
-    case 'FAILED':
+    }
+    case 'FAILED': {
       console.log(`Form ${formId} encountered an error.`);
-      await Form.update(
+      const [updatedRows] = await Form.update(
         {
           status: 'error',
           textractJobId,
         },
-        { where: { id: formId } }
+        {
+          where: {
+            id: formId,
+            status: {
+              [Op.not]: 'deleted',
+            },
+          },
+        }
       );
+      if (updatedRows === 0) {
+        console.log(`Form ${formId} was not set to 'error' because its status is 'deleted' or it does not exist.`);
+      }
       break;
-    default:
+    }
+    default: {
       console.log(`No matching action for status ${status}`);
+    }
   }
 };
 
