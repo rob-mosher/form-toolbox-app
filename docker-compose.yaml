@@ -24,6 +24,11 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_PORT=5432
       - DB_USER=${DB_USER}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:${API_PORT}/healthcheck"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
     ports:
       - '${API_PORT}:${API_PORT}'
     volumes:
@@ -50,7 +55,8 @@ services:
     build: ./src/web
     command: npm run dev:docker
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     environment:
       - VITE_API_PORT=${VITE_API_PORT}
       - WEB_PORT=${WEB_PORT}
