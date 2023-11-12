@@ -8,9 +8,7 @@ formsRouter.get('/', async (req, res, next) => {
   try {
     const forms = await Form.findAll({
       where: {
-        status: {
-          [Op.not]: 'deleted',
-        },
+        isDeleted: false,
       },
     });
     return res.status(200).json(forms);
@@ -28,11 +26,11 @@ formsRouter.delete('/:id', async (req, res, next) => {
       return res.status(404).json({ error: 'Form not found' });
     }
 
-    if (form.status !== 'deleted') {
-      form.status = 'deleted';
+    if (!form.isDeleted) {
+      form.isDeleted = true;
       await form.save();
     } else {
-      console.log(`Form ${id} previously marked as deleted, so action is needed, but proceeding as if delete action took place from the user's perspective.`);
+      console.log(`Form ${id} previously marked as deleted, so no action is needed, but proceeding as if delete action took place from the user's perspective.`);
     }
 
     return res.status(200).json({ message: 'Form marked as deleted' });
@@ -50,7 +48,7 @@ formsRouter.get('/:id', async (req, res, next) => {
       return res.status(404).json({ error: 'Form not found' });
     }
 
-    if (form.status === 'deleted') {
+    if (form.isDeleted) {
       return res.status(404).json({ message: 'Form is deleted and not accessible' });
     }
 

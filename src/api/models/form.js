@@ -26,11 +26,15 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
       status: {
         type: DataTypes.ENUM,
         values: [
           'analyzing',
-          'deleted',
           'error',
           'initialized',
           'ready',

@@ -23,14 +23,11 @@ const processMessage = async (message) => {
         {
           where: {
             id: formId,
-            status: {
-              [Op.not]: 'deleted',
-            },
           },
         }
       );
       if (updatedRows === 0) {
-        console.log(`Form ${formId} was not set to 'analyzing' because its status is 'deleted' or it does not exist.`);
+        console.warn(`Form ${formId} was not set to 'analyzing'.`);
       }
       break;
     }
@@ -44,14 +41,11 @@ const processMessage = async (message) => {
         {
           where: {
             id: formId,
-            status: {
-              [Op.not]: 'deleted',
-            },
           },
         }
       );
       if (updatedRows === 0) {
-        console.log(`Form ${formId} was not set to 'error' because its status is 'deleted' or it does not exist.`);
+        console.warn(`Form ${formId} was not set to 'error'.`);
       }
       break;
     }
