@@ -4,7 +4,7 @@ const { Form } = require('../models');
 
 const formsRouter = express.Router();
 
-formsRouter.get('/', async (req, res) => {
+formsRouter.get('/', async (req, res, next) => {
   try {
     const forms = await Form.findAll({
       where: {
@@ -19,7 +19,7 @@ formsRouter.get('/', async (req, res) => {
   }
 });
 
-formsRouter.delete('/:id', async (req, res) => {
+formsRouter.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const form = await Form.findByPk(id);
@@ -41,7 +41,7 @@ formsRouter.delete('/:id', async (req, res) => {
   }
 });
 
-formsRouter.get('/:id', async (req, res) => {
+formsRouter.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const form = await Form.findByPk(id);

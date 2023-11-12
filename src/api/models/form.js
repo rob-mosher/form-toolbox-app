@@ -10,13 +10,21 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      analysisFolderNameS3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      exportFolderNameS3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       fileName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       fileNameS3: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM,
@@ -24,6 +32,7 @@ module.exports = (sequelize) => {
           'analyzing',
           'deleted',
           'error',
+          'initialized',
           'ready',
           'uploading',
         ],

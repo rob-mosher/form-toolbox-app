@@ -2,7 +2,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Header, Table } from 'semantic-ui-react'
+import { Header, Tab } from 'semantic-ui-react'
+import Content from '../common/Content'
 
 export default function FormEdit() {
   const [form, setForm] = useState(null)
@@ -28,13 +29,31 @@ export default function FormEdit() {
     return <Header as='h2'>Form Details Editor Loading...</Header>
   }
 
+  const panes = [
+    {
+      menuItem: { key: 'header', icon: 'wpforms', content: 'Data' },
+      render: () => <p />,
+    },
+    {
+      menuItem: { key: 'info', icon: 'info', content: 'Info' },
+      render: () => <p />,
+    },
+    {
+      menuItem: { key: 'settings', icon: 'cogs', content: 'Settings' },
+      render: () => <p />,
+    },
+  ]
+
   return (
-    <>
-      <Header as='h2'>Form Details Editor</Header>
-      <Header as='h3'>API Response:</Header>
-      <code>
-        {JSON.stringify(form)}
-      </code>
-    </>
+    <div className='ui grid'>
+
+      <Content />
+      <div className='six wide column ftbx-fitted-max'>
+        <code>
+          <Tab panes={panes} />
+          {JSON.stringify(form)}
+        </code>
+      </div>
+    </div>
   )
 }

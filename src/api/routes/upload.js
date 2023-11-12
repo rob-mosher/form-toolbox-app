@@ -1,8 +1,10 @@
 const express = require('express');
 const multer = require('multer');
 
-const fileController = require('../controllers/fileController');
 const bucketController = require('../controllers/bucketController');
+const fileController = require('../controllers/fileController');
+const formController = require('../controllers/formController');
+const imageController = require('../controllers/imageController');
 
 const { ACCEPTED_UPLOAD_MIME_TYPES } = require('../constants/acceptedUploadMimeTypes');
 
@@ -35,16 +37,29 @@ const upload = multer({
 
 const uploadRouter = express.Router();
 
-uploadRouter.get('/', (req, res) => {
+uploadRouter.get('/', (req, res, next) => {
   res.status(200).send(req.originalUrl);
 });
 
 uploadRouter.post(
   '/',
-  upload.single('user-upload'), // Creates a 'file' property on the 'req' object
-  fileController.extractFileProps,
-  bucketController.putObject,
-  // fileController.clearStoredUploads, // Only applicable if diskStorage is used, i.e. useMemory === false
+  // Creates a 'file' property on the 'req' object
+  upload.single('user-upload'),
+
+  // Adds res.locals.form (res.locals.form.id will be referenced throughout)
+  formController.createForm,
+
+  // Starts the artifact upload to S3 which triggers textraction etc
+  bucketController.putUpload,
+
+  // Local image processing for a screenshot of each page, then upload
+  imageController.convertToWebp,
+  bucketController.putWebpFiles,
+
+  // Only applicable if diskStorage is used, i.e. useMemory === false
+  // fileController.clearStoredUploads,
+
+  // Complete the request
   (req, res, next) => {
     res.sendStatus(201);
   }

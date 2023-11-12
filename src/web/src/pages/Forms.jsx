@@ -54,6 +54,9 @@ export default function Forms() {
             <Table.HeaderCell>Uploaded At</Table.HeaderCell>
             <Table.HeaderCell>Form ID</Table.HeaderCell>
             <Table.HeaderCell>Textract Job ID</Table.HeaderCell>
+            <Table.HeaderCell>File Name S3</Table.HeaderCell>
+            <Table.HeaderCell>Analysis Folder Name S3</Table.HeaderCell>
+            <Table.HeaderCell>Export Folder Name S3</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -79,8 +82,11 @@ export default function Forms() {
               <Table.Cell>{form.fileName}</Table.Cell>
               <Table.Cell>{form.status}</Table.Cell>
               <Table.Cell>{new Date(form.createdAt).toLocaleString()}</Table.Cell>
-              <Table.Cell>{form.id}</Table.Cell>
-              <Table.Cell>{form.textractJobId}</Table.Cell>
+              <Table.Cell style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '100px' }}>{form.id}</Table.Cell>
+              <Table.Cell style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '100px' }}>{form.textractJobId}</Table.Cell>
+              <Table.Cell style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '100px' }}>{form.fileNameS3}</Table.Cell>
+              <Table.Cell style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '100px' }}>{form.analysisFolderNameS3}</Table.Cell>
+              <Table.Cell style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '100px' }}>{form.exportFolderNameS3}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

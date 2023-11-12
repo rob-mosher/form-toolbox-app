@@ -18,6 +18,7 @@ const processMessage = async (message) => {
         {
           status: 'analyzing',
           textractJobId,
+          analysisFolderNameS3: `analysis/${textractJobId}`,
         },
         {
           where: {

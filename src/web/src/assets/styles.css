@@ -13,3 +13,22 @@
   position: relative;
   top: 90px;
 }
+
+.ftbx-fitted-max {
+  max-height: 91vh;
+  overflow-y: scroll;
+  padding-top: 1px !important;
+  /* above instead of 0px - might be needed for .card */
+}
+
+.ftbx-sticky {
+  position: sticky;
+  z-index: 10;
+}
+
+.ftbx-scanned-docs {
+  padding: 2em 2em;
+  background-color: #ededed;
+}
+
+/* .ftbx-scanned-doc {} */
