@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const s3Functions = require('../s3/s3Functions');
 const { Form } = require('../../../models');
 
 const processMessage = async (mes) => {
@@ -33,6 +34,7 @@ const processMessage = async (mes) => {
       }
       break;
     }
+
     case 'FAILED': {
       console.log(`Form ${formId} encountered an error.`);
 
@@ -52,26 +54,38 @@ const processMessage = async (mes) => {
       }
       break;
     }
+
+    // 'SUCCEEDED' in AWS Textract denotes a completed analysis.
     case 'SUCCEEDED': {
       console.log(`Form with textractJobId ${textractJobId} has completed the textract process.`);
 
-      // TODO add page count etc
+      // Find the form with the given textractJobId
+      const form = await Form.findOne({
+        where: { textractJobId },
+      });
 
-      const [updatedRows] = await Form.update(
-        {
-          status: 'ready',
-        },
-        {
-          where: {
-            textractJobId,
-          },
-        }
-      );
-      if (updatedRows === 0) {
-        console.warn(`Form with textracJobtId ${textractJobId} was not set to 'ready'. A possible race condition was met.`);
+      if (!form) {
+        console.warn(`No form found with textractJobId ${textractJobId}. A possible race condition occured where the analysis results were queued before the notice of them starting (which writes the textract job id).`);
+        break;
       }
+
+      // Extract the analysisFolderNameS3
+      const { analysisFolderNameS3 } = form;
+
+      // Extract various information about the analysis
+      const {
+        pageCount,
+      } = await s3Functions.getAnalysis(analysisFolderNameS3);
+
+      // Update the form
+      form.pages = pageCount;
+      form.status = 'ready';
+      await form.save();
+
+      console.log(`Form with textractJobId ${textractJobId} has been set to 'ready'.`);
       break;
     }
+
     default: {
       console.log(`No matching action for status ${status}`);
     }
