@@ -11,7 +11,7 @@ const {
   AWS_REGION,
 } = process.env;
 
-const queueURL = `https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_NUMBER}/${AWS_QUEUE_NAME}.fifo`;
+const queueURL = `https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_NUMBER}/${AWS_QUEUE_NAME}`;
 console.log('queueURL:', queueURL);
 
 const sqsClient = new SQSClient({

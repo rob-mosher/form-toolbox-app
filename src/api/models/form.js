@@ -31,6 +31,10 @@ module.exports = (sequelize) => {
         defaultValue: false,
         allowNull: false,
       },
+      pages: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       status: {
         type: DataTypes.ENUM,
         values: [

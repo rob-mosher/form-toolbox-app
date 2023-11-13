@@ -1,3 +1,4 @@
-bucket_name =
-queue_name  =
-region      =
+bucket_name    =
+queue_name     =
+region         =
+sns_topic_name =

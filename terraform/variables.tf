@@ -3,12 +3,17 @@ variable "bucket_name" {
   type        = string
 }
 
+variable "queue_name" {
+  description = "The name of the SQS queue."
+  type        = string
+}
+
 variable "region" {
   description = "The AWS region to create resources in."
   type        = string
 }
 
-variable "queue_name" {
-  description = "The name of the SQS queue."
+variable "sns_topic_name" {
+  description = "The name of the SNS topic to create."
   type        = string
 }
