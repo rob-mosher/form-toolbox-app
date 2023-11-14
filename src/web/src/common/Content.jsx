@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function Content() {
+export default function Content({ imageUrls }) {
   return (
     <div className='ten wide column ftbx-fitted-max'>
       <div className='ui top attached menu ftbx-sticky'>
@@ -40,18 +40,23 @@ export default function Content() {
         </div>
       </div>
       <div className='ftbx-scanned-docs'>
-        {/* TODO page artifact logic */}
-        <div
-          className='ui fluid ftbx-scanned-doc'
-          id='ftbx-scanned-doc-page-TODO'
-        >
-          <img
-            className='ui fluid image'
-            alt='page1'
-            src='' /* Local or S3 image via pre-signed key */
-          />
-        </div>
-        {/* end page artifact logic */}
+        {imageUrls.map((url, index) => {
+          const pageNumber = index + 1 // Pages are 1-indexed
+
+          return (
+            <div
+              className='ui fluid ftbx-scanned-doc'
+              id={`tbx-scanned-doc-page-${pageNumber}'`}
+              key={index}
+            >
+              <img
+                className='ui fluid image'
+                alt={`Page ${pageNumber}`}
+                src={url}
+              />
+            </div>
+          )
+        })}
       </div>
     </div>
   )

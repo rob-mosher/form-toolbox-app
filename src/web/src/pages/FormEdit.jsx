@@ -7,13 +7,25 @@ import Content from '../common/Content'
 
 export default function FormEdit() {
   const [form, setForm] = useState(null)
+  const [imageUrls, setImageUrls] = useState([])
 
   const { formId } = useParams()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+  const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
+  const testApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
 
   useEffect(() => {
-    axios.get(url)
+    // Render form images/pages
+    axios.get(imageApiUrl)
+      .then((resp) => {
+        setImageUrls(resp.data)
+      })
+      .catch((err) => {
+        console.error('Error fetching presigned URLs:', err)
+      })
+
+    // Render API data that's temporarily being displayed
+    axios.get(testApiUrl)
       .then((resp) => {
         setForm(resp.data)
       })
@@ -23,7 +35,7 @@ export default function FormEdit() {
         })
         console.error('Unable to load form:', error)
       })
-  }, [url])
+  }, [])
 
   if (!form) {
     return <Header as='h2'>Form Details Editor Loading...</Header>
@@ -47,7 +59,7 @@ export default function FormEdit() {
   return (
     <div className='ui grid'>
 
-      <Content />
+      <Content imageUrls={imageUrls} />
       <div className='six wide column ftbx-fitted-max'>
         <code>
           <Tab panes={panes} />

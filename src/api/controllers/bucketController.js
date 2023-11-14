@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { sendPutObjectCommand } = require('../services/aws/s3/put');
+const { putObject } = require('../services/aws/s3/s3Functions');
 const { createError } = require('../utils/error');
 
 const bucketController = {};
@@ -15,9 +15,9 @@ bucketController.putWebpFiles = async (req, res, next) => {
   }
 
   try {
-    const uploadPromises = req.webpFiles.map((file) => sendPutObjectCommand({
+    const uploadPromises = req.webpFiles.map((file, i) => putObject({
       Bucket: AWS_BUCKET_NAME,
-      Key: `exports/${res.locals.form.id}/${file.filename}`,
+      Key: `exports/${res.locals.form.id}/${i + 1}.webp`, // Pages are 1-indexed
       Body: file.buffer,
       ContentType: 'image/webp',
     }));
@@ -62,7 +62,7 @@ bucketController.putUpload = async (req, res, next) => {
     await res.locals.form.save();
 
     console.log(`bucketController.putUpload: Uploading document with the following formId: '${res.locals.form.id}'`);
-    sendPutObjectCommand({
+    putObject({
       Bucket: AWS_BUCKET_NAME, // string
       Key: fileNameS3, // string
       Body: req.file.buffer,
