@@ -61,6 +61,12 @@ export default function FormView() {
           </List.Item>
           <List.Item>
             <List.Content>
+              <List.Header>Pages</List.Header>
+              {form.pages}
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Content>
               <List.Header>Form ID</List.Header>
               <code>
                 {form.id}
