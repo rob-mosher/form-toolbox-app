@@ -62,11 +62,11 @@ export default function Forms() {
           {forms.map((form) => (
             <Table.Row key={form.id}>
               <Table.Cell singleLine>
-                <Link to={`/forms/${form.id}`}>
-                  <Icon color='grey' name='eye' />
-                </Link>
                 <Link to={`/forms/${form.id}/edit`}>
                   <Icon color='grey' name='edit' />
+                </Link>
+                <Link to={`/forms/${form.id}`}>
+                  <Icon color='grey' name='eye' />
                 </Link>
                 <Icon
                   color='grey'

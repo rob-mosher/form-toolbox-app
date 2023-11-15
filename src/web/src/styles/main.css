@@ -32,3 +32,12 @@
 }
 
 /* .ftbx-scanned-doc {} */
+
+.ftbx-uppercase {
+  text-transform: uppercase !important;
+}
+
+.ftbx-mono {
+  font-family: monospace !important;
+  color: #313131 !important;
+}
