@@ -1,20 +1,20 @@
 require('dotenv').config({ path: '../../.env' });
 
-const cors = require('cors');
-
-const express = require('express');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 const { API_HOST } = process.env;
 const { API_PORT } = process.env;
+
+const cors = require('cors');
+const express = require('express');
+const listEndpoints = require('express-list-endpoints');
 
 const apiRouter = require('./routes/api');
 const seedFormTypes = require('./seeders/initFormTypes');
 const sqsPoller = require('./services/aws/sqs/poller');
 const { sequelize } = require('./models');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res, next) => {
   res.sendStatus(200);
@@ -60,6 +60,8 @@ if (process.env.NODE_ENV !== 'test') {
         console.log(`Server listening on ${API_HOST}:${API_PORT}`);
         sqsPoller.startPolling();
       });
+      console.log('API endpoints are:');
+      console.log(listEndpoints(app));
     })
     .catch(() => {
       console.error('Error syncronizing database schema. API will not load as a result.');
