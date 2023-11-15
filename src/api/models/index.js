@@ -10,10 +10,25 @@ const sequelize = new Sequelize(
   }
 );
 
+// The following DO NOT have any dependencies.
+const FormType = require('./formType')(sequelize);
+
+// The following DO have dependencies from the preceding.
 const Form = require('./form')(sequelize);
+
+Form.belongsTo(FormType, {
+  foreignKey: 'formTypeId',
+  as: 'formType',
+});
+
+FormType.hasMany(Form, {
+  foreignKey: 'formTypeId',
+  as: 'forms',
+});
 
 module.exports = {
   sequelize,
-  // Sequelize,
   Form,
+  FormType,
+  Sequelize,
 };

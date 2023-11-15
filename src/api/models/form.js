@@ -26,6 +26,18 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      formData: {
+        type: DataTypes.JSONB,
+        allowNull: true,
+      },
+      formTypeId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: sequelize.models.FormType.tableName,
+          key: 'id',
+        },
+      },
       isDeleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
