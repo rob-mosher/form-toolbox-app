@@ -29,32 +29,25 @@ describe('API server', () => {
     })
   });
 
-  describe('GET /api/upload', () => {
-    it('should respond with a 200 status code', async () => {
-      const response = await request(app).get('/api/upload');
-      expect(response.statusCode).toBe(200);
-    })
-  });
-
-  describe('POST /api/upload', () => {
+  describe('POST /api/forms', () => {
     it('should respond with a 500 status code, due to an empty request', async () => {
-      const response = await request(app).post('/api/upload');
+      const response = await request(app).post('/api/forms');
       expect(response.statusCode).toBe(500);
     })
   });
 
-  describe('GET /api/upload/acceptedMimeTypes', () => {
+  describe('GET /api/forms/accepted-mime-types', () => {
     it('should match an expected list of supported MIME types', async () => {
-      const response = await request(app).get('/api/upload/acceptedMimeTypes');
+      const response = await request(app).get('/api/forms/accepted-mime-types');
       const responseStringified = response.text;
       const acceptedStringified = JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES);
       expect(responseStringified === acceptedStringified).toBe(true);
     })
   });
 
-  describe('GET /api/upload/acceptedMimeTypes', () => {
+  describe('GET /api/forms/accepted-mime-types', () => {
     it('should not match an invalid list of supported MIME types', async () => {
-      const response = await request(app).get('/api/upload/acceptedMimeTypes');
+      const response = await request(app).get('/api/forms/accepted-mime-types');
       const responseStringified = response.text;
       const invalidTypes = [...ACCEPTED_UPLOAD_MIME_TYPES, 'invalidEntry'];
       const invalidStringified = JSON.stringify(invalidTypes);

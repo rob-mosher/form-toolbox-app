@@ -13,7 +13,7 @@ export default function UploadForm() {
   // const [imageFile, setImageFile] = useState(null)
 
   useEffect(() => {
-    const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/upload/acceptedMimeTypes`
+    const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/accepted-mime-types`
     axios.get(url)
       .then((resp) => {
         setAcceptedMimeTypes(resp.data)
@@ -41,7 +41,7 @@ export default function UploadForm() {
     // eslint-disable-next-line no-use-before-define
     validateFilePromise(filePointer)
       .then((formData) => {
-        const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/upload`
+        const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
 
         return axios.request(
           {
