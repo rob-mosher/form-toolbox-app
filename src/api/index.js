@@ -12,6 +12,7 @@ const { API_HOST } = process.env;
 const { API_PORT } = process.env;
 
 const apiRouter = require('./routes/api');
+const seedFormTypes = require('./seeders/initFormTypes');
 const sqsPoller = require('./services/aws/sqs/poller');
 const { sequelize } = require('./models');
 
@@ -52,6 +53,9 @@ if (process.env.NODE_ENV !== 'test') {
   sequelize.sync()
     .then(() => {
       console.log('Successfully syncronized database schema.');
+      return seedFormTypes(); // Must complete before remaining logic can occur (see below)
+    })
+    .then(() => { // Allows seedFormTypes() to complete before proceeding (see above)
       app.listen(API_PORT, API_HOST, () => {
         console.log(`Server listening on ${API_HOST}:${API_PORT}`);
         sqsPoller.startPolling();
