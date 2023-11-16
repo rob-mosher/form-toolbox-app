@@ -42,7 +42,11 @@ module.exports.handler = async (event) => {
         RoleArn: process.env.TEXTRACT_TO_SNS_ROLE_ARN,
         SNSTopicArn: process.env.SNS_TOPIC_ARN,
       },
-      FeatureTypes: ["LAYOUT"],
+      FeatureTypes: [
+        "FORMS",
+        "LAYOUT",
+        "TABLES",
+      ],
       OutputConfig: {
         S3Bucket: bucketName,
         S3Prefix: "analysis"

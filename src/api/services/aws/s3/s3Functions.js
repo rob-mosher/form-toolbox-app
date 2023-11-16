@@ -4,6 +4,8 @@ const { fromEnv } = require('@aws-sdk/credential-providers');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { GetObjectCommand, PutObjectCommand, S3Client } = require('@aws-sdk/client-s3');
 
+const textractFunctions = require('../textract/textractFunctions');
+
 const {
   AWS_BUCKET_NAME,
   AWS_REGION,
@@ -85,10 +87,18 @@ s3Functions.getAnalysis = async (analysisFolderNameS3) => {
     });
 
     // S3 returns a buffer, so utilize `toString('utf-8')` to be safe, although it works without it
-    const analysisResult = JSON.parse(data.toString('utf-8'));
-    const pageCount = analysisResult.DocumentMetadata.Pages;
+    const analysisResults = JSON.parse(data.toString('utf-8'));
 
-    return { pageCount };
+    const pageCount = analysisResults.DocumentMetadata.Pages;
+    const textractKeyValues = textractFunctions.parseKeyValuePairs(analysisResults);
+
+    console.log('pageCount', pageCount);
+    console.log('textractKeyValues', textractKeyValues);
+
+    return {
+      pageCount,
+      textractKeyValues,
+    };
   } catch (err) {
     throw new Error(err.message);
   }

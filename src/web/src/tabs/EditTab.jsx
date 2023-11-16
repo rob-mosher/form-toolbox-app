@@ -27,7 +27,7 @@ export default function EditTab({
         <Button>Detect</Button>
 
         <Divider horizontal>
-          <Header size='small' content='Form' className='ftbx-uppercase' />
+          <Header size='small' content='Form Data' className='ftbx-uppercase' />
         </Divider>
 
         <Form.Field>

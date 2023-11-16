@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+
 const s3Functions = require('../s3/s3Functions');
 const { Form } = require('../../../models');
 
@@ -75,11 +76,13 @@ const processMessage = async (mes) => {
       // Extract various information about the analysis
       const {
         pageCount,
+        textractKeyValues,
       } = await s3Functions.getAnalysis(analysisFolderNameS3);
 
       // Update the form
       form.pages = pageCount;
       form.status = 'ready';
+      form.textractKeyValues = textractKeyValues;
       await form.save();
 
       console.log(`Form with textractJobId ${textractJobId} has been set to 'ready'.`);

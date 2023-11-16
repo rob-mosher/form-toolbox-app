@@ -11,7 +11,7 @@ export default function InfoTab({ form }) {
               </strong>
             </div>
             <div>
-              {value}
+              {JSON.stringify(value)}
             </div>
           </div>
         ))}
