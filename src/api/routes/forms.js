@@ -8,7 +8,7 @@ const imageController = require('../controllers/imageController');
 const { createError } = require('../utils/error');
 const { generatePresignedUrlsFromKeys } = require('../services/aws/s3/s3Functions');
 const { ACCEPTED_UPLOAD_MIME_TYPES } = require('../constants/acceptedUploadMimeTypes');
-const { Form } = require('../models');
+const { Form, FormType } = require('../models');
 
 function fileFilter(req, file, cb) {
   const acceptedMimeTypes = new Set([...ACCEPTED_UPLOAD_MIME_TYPES]);
@@ -48,6 +48,19 @@ formsRouter.get(
         where: {
           isDeleted: false,
         },
+        include: [{
+          model: FormType,
+          as: 'formType',
+          attributes: ['name'],
+        }],
+        attributes: [
+          'createdAt',
+          'fileName',
+          'id',
+          'pages',
+          'status',
+          'textractJobId',
+        ],
       });
       return res.status(200).json(forms);
     } catch (err) {

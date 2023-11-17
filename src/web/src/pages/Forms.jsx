@@ -51,10 +51,11 @@ export default function Forms() {
             <Table.HeaderCell>Action</Table.HeaderCell>
             <Table.HeaderCell>File Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Uploaded At</Table.HeaderCell>
             <Table.HeaderCell>Pages</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Form ID</Table.HeaderCell>
             <Table.HeaderCell>Textract Job ID</Table.HeaderCell>
+            <Table.HeaderCell>Uploaded At</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -79,10 +80,11 @@ export default function Forms() {
               </Table.Cell>
               <Table.Cell>{form.fileName}</Table.Cell>
               <Table.Cell>{form.status}</Table.Cell>
-              <Table.Cell>{new Date(form.createdAt).toLocaleString()}</Table.Cell>
               <Table.Cell>{form.pages}</Table.Cell>
+              <Table.Cell>{form.formType?.name}</Table.Cell>
               <Table.Cell>{form.id}</Table.Cell>
               <Table.Cell>{form.textractJobId}</Table.Cell>
+              <Table.Cell>{new Date(form.createdAt).toLocaleString()}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
