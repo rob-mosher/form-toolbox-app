@@ -1,11 +1,11 @@
 const express = require('express');
 const multer = require('multer');
-const { Op } = require('sequelize');
 
 const bucketController = require('../controllers/bucketController');
 const fileController = require('../controllers/fileController');
 const formController = require('../controllers/formController');
 const imageController = require('../controllers/imageController');
+const { createError } = require('../utils/error');
 const { generatePresignedUrlsFromKeys } = require('../services/aws/s3/s3Functions');
 const { ACCEPTED_UPLOAD_MIME_TYPES } = require('../constants/acceptedUploadMimeTypes');
 const { Form } = require('../models');
@@ -39,18 +39,26 @@ const upload = multer({
 
 const formsRouter = express.Router();
 
-formsRouter.get('/', async (req, res, next) => {
-  try {
-    const forms = await Form.findAll({
-      where: {
-        isDeleted: false,
-      },
-    });
-    return res.status(200).json(forms);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+formsRouter.get(
+  '/',
+
+  async (req, res, next) => {
+    try {
+      const forms = await Form.findAll({
+        where: {
+          isDeleted: false,
+        },
+      });
+      return res.status(200).json(forms);
+    } catch (err) {
+      return next(createError({
+        err: `Error getting all forms: ${err.message}`,
+        method: `${__filename}:formsRouter.get /`,
+        status: 500,
+      }));
+    }
   }
-});
+);
 
 formsRouter.post(
   '/',
@@ -76,74 +84,137 @@ formsRouter.post(
   }
 );
 
-formsRouter.get('/accepted-mime-types', (req, res, next) => {
-  res.status(200).send(JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES));
-});
+formsRouter.get(
+  '/accepted-mime-types',
 
-formsRouter.delete('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const form = await Form.findByPk(id);
+  (req, res, next) => {
+    try {
+      const mimeTypesJson = JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES);
+      return res.status(200).send(mimeTypesJson);
+    } catch (err) {
+      return next(createError({
+        err: `Error processing accepted MIME types: ${err.message}`,
+        method: `${__filename}:formsRouter.get /accepted-mime-types`,
+        status: 500,
+      }));
+    }
+  }
+);
 
-    if (!form) {
-      return res.status(404).json({ error: 'Form not found' });
+formsRouter.delete(
+  '/:id',
+  (req, res, next) => {
+    res.locals.allowDeleted = true;
+    next();
+  },
+  formController.getForm,
+
+  async (req, res, next) => {
+    try {
+      if (res.locals.form.isDeleted) {
+        console.log('formsRouter.delete: Form was previously marked as deleted, but returning successfully to preserve idempotency');
+        return res.sendStatus(200);
+      }
+
+      res.locals.form.isDeleted = true;
+      await res.locals.form.save();
+      return res.sendStatus(200);
+    } catch (err) {
+      return next(createError({
+        err: `Error deleting form: ${err.message}`,
+        method: `${__filename}:formsRouter.delete /:id`,
+        status: 500,
+      }));
+    }
+  }
+);
+
+formsRouter.get(
+  '/:id',
+  formController.getForm,
+
+  async (req, res, next) => {
+    try {
+      return res.status(200).json(res.locals.form);
+    } catch (err) {
+      return next(createError({
+        err: `Error getting form: ${err.message}`,
+        method: `${__filename}:formsRouter.get /:id`,
+        status: 500,
+      }));
+    }
+  }
+);
+
+formsRouter.put(
+  '/:id',
+  formController.getForm,
+
+  async (req, res, next) => {
+    const { updates } = req.body;
+    const allowedUpdates = new Set([
+      'formTypeId',
+    ]);
+
+    try {
+      if (!updates) {
+        throw new Error('No update object was included in the request');
+      }
+
+      // Search for unsupported updates
+      Object.keys(updates).forEach((key) => {
+        if (!allowedUpdates.has(key)) {
+          throw new Error(`Update to field '${key}' is not allowed`);
+        }
+      });
+
+      // Process supported updates
+      // NOTE: If values match by value, sequelize will not alter changed() to true
+      if (updates.formTypeId) {
+        res.locals.form.formTypeId = updates.formTypeId;
+      }
+
+      if (!res.locals.form.changed()) {
+        console.log('formsRouter.put: No valid data needed to be changed, but returning successfully to preserve idempotency');
+        return res.sendStatus(201);
+      }
+
+      await res.locals.form.save();
+      return res.sendStatus(201);
+    } catch (err) {
+      return next(createError({
+        err: `Error updating form: ${err.message}`,
+        method: `${__filename}:formsRouter.put /:id`,
+        status: 400,
+      }));
+    }
+  }
+);
+
+formsRouter.get(
+  '/:id/image-urls',
+  formController.getForm,
+
+  async (req, res, next) => {
+    const { pages: pageCount } = res.locals.form;
+    const keys = [];
+
+    for (let i = 1; i <= pageCount; i += 1) {
+      const key = `exports/${res.locals.form.id}/${i}.webp`;
+      keys.push(key);
     }
 
-    if (!form.isDeleted) {
-      form.isDeleted = true;
-      await form.save();
-    } else {
-      console.log(`Form ${id} previously marked as deleted, so no action is needed, but proceeding as if delete action took place from the user's perspective.`);
+    try {
+      const presignedUrls = await generatePresignedUrlsFromKeys(keys);
+      return res.json(presignedUrls);
+    } catch (err) {
+      return next(createError({
+        err: `Error generating image URLS: ${err.message}`,
+        method: `${__filename}:formsRouter.get /:id/image-urls`,
+        status: 500,
+      }));
     }
-
-    return res.status(200).json({ message: 'Form marked as deleted' });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
   }
-});
-
-formsRouter.get('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const form = await Form.findByPk(id);
-
-    if (!form) {
-      return res.status(404).json({ error: 'Form not found' });
-    }
-
-    if (form.isDeleted) {
-      return res.status(404).json({ message: 'Form is deleted and not accessible' });
-    }
-
-    return res.status(200).json(form);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
-
-formsRouter.get('/:id/image-urls', async (req, res, next) => {
-  const { id } = req.params;
-  const form = await Form.findByPk(id);
-
-  if (!form || form.isDeleted) {
-    return res.status(404).json({ error: 'Form not found, or has been deleted' });
-  }
-
-  const { pages: pageCount } = form;
-  const keys = [];
-
-  for (let i = 1; i <= pageCount; i += 1) {
-    const key = `exports/${id}/${i}.webp`;
-    keys.push(key);
-  }
-
-  try {
-    const presignedUrls = await generatePresignedUrlsFromKeys(keys);
-    return res.json(presignedUrls);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Error generating URLs' });
-  }
-});
+);
 
 module.exports = formsRouter;

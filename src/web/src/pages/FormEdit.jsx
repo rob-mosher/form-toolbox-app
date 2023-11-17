@@ -14,9 +14,9 @@ export default function FormEdit() {
 
   const { formId } = useParams()
 
+  const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
   const formTypeApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
   const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
-  const testApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
 
   useEffect(() => {
     // Get formtypes
@@ -44,8 +44,8 @@ export default function FormEdit() {
         console.error('Error fetching presigned URLs:', error.message)
       })
 
-    // Get general data that's temporarily being displayed
-    axios.get(testApiUrl)
+    // Get form data
+    axios.get(formApiUrl)
       .then((resp) => {
         setForm(resp.data)
       })
@@ -64,7 +64,14 @@ export default function FormEdit() {
   const panes = [
     {
       menuItem: { key: 'edit', icon: 'edit', content: 'Edit' },
-      render: () => <EditTab formTypes={formTypes} />,
+      render: () => (
+        <EditTab
+          form={form}
+          formId={formId}
+          formTypes={formTypes}
+          setForm={setForm}
+        />
+      ),
     },
     {
       menuItem: { key: 'info', icon: 'info', content: 'Info' },

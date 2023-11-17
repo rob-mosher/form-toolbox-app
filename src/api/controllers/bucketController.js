@@ -74,7 +74,7 @@ bucketController.putUpload = async (req, res, next) => {
   } catch (err) {
     return next(createError({
       err,
-      method: `${__filename}:putObject`,
+      method: `${__filename}:putUpload`,
       status: 500,
     }));
   }
