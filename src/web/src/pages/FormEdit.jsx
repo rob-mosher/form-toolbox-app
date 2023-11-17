@@ -11,16 +11,21 @@ export default function FormEdit() {
   const [form, setForm] = useState(null)
   const [formTypes, setFormTypes] = useState([])
   const [imageUrls, setImageUrls] = useState([])
+  const [schema, setSchema] = useState(null)
 
   const { formId } = useParams()
 
   const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-  const formTypeApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
+  const formTypesApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
   const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
+
+  const formTypeApiUrl = form?.formTypeId
+    ? `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${form?.formTypeId}`
+    : null
 
   useEffect(() => {
     // Get formtypes
-    axios.get(formTypeApiUrl)
+    axios.get(formTypesApiUrl)
       .then((resp) => {
         const types = resp.data.map(({ id, name }) => (
           {
@@ -57,6 +62,20 @@ export default function FormEdit() {
       })
   }, [])
 
+  useEffect(() => {
+    if (form?.formTypeId) {
+      axios.get(formTypeApiUrl)
+        .then((resp) => {
+          console.log('schema found:', resp.data[0].schema)
+          setSchema(resp.data[0].schema)
+        })
+        .catch((err) => {
+          console.error('Error fetching schema:', err)
+          toast.error('Error fetch form tyhpe schema.')
+        })
+    }
+  }, [form?.formTypeId, formTypeApiUrl])
+
   if (!form) {
     return <Header as='h2'>Form Details Editor Loading...</Header>
   }
@@ -69,6 +88,7 @@ export default function FormEdit() {
           form={form}
           formId={formId}
           formTypes={formTypes}
+          schema={schema}
           setForm={setForm}
         />
       ),

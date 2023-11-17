@@ -17,6 +17,7 @@ export default function EditTab({
   form,
   formId,
   formTypes,
+  schema,
   setForm,
 }) {
   const [selectedFormType, setSelectedFormType] = useState(form.formTypeId || '')
@@ -64,44 +65,32 @@ export default function EditTab({
           <Header size='small' content='Form Data' className='ftbx-uppercase' />
         </Divider>
 
-        <Form.Field>
-          <label htmlFor='formField1'>
-            Field 1
-            <input
-              type='text'
-              name='title'
-              id='formField1'
-              className='ftbx-mono'
-              defaultValue='Example Data'
-            />
-          </label>
-        </Form.Field>
+        {schema ? (
 
-        <Form.Field>
-          <label htmlFor='formField1'>
-            Field 2
-            <input
-              type='text'
-              name='title'
-              id='formField1'
-              className='ftbx-mono'
-              defaultValue='More example data'
-            />
-          </label>
-        </Form.Field>
+          Object.entries(JSON.parse(schema)).map(([key, value]) => (
+            <Form.Field key={key}>
+              <label htmlFor='key'>
+                {key}
+                <input
+                  className='ftbx-mono'
+                // defaultValue='Example Data'
+                  id='key'
+                  defaultValue={form?.textractKeyValues[key] || ''}
+                  name={key}
+                  required={value?.required}
+                  type={
+                    value?.type === 'string'
+                      ? 'text'
+                      : value?.type
+                  }
+                />
+              </label>
+            </Form.Field>
+          ))
+        ) : (
+          <span>Please select and apply a form type from above.</span>
+        )}
 
-        <Form.Field>
-          <label htmlFor='formField1'>
-            Field 3
-            <input
-              type='text'
-              name='title'
-              id='formField1'
-              className='ftbx-mono'
-              defaultValue='Even more example data'
-            />
-          </label>
-        </Form.Field>
       </Form>
     </div>
   )
