@@ -81,6 +81,17 @@ export default function EditTab({
     }))
   })
 
+  const handleSave = async () => {
+    try {
+      const setFormDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+      await axios.put(setFormDataUrl, { updates: { formData: form.formData } })
+      toast.success('Form saved!')
+    } catch (err) {
+      console.error('Error saving form data:', err)
+      toast.error('Error saving form data.')
+    }
+  }
+
   return (
     <div className='ui bottom attached active tab segment' data-tab='edit'>
       <Form>
@@ -98,7 +109,7 @@ export default function EditTab({
         <Form.Select label='Version' options={versionsTempData} placeholder='Select Version' />
 
         <Button primary onClick={handleApply}>Apply</Button>
-        <Button>Detect</Button>
+        <Button onClick={handleSave}>Save</Button>
 
         <Divider horizontal>
           <Header size='small' content='Form Data' className='ftbx-uppercase' />

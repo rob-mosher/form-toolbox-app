@@ -49,9 +49,8 @@ export default function FormEdit() {
     axios.get(formApiUrl)
       .then(async (resp) => {
         const fetchedForm = resp.data
-        setForm(fetchedForm)
 
-        // If formTypeId is set, set the schema (loading formData to follow)
+        // If formTypeId is set, set the schema
         if (fetchedForm.formTypeId) {
           try {
             const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${fetchedForm.formTypeId}`)
@@ -60,6 +59,10 @@ export default function FormEdit() {
             console.error('Error fetching schema:', error)
           }
         }
+
+        // It should be fine to setForm before setSchema due to how React works, but it seems more
+        // clear to setSchema first, since setForm's formData depends on schema to exist upon.
+        setForm(fetchedForm)
       })
       .catch((error) => {
         toast.error('Error: Unable to load form.', {

@@ -166,6 +166,7 @@ formsRouter.put(
   async (req, res, next) => {
     const { updates } = req.body;
     const allowedUpdates = new Set([
+      'formData',
       'formTypeId',
     ]);
 
@@ -182,9 +183,14 @@ formsRouter.put(
       });
 
       // Process supported updates
+      // For now, handle individually in case specific logic is needed.
       // NOTE: If values match by value, sequelize will not alter changed() to true
       if (updates.formTypeId) {
         res.locals.form.formTypeId = updates.formTypeId;
+      }
+
+      if (updates.formData) {
+        res.locals.form.formData = updates.formData;
       }
 
       if (!res.locals.form.changed()) {
