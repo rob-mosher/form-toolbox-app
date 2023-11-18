@@ -19,18 +19,48 @@ export default function EditTab({
   formTypes,
   schema,
   setForm,
+  setSchema,
 }) {
   const [selectedFormType, setSelectedFormType] = useState(form.formTypeId || '')
 
+  const mapTextractKeyValuesToFormData = (newSchema, textractKeyValues) => {
+    const schemaKeys = Object.keys(JSON.parse(newSchema))
+    const newFormData = schemaKeys.reduce((acc, key) => {
+      if (key in textractKeyValues) {
+        acc[key] = textractKeyValues[key]
+      } else {
+        acc[key] = ''
+      }
+      return acc
+    }, {})
+
+    return newFormData
+  }
+
   const handleApply = async () => {
     try {
-      const setFormTypeUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-      await axios.put(setFormTypeUrl, { updates: { formTypeId: selectedFormType } })
-      setForm((prevForm) => ({
-        ...prevForm,
-        formTypeId: selectedFormType,
-      }))
-      toast.success('Form type updated successfully.')
+      // Set formTypeId on the form.
+      const setFormTypeIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+      await axios.put(setFormTypeIdUrl, { updates: { formTypeId: selectedFormType } })
+
+      // Get the new schema.
+      const getFormTypeDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${selectedFormType}`
+      const response = await axios.get(getFormTypeDataUrl)
+      const newSchema = response.data[0].schema
+
+      // Update state with the above changes.
+      setSchema(newSchema)
+      setForm((prevForm) => {
+        // Since handleApply is user-initiated, map textractKeyValues to formData, replacing values
+        const mappedFormData = mapTextractKeyValuesToFormData(newSchema, prevForm.textractKeyValues)
+        return {
+          ...prevForm,
+          formTypeId: selectedFormType,
+          formData: mappedFormData,
+        }
+      })
+
+      // toast.success('Form type updated successfully.')
     } catch (err) {
       console.error('Error updating form type:', err)
       toast.error('Error updating form type.')
@@ -38,9 +68,18 @@ export default function EditTab({
   }
 
   const handleChangeFormType = (e, data) => {
-    console.log('handleChangeFormType called with', data.value)
     setSelectedFormType(data.value)
   }
+
+  const handleChangeFormData = ((key, value) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      formData: {
+        ...prevForm.formData,
+        [key]: value,
+      },
+    }))
+  })
 
   return (
     <div className='ui bottom attached active tab segment' data-tab='edit'>
@@ -73,16 +112,16 @@ export default function EditTab({
                 {key}
                 <input
                   className='ftbx-mono'
-                // defaultValue='Example Data'
                   id='key'
-                  defaultValue={form?.textractKeyValues[key] || ''}
                   name={key}
+                  onChange={(e) => handleChangeFormData(key, e.target.value)}
                   required={value?.required}
                   type={
                     value?.type === 'string'
                       ? 'text'
                       : value?.type
                   }
+                  value={form?.formData?.[key] || ''}
                 />
               </label>
             </Form.Field>

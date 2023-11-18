@@ -19,10 +19,6 @@ export default function FormEdit() {
   const formTypesApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
   const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
 
-  const formTypeApiUrl = form?.formTypeId
-    ? `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${form?.formTypeId}`
-    : null
-
   useEffect(() => {
     // Get formtypes
     axios.get(formTypesApiUrl)
@@ -51,8 +47,19 @@ export default function FormEdit() {
 
     // Get form data
     axios.get(formApiUrl)
-      .then((resp) => {
-        setForm(resp.data)
+      .then(async (resp) => {
+        const fetchedForm = resp.data
+        setForm(fetchedForm)
+
+        // If formTypeId is set, set the schema (loading formData to follow)
+        if (fetchedForm.formTypeId) {
+          try {
+            const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${fetchedForm.formTypeId}`)
+            setSchema(schemaResponse.data[0].schema)
+          } catch (error) {
+            console.error('Error fetching schema:', error)
+          }
+        }
       })
       .catch((error) => {
         toast.error('Error: Unable to load form.', {
@@ -61,20 +68,6 @@ export default function FormEdit() {
         console.error('Unable to load form:', error.message)
       })
   }, [])
-
-  useEffect(() => {
-    if (form?.formTypeId) {
-      axios.get(formTypeApiUrl)
-        .then((resp) => {
-          console.log('schema found:', resp.data[0].schema)
-          setSchema(resp.data[0].schema)
-        })
-        .catch((err) => {
-          console.error('Error fetching schema:', err)
-          toast.error('Error fetch form tyhpe schema.')
-        })
-    }
-  }, [form?.formTypeId, formTypeApiUrl])
 
   if (!form) {
     return <Header as='h2'>Form Details Editor Loading...</Header>
@@ -90,6 +83,7 @@ export default function FormEdit() {
           formTypes={formTypes}
           schema={schema}
           setForm={setForm}
+          setSchema={setSchema}
         />
       ),
     },
