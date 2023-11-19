@@ -16,16 +16,24 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_ACCOUNT_NUMBER=${AWS_ACCOUNT_NUMBER}
       - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
-      - AWS_QUEUE_NAME=${AWS_QUEUE_NAME}
       - AWS_REGION=${AWS_REGION}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SQS_QUEUE_NAME=${AWS_SQS_QUEUE_NAME}
+      - AWS_SQS_REQUEUE_DELAY=${AWS_SQS_REQUEUE_DELAY}
+      - AWS_SQS_REQUEUE_MAX_RETRIES=${AWS_SQS_REQUEUE_MAX_RETRIES}
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
       - DB_PASS=${DB_PASS}
       - DB_PORT=5432
       - DB_USER=${DB_USER}
     healthcheck:
-      test: ["CMD", "curl", "-f", "localhost:${API_PORT}/healthcheck"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "localhost:${API_PORT}/healthcheck"
+        ]
       interval: 2s
       timeout: 5s
       retries: 5
@@ -39,7 +47,11 @@ services:
   db:
     image: postgres:15.4
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB'
+        ]
       interval: 2s
       timeout: 5s
       retries: 5
@@ -66,5 +78,6 @@ services:
       - ./src/web/:/code
       # Exclude host's node_modules for container and processor architecture compatibility.
       - /code/node_modules/
+
 # volumes:
 #   pgdata:

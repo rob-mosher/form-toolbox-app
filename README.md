@@ -17,4 +17,5 @@ When no longer needed, run:
 
 ### Notes
 
+- `AWS_SQS_REQUEUE_DELAY` is in seconds, not milliseconds
 - `docker-compose.yaml` will eventually be renamed to `docker-compose-dev.yaml`. See `docker-compose.yaml` file for more details.

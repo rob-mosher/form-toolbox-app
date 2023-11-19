@@ -1,18 +1,25 @@
-const { Op } = require('sequelize');
+require('dotenv').config();
 
+const sqsFunctions = require('./sqsFunctions');
 const s3Functions = require('../s3/s3Functions');
 const { Form } = require('../../../models');
+
+const {
+  AWS_SQS_REQUEUE_MAX_RETRIES,
+} = process.env;
 
 const processMessage = async (mes) => {
   console.log('Processing message: ', mes.Body);
 
   const parsedBody = JSON.parse(mes.Body);
+  const parsedMessageContent = JSON.parse(parsedBody.Message);
+
+  // NOTE AWS textract is limited in how it can be structured, so "JobId" is "textractJobId"
   const {
-    // NOTE AWS textract is limited in how it can be structured, so "JobId" is "textractJobId"
     JobId: textractJobId,
     Status: status,
     FormId: formId,
-  } = JSON.parse(parsedBody.Message); // NOTE this is how AWS textract forms their data
+  } = parsedMessageContent;
 
   switch (status) {
     case 'ANALYZING': {
@@ -66,7 +73,15 @@ const processMessage = async (mes) => {
       });
 
       if (!form) {
-        console.warn(`No form found with textractJobId ${textractJobId}. A possible race condition occured where the analysis results were queued before the notice of them starting (which writes the textract job id).`);
+        const retryCount = (parsedBody.RetryCount || 0);
+
+        if (retryCount <= AWS_SQS_REQUEUE_MAX_RETRIES) {
+          await sqsFunctions.requeueMessage(parsedBody.Message, retryCount);
+          console.warn(`Requeued message for textractJobId ${textractJobId}. Retry count is expected to be: ${retryCount + 1}`);
+        } else {
+          console.error(`Max retries reached for message: ${mes.MessageId}`);
+          // Handle max retries (e.g., log, move to DLQ)
+        }
         break;
       }
 

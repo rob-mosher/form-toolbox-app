@@ -7,11 +7,11 @@ const { processMessage } = require('./messageProcessor');
 
 const {
   AWS_ACCOUNT_NUMBER,
-  AWS_QUEUE_NAME,
   AWS_REGION,
+  AWS_SQS_QUEUE_NAME,
 } = process.env;
 
-const queueURL = `https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_NUMBER}/${AWS_QUEUE_NAME}`;
+const queueURL = `https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_NUMBER}/${AWS_SQS_QUEUE_NAME}`;
 console.log('queueURL:', queueURL);
 
 const sqsClient = new SQSClient({
