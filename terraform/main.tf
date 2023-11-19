@@ -193,7 +193,7 @@ resource "aws_sqs_queue_policy" "form_toolbox_queue_policy" {
 }
 
 resource "aws_sns_topic" "toolbox_topic" {
-  name = "toolboxSnsTopic"
+  name = var.sns_topic_name
 }
 
 resource "aws_sns_topic_subscription" "toolbox_topic_subscription" {
