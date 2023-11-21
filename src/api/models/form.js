@@ -43,7 +43,7 @@ module.exports = (sequelize) => {
         defaultValue: false,
         allowNull: false,
       },
-      pages: {
+      pageCount: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },

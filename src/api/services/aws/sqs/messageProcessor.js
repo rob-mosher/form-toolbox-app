@@ -95,7 +95,7 @@ const processMessage = async (mes) => {
       } = await s3Functions.getAnalysis(analysisFolderNameS3);
 
       // Update the form
-      form.pages = pageCount;
+      form.pageCount = pageCount;
       form.status = 'ready';
       form.textractKeyValues = textractKeyValues;
       await form.save();

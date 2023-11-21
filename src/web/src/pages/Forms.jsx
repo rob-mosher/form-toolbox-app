@@ -80,7 +80,7 @@ export default function Forms() {
               </Table.Cell>
               <Table.Cell>{form.fileName}</Table.Cell>
               <Table.Cell>{form.status}</Table.Cell>
-              <Table.Cell>{form.pages}</Table.Cell>
+              <Table.Cell>{form.pageCount}</Table.Cell>
               <Table.Cell>{form.formType?.name}</Table.Cell>
               <Table.Cell>{form.id}</Table.Cell>
               <Table.Cell>{form.textractJobId}</Table.Cell>

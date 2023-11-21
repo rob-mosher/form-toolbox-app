@@ -57,7 +57,7 @@ formsRouter.get(
           'createdAt',
           'fileName',
           'id',
-          'pages',
+          'pageCount',
           'status',
           'textractJobId',
         ],
@@ -215,7 +215,7 @@ formsRouter.get(
   formController.getForm,
 
   async (req, res, next) => {
-    const { pages: pageCount } = res.locals.form;
+    const { pageCount } = res.locals.form;
     const keys = [];
 
     for (let i = 1; i <= pageCount; i += 1) {

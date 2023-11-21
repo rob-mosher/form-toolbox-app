@@ -68,7 +68,7 @@ erDiagram
         JSONB formData "Flexible container for varied form content, adhering to FormType schema"
         UUID formTypeId FK "Foreign Key to FormType"
         BOOLEAN isDeleted "For soft-delete"
-        INTEGER pages
+        INTEGER pageCount
         ENUM status
         STRING textractJobId
         JSONB textractKeyValues
