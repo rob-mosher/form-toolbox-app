@@ -1,7 +1,3 @@
-# For now, to ease development, this config acts as the dev build. Eventually
-# it will be renamed to docker-compose-dev.yaml, and docker-compose.yaml will
-# be in place for non-dev builds.
-
 version: '3.9'
 
 services:
