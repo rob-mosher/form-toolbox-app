@@ -6,7 +6,7 @@ Assists the data-entry process by automating entry of form data. Can be extended
 
 - AWS Account
 - docker
-- terraform
+- terraform cli
 
 # Local Development
 
@@ -21,8 +21,15 @@ terraform validate
 terraform plan
 terraform apply
 ```
-3. Create `./.env`, populating `AWS_BUCKET_NAME`, `AWS_REGION`, `AWS_SQS_QUEUE_NAME`, and `COMPOSE_PROJECT_NAME` with outputted values from terraform, and the remaining values as appropriate.
-4. Run each following command:
+3. Note outputted values from running `terraform apply` above:
+```
+AWS_BUCKET_NAME
+AWS_REGION
+AWS_SQS_QUEUE_NAME
+COMPOSE_PROJECT_NAME
+```
+4. Create `./.env`, populating with above and appropriate values.
+5. Run each following command:
 ```
 docker compose build
 docker compose up -d
