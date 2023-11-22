@@ -1,5 +1,24 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.26"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
+  }
+}
+
 provider "aws" {
   region = var.region
+}
+
+provider "random" {}
+
+locals {
+  prefix = "formtoolbox-${random_string.shared_id.result}"
 }
 
 module "iam" {
@@ -35,14 +54,14 @@ module "lambda" {
 module "s3_bucket" {
   source        = "terraform-aws-modules/s3-bucket/aws"
   version       = "3.15.1"
-  bucket        = var.bucket_name
+  bucket        = "${local.prefix}-s3-bucket"
   force_destroy = true # TODO remove later
 }
 
 module "sns" {
   source = "./sns"
 
-  sns_topic_name = var.sns_topic_name
+  sns_topic_name = "${local.prefix}-sns-topic"
 
   sqs_queue_arn            = module.sqs.sqs_queue_arn
   textract_to_sns_role_arn = module.iam.textract_to_sns_role_arn
@@ -51,7 +70,7 @@ module "sns" {
 module "sqs" {
   source = "./sqs"
 
-  queue_name = var.queue_name
+  queue_name = "${local.prefix}-sqs-queue"
 
   sns_topic_arn = module.sns.sns_topic_arn
 }
@@ -65,4 +84,12 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "uploads/"
   }
+}
+
+resource "random_string" "shared_id" {
+  length      = 8
+  min_lower   = 1
+  min_numeric = 1
+  special     = false
+  upper       = false
 }

@@ -1,15 +1,15 @@
-output "s3_bucket_name" {
+output "AWS_BUCKET_NAME" {
   value = module.s3_bucket.s3_bucket_id
 }
 
-output "sns_topic_arn" {
-  value = module.sns.sns_topic_arn
+output "AWS_SQS_QUEUE_NAME" {
+  value = module.sqs.sqs_queue_name
 }
 
-output "sqs_queue_url" {
-  value = module.sqs.sqs_queue_url
+output "AWS_REGION" {
+  value = var.region
 }
 
-output "textract_to_sns_role_arn" {
-  value = module.iam.textract_to_sns_role_arn
+output "COMPOSE_PROJECT_NAME" {
+  value = local.prefix
 }

@@ -1,36 +1,52 @@
 # form-toolbox
 
-### Prerequisites
+Assists the data-entry process by automating entry of form data. Can be extended to validate input against expected values.
+
+# Prerequisites
 
 - AWS Account
 - docker
 - terraform
 
-### Local Development
+# Local Development
+
+## Setting Up
 
 To run a development build, which includes hot-reloading for the Docker portion:
 
-1. `terraform -chdir=terraform validate`
-1. `terraform -chdir=terraform plan`
-1. `terraform -chdir=terraform apply`
-1. `docker compose build`
-1. `docker compose up -d`
+1. Create `./terraform/terraform.tfvars`, populating `region`  with your AWS region
+2. Run each following command from the `./terraform/` directory:
+```
+terraform validate
+terraform plan
+terraform apply
+```
+3. Create `./.env`, populating `AWS_BUCKET_NAME`, `AWS_REGION`, `AWS_SQS_QUEUE_NAME`, and `COMPOSE_PROJECT_NAME` with outputted values from terraform, and the remaining values as appropriate.
+4. Run each following command:
+```
+docker compose build
+docker compose up -d
+``````
 
-When no longer needed, run:
+## Striking
 
-1. `docker compose down`
-2. `terraform -chdir=terraform destroy`
+When no longer needed, run each following command:
 
-### Notes
+```
+docker compose down
+terraform destroy
+```
+
+# Notes
 
 - `AWS_SQS_REQUEUE_DELAY` is in seconds
-- `docker-compose.yaml` will eventually be renamed to `docker-compose-dev.yaml`. Eventually it will be renamed to `docker-compose-dev.yaml`, and `docker-compose.yaml` will be in place for non-dev builds. This is to ease current development (requiring less typing) and architectural flexibilty.
+- `docker-compose.yaml` will eventually be renamed to `docker-compose-dev.yaml`, and `docker-compose.yaml` will be utilized for non-dev builds. This is to ease current development (requiring less typing) and architectural flexibilty.
 
-### Known Issues
+# Known Issues
 
 - `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
 
-### AWS Integration Diagram
+# AWS Integration Diagram
 
 Form Toolbox utilizes AWS Textract to extract key-value data from forms.
 
@@ -56,7 +72,7 @@ graph TD;
     AWS_SQS --"When Polled"--> FormToolbox;
 ```
 
-### Database Diagram
+# Database Diagram
 
 To balance the diverse requirements of various form types with the need for strict schema and ACID compliance, Form Toolbox employs a hyrid approach. Utilizing PostgreSQL's JSONB datatype, we enable each form type to have its own schema, while still maintaining a consistent, overarching schema-based system. This methodology effectively merges the benefits of NoSQL/Document storage – flexibility and adaptability – with the strengths of a SQL/Schema-based system – reliability and structure. The result is a system that provides consistent document-style storage and retrieval within a structured SQL framework, catering to diverse form requirements while upholding data integrity and consistency.
 
