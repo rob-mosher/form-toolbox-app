@@ -1,6 +1,6 @@
 # form-toolbox
 
-Assists the data-entry process by automating entry of form data. Can be extended to validate input against expected values.
+Form Toolbox simplifies and automates the process of entering and validating form data. Its design focuses on practicality and adaptability, using Docker containers for consistent and manageable deployment, Terraform for efficient and reliable orchestration of AWS resources, and AWS services to extract meaning and securely store forms and their metadata. The system provides contextual analysis, saving time, increasing accuracy, and lowering business costs.
 
 # Prerequisites
 
@@ -36,7 +36,7 @@ docker compose build
 docker compose up -d
 ``````
 
-## Striking
+## Tearing Down
 
 When no longer needed, run each following command:
 
@@ -54,11 +54,35 @@ terraform destroy
 
 - `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
 
-# AWS Integration Diagram
+# Application Architecture
 
-Form Toolbox utilizes AWS Textract to extract key-value data from forms.
+Form Toolbox harnesses Docker for flexible and reliable deployment, and integrates with AWS for enhanced data processing and storage capabilities. The architecture combines modern web technologies and a robust backend framework to offer a seamless user experience.
 
 - **User**: Interacts with Form Toolbox to upload new forms and utilize resulting analysis.
+- **Docker Environment**: Encapsulates the application components (Web Server, API, Database) in containers, facilitating consistent deployment and scalability.
+- **Frontend - React with Hooks**: Serves as the frontend, handling user interactions and relaying requests to the API.
+- **API - Node Express**: Backend server that processes requests, manages business logic, and interfaces with the database and AWS services.
+- **ORM - Sequelize**: Facilitates communication between the API and the database, ensuring data consistency and simplifying database interactions.
+- **Database - PostgreSQL**: Stores application data using PostgreSQL, leveraging Sequelize for object-relational mapping and incorporating JSONB for flexible schema representation.
+- **AWS Services**: Provides cloud infrastructure for storage (S3), serverless computing (Lambda), form analysis (Textract), notifications (SNS), and message queuing (SQS).
+
+
+```mermaid
+graph LR
+    subgraph FormToolbox["Form Toolbox (via Docker)"]
+        Frontend <--> API{API}
+        API <--"ORM"--> DB[(Database)]
+    end
+
+    User(("User")) <--> Frontend
+    API <--> AWS{{"AWS Services"}}
+```
+
+# AWS Integration Diagram
+
+Form Toolbox integrates AWS services, orchestrated through Terraform, to enhance form data processing and secure storage. This integration is pivotal in automating the extraction and analysis of key-value data from forms.
+
+- **User**: (see above)
 - **Form Toolbox**: Acts as the central hub, including a frontend, API, and database. Receives form image from the user, initiates textraction, and polls AWS for raw analysis. Transforms analysis into contextual data.
 - **AWS S3**: Stores forms, form thumbnails, metadata, and raw analysis. Triggers a Lambda function when new forms are uploaded.
 - **AWS Lambda**: Retrieves metadata from S3 object, initiates Textract analysis, and informs SQS that analysis has started, including the related Textract ID.
@@ -68,7 +92,7 @@ Form Toolbox utilizes AWS Textract to extract key-value data from forms.
 
 ```mermaid
 graph TD;
-    User --"Uploads"--> FormToolbox["Form Toolbox"];
+    User(("User")) --"Uploads"--> FormToolbox{{"Form Toolbox"}};
     FormToolbox --"Interacts"--> User
     FormToolbox --"Uploads"--> AWS_S3["AWS S3"];
     AWS_S3 --"Triggers"--> AWS_Lambda["AWS Lambda"];
@@ -80,9 +104,11 @@ graph TD;
     AWS_SQS --"When Polled"--> FormToolbox;
 ```
 
+*Note: within Mermaid markup, it does not appear possible at this time to render "AWS" as a subgraph and retain the intended flow/shape.*
+
 # Database Diagram
 
-To balance the diverse requirements of various form types with the need for strict schema and ACID compliance, Form Toolbox employs a hyrid approach. Utilizing PostgreSQL's JSONB datatype, we enable each form type to have its own schema, while still maintaining a consistent, overarching schema-based system. This methodology effectively merges the benefits of NoSQL/Document storage – flexibility and adaptability – with the strengths of a SQL/Schema-based system – reliability and structure. The result is a system that provides consistent document-style storage and retrieval within a structured SQL framework, catering to diverse form requirements while upholding data integrity and consistency.
+To balance the diverse requirements of various form types with the need for strict schema and ACID compliance, Form Toolbox employs a hyrid approach. Utilizing PostgreSQL's JSONB datatype, each form type has its own schema, while still maintaining a consistent, overarching schema-based system. This methodology effectively merges the benefits of NoSQL/Document storage – flexibility and adaptability – with the strengths of a SQL/Schema-based system – reliability and structure. The result is a system that provides consistent document-style storage and retrieval within a structured SQL framework, catering to diverse form requirements while upholding data integrity and consistency.
 
 ```mermaid
 erDiagram
