@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "lambda_logging_policy" {
-  name        = "lambda_logging_policy"
+  name        = var.lambda_logging_policy_name
   description = "IAM policy for logging from a lambda"
 
   policy = jsonencode({
@@ -19,7 +19,7 @@ resource "aws_iam_policy" "lambda_logging_policy" {
 }
 
 resource "aws_iam_policy" "lambda_s3_policy" {
-  name        = "lambda_s3_policy"
+  name        = var.lambda_s3_policy_name
   description = "IAM policy for Lambda function to access S3."
 
   policy = jsonencode({
@@ -38,7 +38,7 @@ resource "aws_iam_policy" "lambda_s3_policy" {
 }
 
 resource "aws_iam_policy" "lambda_sqs_policy" {
-  name        = "lambda_sqs_policy"
+  name        = var.lambda_sqs_policy_name
   description = "IAM policy for Lambda function to send messages to SQS."
 
   policy = jsonencode({
@@ -54,7 +54,7 @@ resource "aws_iam_policy" "lambda_sqs_policy" {
 }
 
 resource "aws_iam_policy" "lambda_textract_policy" {
-  name        = "lambda_textract_policy"
+  name        = var.lambda_textract_policy_name
   description = "IAM policy for Lambda function to access Textract."
 
   policy = jsonencode({
@@ -75,7 +75,7 @@ resource "aws_iam_policy" "lambda_textract_policy" {
 }
 
 resource "aws_iam_policy" "textract_to_sns_policy" {
-  name        = "textract_to_sns_policy"
+  name        = var.textract_to_sns_policy_name
   description = "IAM policy for AWS Textract to publish to SNS."
 
   policy = jsonencode({

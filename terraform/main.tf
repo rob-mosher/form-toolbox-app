@@ -1,3 +1,7 @@
+#################
+### Terraform ###
+#################
+
 terraform {
   required_providers {
     aws = {
@@ -11,19 +15,35 @@ terraform {
   }
 }
 
+#################
+### Providers ###
+#################
+
 provider "aws" {
   region = var.region
 }
 
 provider "random" {}
 
+##############
+### Locals ###
+##############
+
 locals {
   prefix = "formtoolbox-${random_string.shared_id.result}"
 }
 
+###############
+### Modules ###
+###############
+
+module "cloudwatch" {
+  source                = "./cloudwatch"
+  lambda_log_group_name = "${local.prefix}-lambda-on-upload"
+}
+
 module "iam" {
   source = "./iam"
-
   region = var.region
 
   aws_caller_identity_current = data.aws_caller_identity.current
@@ -32,23 +52,34 @@ module "iam" {
   sqs_queue_arn = module.sqs.sqs_queue_arn
   s3_bucket_arn = module.s3_bucket.s3_bucket_arn
 
+  lambda_exec_role_name     = "${local.prefix}-lambda-exec-role"
+  textract_to_sns_role_name = "${local.prefix}-textract-to-sns-role"
+
+  lambda_logging_policy_name  = "${local.prefix}-lambda-logging-policy"
+  lambda_s3_policy_name       = "${local.prefix}-lambda-s3-policy"
+  lambda_sqs_policy_name      = "${local.prefix}-lambda-sqs-policy"
+  lambda_textract_policy_name = "${local.prefix}-lambda-textract-policy"
+  textract_to_sns_policy_name = "${local.prefix}-textract-to-sns-policy"
 }
 
 module "lambda" {
   source = "./lambda"
-
   region = var.region
 
-  bucket_id                         = module.s3_bucket.s3_bucket_id
-  lambda_exec_role_arn              = module.iam.lambda_exec_role_arn
+  bucket_id     = module.s3_bucket.s3_bucket_id
+  sqs_queue_url = module.sqs.sqs_queue_url
+
   lambda_logs_policy_attachment     = module.iam.lambda_logs_policy_attachment
-  lambda_sqs_policy_attachment      = module.iam.lambda_sqs_policy_attachment
   lambda_s3_policy_attachment       = module.iam.lambda_s3_policy_attachment
+  lambda_sqs_policy_attachment      = module.iam.lambda_sqs_policy_attachment
   lambda_textract_policy_attachment = module.iam.lambda_textract_policy_attachment
-  s3_bucket_arn                     = module.s3_bucket.s3_bucket_arn
-  sns_topic_arn                     = module.sns.sns_topic_arn
-  sqs_queue_url                     = module.sqs.sqs_queue_url
-  textract_to_sns_role_arn          = module.iam.textract_to_sns_role_arn
+
+  lambda_exec_role_arn     = module.iam.lambda_exec_role_arn
+  s3_bucket_arn            = module.s3_bucket.s3_bucket_arn
+  sns_topic_arn            = module.sns.sns_topic_arn
+  textract_to_sns_role_arn = module.iam.textract_to_sns_role_arn
+
+  lambda_on_upload_function_name = "${local.prefix}-lambda-on-upload"
 }
 
 module "s3_bucket" {
@@ -70,12 +101,30 @@ module "sns" {
 module "sqs" {
   source = "./sqs"
 
-  queue_name = "${local.prefix}-sqs-queue"
-
   sns_topic_arn = module.sns.sns_topic_arn
+
+  form_toolbox_queue_policy_id = "${local.prefix}-form-toolbox-queue-policy"
+  queue_name                   = "${local.prefix}-sqs-queue"
 }
 
-# Used by AWS' S3 module. TODO: find a more appropriate place for this.
+#################
+### Resources ###
+#################
+
+resource "random_string" "shared_id" {
+  length      = 8
+  min_lower   = 1
+  min_numeric = 1
+  special     = false
+  upper       = false
+}
+
+#############
+### Other ###
+#############
+
+# Used by AWS' S3 module.
+# TODO: find a more appropriate place for this.
 resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = module.s3_bucket.s3_bucket_id
 
@@ -84,12 +133,4 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "uploads/"
   }
-}
-
-resource "random_string" "shared_id" {
-  length      = 8
-  min_lower   = 1
-  min_numeric = 1
-  special     = false
-  upper       = false
 }

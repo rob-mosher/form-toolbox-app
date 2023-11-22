@@ -3,7 +3,7 @@ resource "aws_sqs_queue_policy" "form_toolbox_queue_policy" {
 
   policy = jsonencode({
     Version = "2012-10-17",
-    Id      = "form_toolbox_queue_policy",
+    Id      = var.form_toolbox_queue_policy_id,
     Statement = [
       {
         Sid    = "Allow-SNS-SendMessage",

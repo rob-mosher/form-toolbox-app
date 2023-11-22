@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "ftbx-lambda_exec_role"
+  name = var.lambda_exec_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -15,8 +15,8 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
-resource "aws_iam_role" "textract_to_sns" {
-  name = "ftbx-textract-role"
+resource "aws_iam_role" "textract_to_sns_role" {
+  name = var.textract_to_sns_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",

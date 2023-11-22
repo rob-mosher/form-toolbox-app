@@ -19,6 +19,6 @@ resource "aws_iam_role_policy_attachment" "lambda_textract_policy_attach" {
 }
 
 resource "aws_iam_role_policy_attachment" "textract_to_sns_policy_attach" {
-  role       = aws_iam_role.textract_to_sns.name
+  role       = aws_iam_role.textract_to_sns_role.name
   policy_arn = aws_iam_policy.textract_to_sns_policy.arn
 }

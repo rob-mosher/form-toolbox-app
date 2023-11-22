@@ -17,6 +17,7 @@ To run a development build, which includes hot-reloading for the Docker portion:
 1. Create `./terraform/terraform.tfvars`, populating `region`  with your AWS region
 2. Run each following command from the `./terraform/` directory:
 ```
+terraform init
 terraform validate
 terraform plan
 terraform apply

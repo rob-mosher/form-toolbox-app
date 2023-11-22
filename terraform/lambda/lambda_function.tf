@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_on_upload" {
-  function_name    = "ftbx-onUpload" # TODO make dynamic
+  function_name    = var.lambda_on_upload_function_name
   handler          = "handler.handler"
   runtime          = "nodejs18.x"
   role             = var.lambda_exec_role_arn
