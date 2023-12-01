@@ -5,9 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "API_HOST=127.0.0.1 nodemon index.js",
-    "dev:docker": "API_HOST=0.0.0.0 nodemon index.js",
-    "start": "API_HOST=0.0.0.0 node index.js",
+    "dev": "API_HOST=127.0.0.1 nodemon src/index.js",
+    "dev:docker": "API_HOST=0.0.0.0 nodemon src/index.js",
+    "start": "API_HOST=0.0.0.0 node src/index.js",
     "test": "echo \"Error: Please initiate tests via the root of the repository\" && exit 1"
   },
   "author": "",
