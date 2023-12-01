@@ -5,9 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "API_HOST=127.0.0.1 nodemon src/index.js",
-    "dev:docker": "API_HOST=0.0.0.0 nodemon src/index.js",
-    "start": "API_HOST=0.0.0.0 node src/index.js",
+    "build": "tsc",
+    "dev": "API_HOST=127.0.0.1 nodemon --exec ts-node src/index.ts",
+    "dev:docker": "API_HOST=0.0.0.0 nodemon --exec ts-node src/index.ts",
+    "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings 0",
+    "start": "API_HOST=0.0.0.0 node dist/index.js",
     "test": "echo \"Error: Please initiate tests via the root of the repository\" && exit 1"
   },
   "author": "",
@@ -26,8 +28,12 @@
     "sharp": "^0.32.6"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.51.0",
     "eslint-config-airbnb": "^19.0.4",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
   }
 }

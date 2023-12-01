@@ -7,11 +7,14 @@ module.exports = {
   extends: [
     'airbnb',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   ignorePatterns: ['.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   // overrides: [],
   rules: {
+    '@typescript-eslint/no-var-requires': 'off',
     'comma-dangle': [
       'error',
       {
