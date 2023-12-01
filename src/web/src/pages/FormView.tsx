@@ -6,15 +6,21 @@ import { Header, Segment } from 'semantic-ui-react'
 
 import FormDetails from '../common/FormDetails'
 
-export default function FormView() {
-  const [form, setForm] = useState(null)
+import type { Form } from '../types'
 
-  const { formId } = useParams()
+type FormViewParams = {
+  formId: Form['id']
+}
+
+export default function FormView() {
+  const [form, setForm] = useState<Form | null>(null)
+
+  const { formId } = useParams<FormViewParams>()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
 
   useEffect(() => {
-    axios.get(url)
+    axios.get<Form>(url)
       .then((resp) => {
         setForm(resp.data)
       })

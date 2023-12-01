@@ -1,16 +1,24 @@
 import { Button, Modal } from 'semantic-ui-react'
 
+import type { Form } from '../types'
+
+type ModalDeleteFormProps = {
+  handleDelete: (formId: Form['id'] | null) => void;
+  isModalDeleteOpen: boolean,
+  selectedFormId: Form['id'] | null,
+  setIsModalDeleteOpen: (newIsModalDeleteOpen: boolean) => void,
+}
 export default function ModalDeleteForm({
   handleDelete,
-  modalDeleteOpen,
+  isModalDeleteOpen,
   selectedFormId,
-  setModalDeleteOpen,
-}) {
+  setIsModalDeleteOpen,
+}: ModalDeleteFormProps) {
   return (
     <Modal
       size='mini'
-      open={modalDeleteOpen}
-      onClose={() => setModalDeleteOpen(false)}
+      open={isModalDeleteOpen}
+      onClose={() => setIsModalDeleteOpen(false)}
     >
       <Modal.Header>Delete Form</Modal.Header>
       <Modal.Content>
@@ -20,7 +28,7 @@ export default function ModalDeleteForm({
         <Button positive onClick={() => handleDelete(selectedFormId)}>
           Yes
         </Button>
-        <Button negative onClick={() => setModalDeleteOpen(false)}>
+        <Button negative onClick={() => setIsModalDeleteOpen(false)}>
           No
         </Button>
       </Modal.Actions>

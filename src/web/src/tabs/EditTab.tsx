@@ -1,9 +1,22 @@
+// TODO complete typscript refactor
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import {
   Button, Divider, Form, Header
 } from 'semantic-ui-react'
+
+import type { Form as FormType, FormTypeOption } from '../types'
+
+type EditTabProps = {
+  form: FormType;
+  formId: FormType['id'];
+  formTypes: FormTypeOption[];
+  schema: string;
+  setForm: (newForm: FormType) => void;
+  setSchema: (newSchema: string) => void;
+}
 
 const versionsTempData = [
   {
@@ -20,7 +33,7 @@ export default function EditTab({
   schema,
   setForm,
   setSchema,
-}) {
+}: EditTabProps) {
   const [selectedFormType, setSelectedFormType] = useState(form.formTypeId || '')
 
   const mapTextractKeyValuesToFormData = (newSchema, textractKeyValues) => {
@@ -71,7 +84,7 @@ export default function EditTab({
     setSelectedFormType(data.value)
   }
 
-  const handleChangeFormData = ((key, value) => {
+  const handleChangeFormData = ((key: string, value: string) => {
     setForm((prevForm) => ({
       ...prevForm,
       formData: {

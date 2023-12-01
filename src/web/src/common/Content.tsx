@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom'
 
-export default function Content({ imageUrls }) {
+type ContentProps = {
+  imageUrls: string[];
+}
+
+export default function Content({ imageUrls }: ContentProps) {
   return (
     <div className='ten wide column ftbx-fitted-max'>
       <div className='ui top attached menu ftbx-sticky'>
@@ -47,6 +51,7 @@ export default function Content({ imageUrls }) {
             <div
               className='ui fluid ftbx-scanned-doc'
               id={`tbx-scanned-doc-page-${pageNumber}'`}
+              // eslint-disable-next-line react/no-array-index-key
               key={index}
             >
               <img

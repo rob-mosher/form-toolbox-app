@@ -1,4 +1,10 @@
-export default function FormDetails({ form }) {
+import type { Form } from '../types'
+
+type FormDetailsProps = {
+  form: Form;
+}
+
+export default function FormDetails({ form }: FormDetailsProps) {
   return (
     <code>
       {Object.entries(form).map(([key, value]) => (

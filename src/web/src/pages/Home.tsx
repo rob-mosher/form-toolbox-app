@@ -9,8 +9,8 @@ export default function Home() {
   useEffect(() => {
     fetch(`//localhost:${VITE_API_PORT}/`)
       .then((resp) => {
-        if (resp.ok) setApiResponse(resp.status)
-        else throw new Error(resp.status)
+        if (resp.ok) setApiResponse(resp.status.toString())
+        else throw new Error(resp.status.toString())
       })
       .catch((err) => setApiResponse(err.toString()))
   }, [])

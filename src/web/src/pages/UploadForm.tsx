@@ -6,15 +6,16 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 
 export default function UploadForm() {
-  const fileRef = useRef(null)
-  const toastRef = useRef(null)
-  const [acceptedMimeTypes, setAcceptedMimeTypes] = useState(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const toastRef = useRef(null) // TODO add type support
+  const [acceptedMimeTypes, setAcceptedMimeTypes] = useState<string[] | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   // const [imageFile, setImageFile] = useState(null)
 
+  // setAcceptedMimeTypes
   useEffect(() => {
     const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/accepted-mime-types`
-    axios.get(url)
+    axios.get<string[]>(url)
       .then((resp) => {
         setAcceptedMimeTypes(resp.data)
       })
@@ -26,7 +27,7 @@ export default function UploadForm() {
       })
   }, [])
 
-  function handleUpload(e) {
+  function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     setIsUploading(true)
@@ -48,7 +49,7 @@ export default function UploadForm() {
             data: formData,
             method: 'POST',
             onUploadProgress: (prog) => {
-              const progress = prog.loaded / prog.total
+              const progress = prog.loaded / prog.total!
               toast.update(toastRef.current, { progress })
             },
             url,
@@ -61,7 +62,7 @@ export default function UploadForm() {
           render: 'Upload complete!',
           type: toast.TYPE.SUCCESS,
         })
-        if (fileRef.current) fileRef.current.value = null
+        if (fileRef.current) fileRef.current.value = ''
       })
       .catch((error) => {
         toast.update(toastRef.current, {
@@ -74,14 +75,16 @@ export default function UploadForm() {
         setIsUploading(false)
       })
 
-    function validateFilePromise(file) {
+    function validateFilePromise(file: File | undefined) {
       return new Promise((resolve, reject) => {
         if (!file) {
           reject(new Error('No file provided.'))
+          return
         }
 
-        if (!acceptedMimeTypes.includes(file.type)) {
+        if (!acceptedMimeTypes?.includes(file.type)) {
           reject(new Error('Invalid file type.'))
+          return
         }
 
         const formData = new FormData()

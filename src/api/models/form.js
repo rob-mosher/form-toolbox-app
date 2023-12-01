@@ -1,3 +1,5 @@
+// NOTE any changes to this model should be reflected in ../../web/src/types/
+
 const { Model, DataTypes } = require('sequelize');
 
 class Form extends Model {}

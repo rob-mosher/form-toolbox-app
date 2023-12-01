@@ -7,13 +7,22 @@ module.exports = {
   extends: [
     'airbnb',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
+  settings: {
+    react: { version: '18.2' },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
   // overrides: [],
   plugins: ['react-refresh'],
   rules: {
@@ -27,8 +36,15 @@ module.exports = {
         functions: 'never',
       },
     ],
+    'import/extensions': 'off',
     'jsx-a11y/label-has-associated-control': ['warn'],
     'jsx-quotes': ['error', 'prefer-single'],
+    'react/jsx-filename-extension': [
+      'error',
+      {
+        extensions: ['.jsx', '.tsx'],
+      },
+    ],
     'react/prop-types': ['off'],
     'react-refresh/only-export-components': [
       'warn',

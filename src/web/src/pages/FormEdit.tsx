@@ -1,27 +1,38 @@
+// TODO add check that form is ready for editing
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Header, Tab } from 'semantic-ui-react'
+
 import Content from '../common/Content'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 
+import type {
+  Form, FormType, FormTypeOption, Schema
+} from '../types'
+
+type FormEditParams = {
+  formId: Form['id']
+}
+
 export default function FormEdit() {
-  const [form, setForm] = useState(null)
-  const [formTypes, setFormTypes] = useState([])
-  const [imageUrls, setImageUrls] = useState([])
-  const [schema, setSchema] = useState(null)
+  const [form, setForm] = useState<Form | null>(null)
+  const [formTypes, setFormTypes] = useState<FormTypeOption[]>([])
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [schema, setSchema] = useState<Schema | null>(null)
 
-  const { formId } = useParams()
-
-  const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-  const formTypesApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
-  const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
+  const { formId } = useParams<FormEditParams>()
 
   useEffect(() => {
+    const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+    const formTypesApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
+    const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
+
     // Get formtypes
-    axios.get(formTypesApiUrl)
+    axios.get<FormType[]>(formTypesApiUrl)
       .then((resp) => {
         const types = resp.data.map(({ id, name }) => (
           {
@@ -37,7 +48,7 @@ export default function FormEdit() {
       })
 
     // Get form images/pages
-    axios.get(imageApiUrl)
+    axios.get<string[]>(imageApiUrl)
       .then((resp) => {
         setImageUrls(resp.data)
       })
@@ -46,7 +57,7 @@ export default function FormEdit() {
       })
 
     // Get form data
-    axios.get(formApiUrl)
+    axios.get<Form>(formApiUrl)
       .then(async (resp) => {
         const fetchedForm = resp.data
 
@@ -70,7 +81,8 @@ export default function FormEdit() {
         })
         console.error('Unable to load form:', error.message)
       })
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // formId is not a dependency because it is used in the URL
 
   if (!form) {
     return <Header as='h2'>Form Details Editor Loading...</Header>

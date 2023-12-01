@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
 
 function Header() {
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log('handleSubmit prevented form defaults.')
   }

@@ -3,12 +3,15 @@ import { toast } from 'react-toastify'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Header, Icon, Table } from 'semantic-ui-react'
+
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 
+import type { Form, FormsList } from '../types'
+
 export default function Forms() {
-  const [forms, setForms] = useState([])
-  const [selectedFormId, setSelectedFormId] = useState(null)
-  const [modalDeleteOpen, setModalDeleteOpen] = useState(false)
+  const [forms, setForms] = useState<FormsList[]>([])
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+  const [selectedFormId, setSelectedFormId] = useState<Form['id'] | null>(null)
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
 
@@ -25,11 +28,16 @@ export default function Forms() {
       })
   }, [url])
 
-  const handleDelete = (formId) => {
+  const handleDelete = (formId: Form['id'] | null) => {
+    if (formId === null) {
+      console.warn('Attempted to delete a form with a null ID. No action will be taken.')
+      return
+    }
+
     axios.delete(`${url}/${formId}`)
       .then(() => {
         toast.success('Form deleted successfully')
-        setModalDeleteOpen(false)
+        setIsModalDeleteOpen(false)
         loadForms()
       })
       .catch((error) => {
@@ -74,7 +82,7 @@ export default function Forms() {
                   name='delete'
                   onClick={() => {
                     setSelectedFormId(form.id)
-                    setModalDeleteOpen(true)
+                    setIsModalDeleteOpen(true)
                   }}
                 />
               </Table.Cell>
@@ -92,9 +100,9 @@ export default function Forms() {
 
       <ModalDeleteForm
         handleDelete={handleDelete}
-        modalDeleteOpen={modalDeleteOpen}
+        isModalDeleteOpen={isModalDeleteOpen}
         selectedFormId={selectedFormId}
-        setModalDeleteOpen={setModalDeleteOpen}
+        setIsModalDeleteOpen={setIsModalDeleteOpen}
       />
     </>
   )
