@@ -1,18 +1,21 @@
 module.exports = {
   root: true,
   env: {
-    browser: true,
     es2020: true,
+    node: true,
   },
   extends: [
-    'airbnb',
+    'airbnb-base',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: [
+    '.eslintrc.cjs',
+    'dist/',
+    'node_modules/',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  // overrides: [],
   rules: {
     '@typescript-eslint/no-var-requires': 'off',
     'comma-dangle': [
@@ -25,7 +28,24 @@ module.exports = {
         functions: 'never',
       },
     ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        ts: 'never',
+      },
+    ],
+    'import/prefer-default-export': 'off',
+    'no-console': 'off', // TODO refactor with a more production-ready logging solution 
     'no-unused-vars': 'off',
-    'semi': ['warn', 'always'],
+    'semi': ['warn', 'never'],
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts'],
+      },
+    },
   },
 };

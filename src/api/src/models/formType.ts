@@ -1,10 +1,10 @@
 // NOTE any changes to this model should be reflected in ../../../web/src/types/
 
-const { Model, DataTypes } = require('sequelize');
+import { DataTypes, Model, Sequelize } from 'sequelize'
 
 class FormType extends Model {}
 
-module.exports = (sequelize) => {
+const initFormType = (sequelize: Sequelize) => {
   FormType.init(
     {
       id: {
@@ -25,7 +25,9 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'FormType',
     }
-  );
+  )
 
-  return FormType;
-};
+  return FormType
+}
+
+export default initFormType

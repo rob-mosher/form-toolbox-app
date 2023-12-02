@@ -1,4 +1,8 @@
 module.exports = {
   displayName: "api",
-  testMatch: ['**/*.test.js'],
-}
+  testMatch: ['**/*.test.ts'],
+  transform: {
+    "^.+\\.ts$": "babel-jest"
+  },
+  testEnvironment: "node",
+};

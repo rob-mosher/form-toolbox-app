@@ -1,4 +1,11 @@
-const { Sequelize } = require('sequelize');
+import dotenv from 'dotenv'
+
+import { Sequelize } from 'sequelize'
+
+import initFormType from './formType'
+import initForm from './form'
+
+dotenv.config()
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -8,27 +15,27 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     dialect: 'postgres',
   }
-);
+)
 
 // The following DO NOT have any dependencies.
-const FormType = require('./formType')(sequelize);
+const FormType = initFormType(sequelize)
 
 // The following DO have dependencies from the preceding.
-const Form = require('./form')(sequelize);
+const Form = initForm(sequelize)
 
 Form.belongsTo(FormType, {
   foreignKey: 'formTypeId',
   as: 'formType',
-});
+})
 
 FormType.hasMany(Form, {
   foreignKey: 'formTypeId',
   as: 'forms',
-});
+})
 
-module.exports = {
+export {
   sequelize,
   Form,
   FormType,
-  Sequelize,
-};
+  Sequelize
+}

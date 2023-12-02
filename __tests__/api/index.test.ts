@@ -1,9 +1,8 @@
-const crypto = require('crypto');
-const request = require('supertest');
-// const express = require('express');
-const app = require('../../src/api/src/index');
+import crypto from 'crypto';
+import request from 'supertest';
+import app from '../../src/api/src/index';
 
-const { ACCEPTED_UPLOAD_MIME_TYPES } = require('../../src/api/src/constants/acceptedUploadMimeTypes');
+import { ACCEPTED_UPLOAD_MIME_TYPES } from '../../src/api/src/constants/acceptedUploadMimeTypes';
 
 describe('API server', () => {
   const invalidRandomURL = `/invalid-random-url-${crypto.randomUUID()}`;

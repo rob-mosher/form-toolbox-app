@@ -1,4 +1,4 @@
-const { FormType } = require('../models');
+import { FormType } from '../models'
 
 const seedData = [
   {
@@ -25,19 +25,19 @@ const seedData = [
       '4. Place of Birth (City & State if in the U.S., or City & Country as it is presently known.)': { type: 'string', required: false },
     }),
   },
-];
+]
 
 const seedFormTypes = async () => {
   // eslint-disable-next-line no-restricted-syntax
   for (const item of seedData) {
     // Check if the FormType already exists
-    const formType = await FormType.findOne({ where: { name: item.name } });
+    const formType = await FormType.findOne({ where: { name: item.name } })
     if (!formType) {
       // eslint-disable-next-line no-await-in-loop
-      await FormType.create(item);
-      console.log(`Seeded FormType: ${item.name}`);
+      await FormType.create(item)
+      console.log(`Seeded FormType: ${item.name}`)
     }
   }
-};
+}
 
-module.exports = seedFormTypes;
+export default seedFormTypes

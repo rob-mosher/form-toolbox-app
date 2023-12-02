@@ -1,71 +1,76 @@
-require('dotenv').config({ path: '../../.env' });
+import dotenv from 'dotenv'
 
-const { API_HOST } = process.env;
-const { API_PORT } = process.env;
+import cors from 'cors'
+import express, { NextFunction, Request, Response } from 'express'
+import listEndpoints from 'express-list-endpoints'
 
-const cors = require('cors');
-const express = require('express');
-const listEndpoints = require('express-list-endpoints');
+import apiRouter from './routes/api'
+import seedFormTypes from './seeders/initFormTypes'
+import { startPolling } from './services/aws/sqs/poller'
 
-const apiRouter = require('./routes/api');
-const seedFormTypes = require('./seeders/initFormTypes');
-const sqsPoller = require('./services/aws/sqs/poller');
-const { sequelize } = require('./models');
+import { sequelize } from './models'
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+dotenv.config({ path: '../../.env' })
 
-app.get('/', (req, res, next) => {
-  res.sendStatus(200);
-});
+const API_HOST = process.env.API_HOST || 'localhost'
+const API_PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 3000
 
-app.get('/healthcheck', (req, res, next) => {
-  res.sendStatus(200);
-});
+const app = express()
+app.use(cors())
+app.use(express.json())
 
-app.use('/api', apiRouter);
+app.get('/', (req: Request, res: Response) => {
+  res.sendStatus(200)
+})
 
-app.use('*', (req, res, next) => {
+app.get('/healthcheck', (req: Request, res: Response) => {
+  res.sendStatus(200)
+})
+
+app.use('/api', apiRouter)
+
+app.use('*', (req: Request, res: Response, next: NextFunction) => {
   const errorObj = {
     log: `No matching path for incoming request to '${req.originalUrl}'`,
     status: 404,
     message: { err: 'Error 404: Page not Found' },
-  };
-  next(errorObj);
-});
+  }
+  next(errorObj)
+})
 
-app.use((err, req, res, next) => {
+// Disable eslint rule for Express's global error handler (requires exactly 4 params)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
     message: { err: 'An error occurred' },
-  };
+  }
 
-  const errorObj = Object.assign(defaultErr, err);
-  console.error(errorObj.log);
+  const errorObj = Object.assign(defaultErr, err)
+  console.error(errorObj.log)
 
-  res.status(errorObj.status).json(errorObj.message);
-});
+  res.status(errorObj.status).json(errorObj.message)
+})
 
 if (process.env.NODE_ENV !== 'test') {
-  console.log('Syncronizing database schema:');
+  console.log('Syncronizing database schema:')
   sequelize.sync()
     .then(() => {
-      console.log('Successfully syncronized database schema.');
-      return seedFormTypes(); // Must complete before remaining logic can occur (see below)
+      console.log('Successfully syncronized database schema.')
+      return seedFormTypes() // Must complete before remaining logic can occur (see below)
     })
     .then(() => { // Allows seedFormTypes() to complete before proceeding (see above)
       app.listen(API_PORT, API_HOST, () => {
-        console.log(`Server listening on ${API_HOST}:${API_PORT}`);
-        sqsPoller.startPolling();
-      });
-      console.log('API endpoints are:');
-      console.log(listEndpoints(app));
+        console.log(`Server listening on ${API_HOST}:${API_PORT}`)
+        startPolling()
+      })
+      console.log('API endpoints are:')
+      console.log(listEndpoints(app))
     })
     .catch(() => {
-      console.error('Error syncronizing database schema. API will not load as a result.');
-    });
+      console.error('Error syncronizing database schema. API will not load as a result.')
+    })
 }
 
-module.exports = app;
+export default app

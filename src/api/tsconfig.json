@@ -11,5 +11,9 @@
     "rootDir": "./src"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/services/**/*" // TODO remove later after refactor complete
+  ]
 }
