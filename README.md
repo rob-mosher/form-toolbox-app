@@ -56,21 +56,6 @@ terraform destroy
 - `AWS_SQS_REQUEUE_DELAY` is in seconds
 - `docker-compose.yaml` will eventually be renamed to `docker-compose-dev.yaml`, and `docker-compose.yaml` will be utilized for non-dev builds. This is to ease current development (requiring less typing) and architectural flexibilty.
 
-# Known Issues
-
-- AWS `textract` does not appear to currently support FIFO-compatible notifications upon completion of a job. Therefore `SQS`, which subscribes to this `SNS` topic, is currently also non-FIFO. A solution may be to subscribe an adaptor `lambda` function to the non-FIFO `SNS` topic, which which then enqueues a FIFO-compatible message to the `SQS` queue, allowing `SQS` to be FIFO. See below example, noting that this approach may be overly complex.
-
-```mermaid
-graph LR
-  API["..."] --> Textract
-  Textract --"non-FIFO"--> SNS_NON_FIFO["SNS"]
-  SNS_NON_FIFO --"non-FIFO"--> Lambda[["Lambda (adaptor)"]]
-  Lambda --"FIFO"--> SQS
-  SQS --"FIFO"--> FormToolbox["..."]
-```
-- `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
-- The `Upload complete!` toast is not always auto-closing after its timeout completes.
-
 # Application Architecture
 
 Form Toolbox harnesses Docker for flexible and reliable deployment, and integrates with AWS for enhanced data processing and storage capabilities. The architecture weaves together modern web technologies and a highly-available and redundant backend framework to provide a seamless and performant user experience.
@@ -152,3 +137,18 @@ erDiagram
 
 FormType ||--o{ Form : "has many"
 ```
+
+# Known Issues
+
+- AWS `textract` does not appear to currently support FIFO-compatible notifications upon completion of a job. Therefore `SQS`, which subscribes to this `SNS` topic, is currently also non-FIFO. A solution may be to subscribe an adaptor `lambda` function to the non-FIFO `SNS` topic, which which then enqueues a FIFO-compatible message to the `SQS` queue, allowing `SQS` to be FIFO. See below example, noting that this approach may be overly complex.
+
+```mermaid
+graph LR
+  API["..."] --> Textract
+  Textract --"non-FIFO"--> SNS_NON_FIFO["SNS"]
+  SNS_NON_FIFO --"non-FIFO"--> Lambda[["Lambda (adaptor)"]]
+  Lambda --"FIFO"--> SQS
+  SQS --"FIFO"--> FormToolbox["..."]
+```
+- `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
+- The `Upload complete!` toast is not always auto-closing after its timeout completes.
