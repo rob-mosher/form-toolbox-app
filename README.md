@@ -1,14 +1,20 @@
 # form-toolbox
 
-Form Toolbox simplifies and automates the process of entering and validating form data. Its design focuses on practicality and adaptability, using Docker containers for consistent and manageable deployment, Terraform for efficient and reliable orchestration of AWS resources, and AWS services to extract meaning and securely store forms and their metadata. The system provides contextual analysis, saving time, increasing accuracy, and lowering business costs.
+Form Toolbox simplifies and automates the process of entering and validating physical forms that have been digitized. Its design focuses on practicality and adaptability, using Docker containers for consistent and manageable deployment, Terraform for efficient and reliable orchestration of AWS resources, and AWS services to extract meaning and securely store form artifacts and metadata. This tool greatly saves time, increases accuracy, and lowers business costs.
 
-# Prerequisites
+In the future, Form Toolbox can be extended to provide contextual analysis, and validation of expected data.
+
+## Screenshots
+
+![Form Edit Window](./assets/images/form-toolbox-screenshot-1.png)
+
+# Local Development
+
+## Prerequisites
 
 - AWS Account
 - docker
 - terraform cli
-
-# Local Development
 
 ## Setting Up
 
@@ -34,7 +40,7 @@ COMPOSE_PROJECT_NAME
 ```
 docker compose build
 docker compose up -d
-``````
+```
 
 ## Tearing Down
 
@@ -52,11 +58,22 @@ terraform destroy
 
 # Known Issues
 
+- AWS `textract` does not appear to currently support FIFO-compatible notifications upon completion of a job. Therefore `SQS`, which subscribes to this `SNS` topic, is currently also non-FIFO. A solution may be to subscribe an adaptor `lambda` function to the non-FIFO `SNS` topic, which which then enqueues a FIFO-compatible message to the `SQS` queue, allowing `SQS` to be FIFO. See below example, noting that this approach may be overly complex.
+
+```mermaid
+graph LR
+  API["..."] --> Textract
+  Textract --"non-FIFO"--> SNS_NON_FIFO["SNS"]
+  SNS_NON_FIFO --"non-FIFO"--> Lambda[["Lambda (adaptor)"]]
+  Lambda --"FIFO"--> SQS
+  SQS --"FIFO"--> FormToolbox["..."]
+```
 - `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
+- The `Upload complete!` toast is not always auto-closing after its timeout completes.
 
 # Application Architecture
 
-Form Toolbox harnesses Docker for flexible and reliable deployment, and integrates with AWS for enhanced data processing and storage capabilities. The architecture combines modern web technologies and a robust backend framework to offer a seamless user experience.
+Form Toolbox harnesses Docker for flexible and reliable deployment, and integrates with AWS for enhanced data processing and storage capabilities. The architecture weaves together modern web technologies and a highly-available and redundant backend framework to provide a seamless and performant user experience.
 
 - **User**: Interacts with Form Toolbox to upload new forms and utilize resulting analysis.
 - **Docker Environment**: Encapsulates the application components (Web Server, API, Database) in containers, facilitating consistent deployment and scalability.
@@ -80,7 +97,7 @@ graph LR
 
 # AWS Integration Diagram
 
-Form Toolbox integrates AWS services, orchestrated through Terraform, to enhance form data processing and secure storage. This integration is pivotal in automating the extraction and analysis of key-value data from forms.
+Form Toolbox integrates AWS services, orchestrated through Terraform, to enhance form data processing and secure storage. This integration is pivotal in automating the extraction and analysis of key-value data from digitized forms.
 
 - **User**: (see above)
 - **Form Toolbox**: Acts as the central hub, including a frontend, API, and database. Receives form image from the user, initiates textraction, and polls AWS for raw analysis. Transforms analysis into contextual data.
@@ -91,17 +108,17 @@ Form Toolbox integrates AWS services, orchestrated through Terraform, to enhance
 - **AWS SQS**: Receives messages about the status of form processing, such as analysis start and completion. Form Toolbox polls the queue and then transforms the analysis.
 
 ```mermaid
-graph TD;
-    User(("User")) --"Uploads"--> FormToolbox{{"Form Toolbox"}};
-    FormToolbox --"Interacts"--> User
-    FormToolbox --"Uploads"--> AWS_S3["AWS S3"];
-    AWS_S3 --"Triggers"--> AWS_Lambda["AWS Lambda"];
-    AWS_Lambda --"Gets Metadata"--> AWS_S3;
-    AWS_Lambda--"Messages"--> AWS_SQS;
-    AWS_Lambda --"Initiates"--> AWS_Textract["AWS Textract"];
-    AWS_Textract --"Notifies"--> AWS_SNS["AWS SNS"];
-    AWS_SNS --"Messages"--> AWS_SQS["AWS SQS"];
-    AWS_SQS --"When Polled"--> FormToolbox;
+graph TD
+  User(("User")) --"Uploads"--> FormToolbox{{"Form Toolbox"}}
+  FormToolbox --"Interacts"--> User
+  FormToolbox --"Uploads"--> AWS_S3["AWS S3"]
+  AWS_S3 --"Triggers"--> AWS_Lambda["AWS Lambda"]
+  AWS_Lambda --"Gets Metadata"--> AWS_S3
+  AWS_Lambda--"Messages"--> AWS_SQS
+  AWS_Lambda --"Initiates"--> AWS_Textract["AWS Textract"]
+  AWS_Textract --"Notifies"--> AWS_SNS["AWS SNS"]
+  AWS_SNS --"Messages"--> AWS_SQS["AWS SQS"]
+  AWS_SQS --"When Polled"--> FormToolbox
 ```
 
 *Note: within Mermaid markup, it does not appear possible at this time to render "AWS" as a subgraph and retain the intended flow/shape.*
