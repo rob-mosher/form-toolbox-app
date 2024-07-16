@@ -6,11 +6,9 @@ import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3
 import { fromEnv } from '@aws-sdk/credential-providers'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
+import { parseKeyValuePairs } from '../textract/textractFunctions'
+
 dotenv.config()
-
-require('dotenv').config()
-
-const textractFunctions = require('../textract/textractFunctions')
 
 const {
   AWS_BUCKET_NAME,
@@ -69,7 +67,7 @@ async function getAnalysis(analysisFolderNameS3) {
     const analysisResults = JSON.parse(data.toString())
 
     const pageCount = analysisResults.DocumentMetadata.Pages
-    const textractKeyValues = textractFunctions.parseKeyValuePairs(analysisResults)
+    const textractKeyValues = parseKeyValuePairs(analysisResults)
 
     console.log('pageCount', pageCount)
     console.log('textractKeyValues', textractKeyValues)
