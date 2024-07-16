@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 
 import { createError } from '../utils/error'
 import { Form } from '../models'
 
 dotenv.config()
 
-const createForm = async (req: Request, res: Response, next: NextFunction) => {
+const createForm: RequestHandler = async (req, res, next) => {
   try {
     res.locals.form = await Form.create({
       status: 'initialized',
@@ -22,7 +22,7 @@ const createForm = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-const getForm = async (req: Request, res: Response, next: NextFunction) => {
+const getForm: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params
 

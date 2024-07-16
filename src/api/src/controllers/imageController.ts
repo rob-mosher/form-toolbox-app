@@ -1,9 +1,9 @@
 import path from 'path'
 import sharp from 'sharp'
 
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 
-const convertToWebp = async (req: Request, res: Response, next: NextFunction) => {
+const convertToWebp: RequestHandler = async (req, res, next) => {
   if (!req.file) return next(new Error('No file provided'))
 
   try {

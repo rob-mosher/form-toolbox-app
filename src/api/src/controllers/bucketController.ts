@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-import { NextFunction, Request, Response } from 'express'
+import { Request, RequestHandler } from 'express'
 
 import { putObject } from '../services/aws/s3/s3Functions'
 import { createError } from '../utils/error'
@@ -16,7 +16,7 @@ const {
   AWS_BUCKET_NAME,
 } = process.env
 
-const putWebpFiles = async (req: RequestTemporaryWorkaround, res: Response, next: NextFunction) => {
+const putWebpFiles: RequestHandler = async (req: RequestTemporaryWorkaround, res, next) => {
   if (!req.webpFiles || req.webpFiles.length === 0) {
     return next(new Error('No WEBP files to upload'))
   }
@@ -42,7 +42,7 @@ const putWebpFiles = async (req: RequestTemporaryWorkaround, res: Response, next
   }
 }
 
-const putUpload = async (req: Request, res: Response, next: NextFunction) => {
+const putUpload: RequestHandler = async (req, res, next) => {
   if (!req.file) {
     return next(createError({
       err: 'File not found',

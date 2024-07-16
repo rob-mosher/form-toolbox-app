@@ -1,9 +1,9 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { NextFunction, Request, Response } from 'express'
+import { RequestHandler } from 'express'
 import { createError } from '../utils/error'
 
-const clearStoredUploads = (req: Request, res: Response, next: NextFunction) => {
+const clearStoredUploads: RequestHandler = (req, res, next) => {
   const dirName = path.resolve(path.dirname(require.main!.filename), 'public/data/uploads')
   fs.readdir(dirName)
     .then((fileNames) => Promise.all(
