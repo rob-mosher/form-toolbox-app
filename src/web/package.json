@@ -19,7 +19,7 @@
     "react-router-dom": "^6.17.0",
     "react-toastify": "^10.0.5",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.4"
+    "semantic-ui-react": "3.0.0-beta.2"
   },
   "devDependencies": {
     "@types/node": "^18.19.40",
