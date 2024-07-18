@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import {
   Button, Header, Input, Segment
 } from 'semantic-ui-react'
-import { toast } from 'react-toastify'
+import { toast, Id as ToastId } from 'react-toastify'
 import axios from 'axios'
 
 export default function UploadForm() {
   const fileRef = useRef<HTMLInputElement>(null)
-  const toastRef = useRef(null) // TODO add type support
+  const toastRef = useRef<ToastId | null>(null)
   const [acceptedMimeTypes, setAcceptedMimeTypes] = useState<string[] | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   // const [imageFile, setImageFile] = useState(null)
@@ -23,6 +23,7 @@ export default function UploadForm() {
         toast.error('Error: Unable to load supported file types, so uploading is temporarily disabled. Try this page again in a bit.', {
           autoClose: 8000,
         })
+        // eslint-disable-next-line no-console
         console.error('Error fetching MIME types:', error)
       })
   }, [])
@@ -34,7 +35,7 @@ export default function UploadForm() {
     toastRef.current = toast('Upload in progress...', {
       // autoClose: false,
       progress: 0,
-      type: toast.TYPE.INFO,
+      type: 'info',
     })
 
     const filePointer = fileRef?.current?.files?.[0]
@@ -50,29 +51,30 @@ export default function UploadForm() {
             method: 'POST',
             onUploadProgress: (prog) => {
               const progress = prog.loaded / prog.total!
-              toast.update(toastRef.current, { progress })
+              toast.update(toastRef.current!, { progress })
             },
             url,
           }
         )
       })
       .then(() => {
-        toast.update(toastRef.current, {
+        toast.update(toastRef.current!, {
           autoClose: 5000,
           render: 'Upload complete!',
-          type: toast.TYPE.SUCCESS,
+          type: 'success',
         })
         if (fileRef.current) fileRef.current.value = ''
       })
       .catch((error) => {
-        toast.update(toastRef.current, {
+        toast.update(toastRef.current!, {
           autoClose: 5000,
           render: `Upload unsuccessful: ${error.message}`,
-          type: toast.TYPE.ERROR,
+          type: 'error',
         })
       })
       .finally(() => {
         setIsUploading(false)
+        toastRef.current = null
       })
 
     function validateFilePromise(file: File | undefined) {
