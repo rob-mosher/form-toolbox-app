@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: process.env.WEB_PORT || 5173,
+    port: process.env.WEB_PORT ? Number(process.env.WEB_PORT) : 5173,
     watch: {
       usePolling: true,
       interval: 100, // Polling interval (optional, default is 100ms)
