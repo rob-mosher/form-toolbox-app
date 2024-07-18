@@ -10,7 +10,7 @@ import type { Form, FormsList } from '../types'
 
 export default function Forms() {
   const [forms, setForms] = useState<FormsList[]>([])
-  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
   const [selectedFormId, setSelectedFormId] = useState<Form['id'] | null>(null)
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
@@ -24,12 +24,14 @@ export default function Forms() {
         toast.error('Error: Unable to load forms.', {
           autoClose: 5000,
         })
+        // eslint-disable-next-line no-console
         console.error('Unable to load forms:', error)
       })
   }, [url])
 
   const handleDelete = (formId: Form['id'] | null) => {
     if (formId === null) {
+      // eslint-disable-next-line no-console
       console.warn('Attempted to delete a form with a null ID. No action will be taken.')
       return
     }
@@ -42,6 +44,7 @@ export default function Forms() {
       })
       .catch((error) => {
         toast.error('Error: Unable to delete form.')
+        // eslint-disable-next-line no-console
         console.error('Unable to delete form:', error)
       })
   }

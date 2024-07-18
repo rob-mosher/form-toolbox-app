@@ -7,15 +7,15 @@ import {
   Button, Divider, Form, Header
 } from 'semantic-ui-react'
 
-import type { Form as FormType, FormTypeOption } from '../types'
+import type { Form as FormType, FormTypeOption, Schema } from '../types'
 
 type EditTabProps = {
   form: FormType;
   formId: FormType['id'];
   formTypes: FormTypeOption[];
-  schema: string;
+  schema: Schema | null;
   setForm: (newForm: FormType) => void;
-  setSchema: (newSchema: string) => void;
+  setSchema: (newSchema: Schema) => void;
 }
 
 const versionsTempData = [
@@ -75,6 +75,7 @@ export default function EditTab({
 
       // toast.success('Form type updated successfully.')
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error updating form type:', err)
       toast.error('Error updating form type.')
     }

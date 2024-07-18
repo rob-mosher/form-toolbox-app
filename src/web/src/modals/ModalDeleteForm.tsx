@@ -8,6 +8,7 @@ type ModalDeleteFormProps = {
   selectedFormId: Form['id'] | null,
   setIsModalDeleteOpen: (newIsModalDeleteOpen: boolean) => void,
 }
+
 export default function ModalDeleteForm({
   handleDelete,
   isModalDeleteOpen,

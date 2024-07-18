@@ -44,6 +44,7 @@ export default function FormEdit() {
         setFormTypes(types)
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error('Error fetching formtypes:', error.message)
       })
 
@@ -53,6 +54,7 @@ export default function FormEdit() {
         setImageUrls(resp.data)
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error('Error fetching presigned URLs:', error.message)
       })
 
@@ -67,6 +69,7 @@ export default function FormEdit() {
             const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${fetchedForm.formTypeId}`)
             setSchema(schemaResponse.data[0].schema)
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Error fetching schema:', error)
           }
         }
@@ -79,6 +82,7 @@ export default function FormEdit() {
         toast.error('Error: Unable to load form.', {
           autoClose: 5000,
         })
+        // eslint-disable-next-line no-console
         console.error('Unable to load form:', error.message)
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
