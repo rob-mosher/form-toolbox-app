@@ -22,8 +22,7 @@ const convertToWebp: RequestHandler = async (req, res, next) => {
       filename: req.file.originalname.replace(fileType, '.webp'),
     })
 
-    // @ts-expect-error TODO refactor
-    req.webpFiles = outputFiles
+    res.locals.webpFiles = outputFiles
     return next()
   } catch (err) {
     return next(err)

@@ -1,28 +1,23 @@
 import dotenv from 'dotenv'
 
-import { Request, RequestHandler } from 'express'
+import { RequestHandler } from 'express'
 
 import { putObject } from '../services/aws/s3/s3Functions'
 import { createError } from '../utils/error'
 
 dotenv.config()
 
-// TODO refactor placing webpFiles on the req object
-interface RequestTemporaryWorkaround extends Request {
-  webpFiles?: Array<{ buffer: Buffer }>;
-}
-
 const {
   AWS_BUCKET_NAME,
 } = process.env
 
-const putWebpFiles: RequestHandler = async (req: RequestTemporaryWorkaround, res, next) => {
-  if (!req.webpFiles || req.webpFiles.length === 0) {
+const putWebpFiles: RequestHandler = async (req, res, next) => {
+  if (!res.locals.webpFiles || res.locals.webpFiles.length === 0) {
     return next(new Error('No WEBP files to upload'))
   }
 
   try {
-    const uploadPromises = req.webpFiles.map((file, i) => putObject({
+    const uploadPromises = res.locals.webpFiles.map((file, i) => putObject({
       Bucket: AWS_BUCKET_NAME,
       Key: `exports/${res.locals.form.id}/${i + 1}.webp`, // Pages are 1-indexed
       Body: file.buffer,
