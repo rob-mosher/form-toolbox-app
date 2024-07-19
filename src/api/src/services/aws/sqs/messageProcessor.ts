@@ -1,10 +1,9 @@
 // TODO finish typescript conversion
 
 import dotenv from 'dotenv'
-
 import { requeueMessage } from './sqsFunctions'
-import { getAnalysis } from '../s3/s3Functions'
 import { Form } from '../../../models'
+import { getAnalysis } from '../s3/s3Functions'
 
 dotenv.config()
 

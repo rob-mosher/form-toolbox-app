@@ -1,11 +1,9 @@
 // TODO finish typescript conversion
 
 /* eslint-disable no-restricted-syntax */
-import dotenv from 'dotenv'
-
-import { fromEnv } from '@aws-sdk/credential-providers'
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs'
-
+import { fromEnv } from '@aws-sdk/credential-providers'
+import dotenv from 'dotenv'
 import { processMessage } from './messageProcessor'
 
 dotenv.config()

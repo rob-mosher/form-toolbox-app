@@ -8,6 +8,9 @@ module.exports = {
     'airbnb-base',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
   ignorePatterns: [
     '.eslintrc.cjs',
@@ -35,6 +38,24 @@ module.exports = {
         js: 'never',
         ts: 'never',
       },
+    ],
+    'import/order': [
+      'warn',
+      {
+        'groups': [
+          'external',
+          'builtin',
+          'internal',
+          'sibling',
+          'parent',
+          'index'
+        ],
+        'newlines-between': 'never',
+        'alphabetize': {
+          'order': 'asc',
+          'caseInsensitive': false
+        }
+      }
     ],
     'import/prefer-default-export': 'off',
     'no-console': 'off', // TODO refactor with a more production-ready logging solution 

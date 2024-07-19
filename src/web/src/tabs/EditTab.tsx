@@ -1,12 +1,11 @@
 // TODO complete typscript refactor
 
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import {
   Button, Divider, Form, Header
 } from 'semantic-ui-react'
-
 import type { Form as FormType, FormTypeOption, Schema } from '../types'
 
 type EditTabProps = {

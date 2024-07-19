@@ -1,9 +1,7 @@
 import dotenv from 'dotenv'
-
 import { Sequelize } from 'sequelize'
-
-import initFormType from './formType'
 import initForm from './form'
+import initFormType from './formType'
 
 dotenv.config()
 

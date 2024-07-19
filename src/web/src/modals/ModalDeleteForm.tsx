@@ -1,5 +1,4 @@
 import { Button, Modal } from 'semantic-ui-react'
-
 import type { Form } from '../types'
 
 type ModalDeleteFormProps = {

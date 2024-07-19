@@ -1,15 +1,13 @@
 // TODO add check that form is ready for editing
 
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { Header, Tab } from 'semantic-ui-react'
-
 import Content from '../common/Content'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
-
 import type {
   Form, FormType, FormTypeOption, Schema
 } from '../types'

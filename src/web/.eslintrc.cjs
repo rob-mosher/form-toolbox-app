@@ -11,6 +11,9 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
@@ -37,6 +40,24 @@ module.exports = {
       },
     ],
     'import/extensions': 'off',
+    'import/order': [
+      'warn',
+      {
+        'groups': [
+          'external',
+          'builtin',
+          'internal',
+          'sibling',
+          'parent',
+          'index'
+        ],
+        'newlines-between': 'never',
+        'alphabetize': {
+          'order': 'asc',
+          'caseInsensitive': false
+        }
+      }
+    ],
     'jsx-a11y/label-has-associated-control': ['warn'],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/jsx-filename-extension': [

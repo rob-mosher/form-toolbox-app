@@ -1,9 +1,9 @@
+import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
+import { toast, Id as ToastId } from 'react-toastify'
 import {
   Button, Header, Input, Segment
 } from 'semantic-ui-react'
-import { toast, Id as ToastId } from 'react-toastify'
-import axios from 'axios'
 
 export default function UploadForm() {
   const fileRef = useRef<HTMLInputElement>(null)

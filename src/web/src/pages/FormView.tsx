@@ -1,11 +1,9 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { Header, Segment } from 'semantic-ui-react'
-
 import FormDetails from '../common/FormDetails'
-
 import type { Form } from '../types'
 
 type FormViewParams = {

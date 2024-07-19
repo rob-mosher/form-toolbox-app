@@ -1,14 +1,11 @@
-import dotenv from 'dotenv'
-
 import cors from 'cors'
+import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
 import listEndpoints from 'express-list-endpoints'
-
+import { sequelize } from './models'
 import apiRouter from './routes/api'
 import seedFormTypes from './seeders/initFormTypes'
 import { startPolling } from './services/aws/sqs/poller'
-
-import { sequelize } from './models'
 
 dotenv.config({ path: '../../.env' })
 

@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from 'express'
-
 import { FormType } from '../models'
 
 const formTypesRouter = express.Router()

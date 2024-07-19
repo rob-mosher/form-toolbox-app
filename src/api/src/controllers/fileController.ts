@@ -1,6 +1,6 @@
+import { RequestHandler } from 'express'
 import fs from 'fs/promises'
 import path from 'path'
-import { RequestHandler } from 'express'
 import { createError } from '../utils/error'
 
 const clearStoredUploads: RequestHandler = (req, res, next) => {

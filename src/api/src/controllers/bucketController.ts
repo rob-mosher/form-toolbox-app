@@ -1,10 +1,8 @@
 import dotenv from 'dotenv'
-
 import { RequestHandler } from 'express'
-
 import { putObject } from '../services/aws/s3/s3Functions'
-import { createError } from '../utils/error'
 import { WebpFile } from '../types'
+import { createError } from '../utils/error'
 
 dotenv.config()
 

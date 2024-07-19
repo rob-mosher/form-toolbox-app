@@ -1,11 +1,9 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { Header, Icon, Table } from 'semantic-ui-react'
-
 import ModalDeleteForm from '../modals/ModalDeleteForm'
-
 import type { Form, FormsList } from '../types'
 
 export default function Forms() {

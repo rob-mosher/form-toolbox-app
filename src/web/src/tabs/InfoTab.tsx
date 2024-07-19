@@ -1,5 +1,4 @@
 import FormDetails from '../common/FormDetails'
-
 import type { Form } from '../types'
 
 type InfoTabProps = {

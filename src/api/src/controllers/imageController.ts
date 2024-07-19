@@ -1,7 +1,6 @@
-import path from 'path'
-import sharp from 'sharp'
-
 import { RequestHandler } from 'express'
+import sharp from 'sharp'
+import path from 'path'
 import { WebpFile } from '../types'
 
 const convertToWebp: RequestHandler = async (req, res, next) => {

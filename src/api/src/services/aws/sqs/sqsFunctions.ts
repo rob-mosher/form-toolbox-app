@@ -1,9 +1,8 @@
 // TODO finish typescript conversion
 
-import dotenv from 'dotenv'
-
-import { fromEnv } from '@aws-sdk/credential-providers'
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs'
+import { fromEnv } from '@aws-sdk/credential-providers'
+import dotenv from 'dotenv'
 
 dotenv.config()
 
