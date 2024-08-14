@@ -2,8 +2,9 @@ import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
 import {
-  Button, Header, Input, Segment
+  Header, Input, Segment
 } from 'semantic-ui-react'
+import Button from '../components/Button'
 
 export default function UploadForm() {
   const fileRef = useRef<HTMLInputElement>(null)
@@ -120,14 +121,16 @@ export default function UploadForm() {
           />
         </Input>
         <br />
-        <Button
-          disabled={acceptedMimeTypes === null || isUploading}
-          id='upload-button'
-          type='submit'
-          primary
-        >
-          Upload
-        </Button>
+        <div className='mt-4 flex justify-center'>
+          <Button
+            disabled={acceptedMimeTypes === null || isUploading}
+            id='upload-button'
+            type='submit'
+            primary
+          >
+            Upload
+          </Button>
+        </div>
         {/* <Button secondary>Cancel</Button> */}
         {/* {imageFile?.type?.includes('image') && (
           <>
