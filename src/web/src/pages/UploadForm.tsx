@@ -1,9 +1,6 @@
 import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
-import {
-  Header, Input, Segment
-} from 'semantic-ui-react'
 import Button from '../components/Button'
 
 export default function UploadForm() {
@@ -99,15 +96,15 @@ export default function UploadForm() {
 
   return (
     <form onSubmit={(e) => handleUpload(e)}>
-      <Segment placeholder>
-        <Header as='h2' icon>Upload</Header>
-        <Input type='file'>
-          <input
-            accept={acceptedMimeTypes?.join(', ')}
-            disabled={acceptedMimeTypes === null || isUploading}
-            id='upload-picker'
+      <section className='flex flex-col items-center justify-center gap-4 border border-stone-300 bg-stone-100 py-16 shadow-inner'>
+        <div className='text-3xl font-bold tracking-tight'>Upload</div>
+        <input
+          accept={acceptedMimeTypes?.join(', ')}
+          className='cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-6 text-sm text-gray-900 focus:outline-none'
+          disabled={acceptedMimeTypes === null || isUploading}
+          id='upload-picker'
             // multiple
-            name='user-upload'
+          name='user-upload'
             // onInput={(event) => {
             //   event.preventDefault()
             //   if (fileRef?.current?.files?.[0]?.type?.includes('image')) {
@@ -116,29 +113,26 @@ export default function UploadForm() {
             //     setImageFile(() => null)
             //   }
             // }}
-            ref={fileRef}
-            type='file'
-          />
-        </Input>
-        <br />
-        <div className='mt-4 flex justify-center'>
-          <Button
-            disabled={acceptedMimeTypes === null || isUploading}
-            id='upload-button'
-            type='submit'
-            primary
-          >
-            Upload
-          </Button>
-        </div>
-        {/* <Button secondary>Cancel</Button> */}
+          ref={fileRef}
+          type='file'
+        />
+
+        <Button
+          ariaLabel='Upload file'
+          disabled={acceptedMimeTypes === null || isUploading}
+          id='upload-button'
+          type='submit'
+          primary
+        >
+          Upload
+        </Button>
         {/* {imageFile?.type?.includes('image') && (
           <>
             <br />
             <img src={URL.createObjectURL(imageFile)} alt='' />
           </>
         )} */}
-      </Segment>
+      </section>
     </form>
   )
 }
