@@ -27,7 +27,14 @@ module.exports = {
       },
     },
   },
-  // overrides: [],
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      rules: {
+        "react/require-default-props": "off"
+      }
+    }
+  ],
   plugins: ['react-refresh'],
   rules: {
     'comma-dangle': [

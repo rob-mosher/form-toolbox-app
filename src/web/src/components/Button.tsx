@@ -34,10 +34,3 @@ export default function Button({
     </button>
   )
 }
-
-Button.defaultProps = {
-  disabled: false,
-  primary: false,
-  type: 'button',
-  children: '',
-}
