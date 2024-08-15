@@ -4,8 +4,9 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Header, Tab } from 'semantic-ui-react'
+import { Tab } from 'semantic-ui-react'
 import Content from '../common/Content'
+import Heading from '../components/Heading'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
@@ -87,7 +88,7 @@ export default function FormEdit() {
   }, []) // formId is not a dependency because it is used in the URL
 
   if (!form) {
-    return <Header as='h2'>Form Details Editor Loading...</Header>
+    return <Heading as='h2'>Form Details Editor Loading...</Heading>
   }
 
   const panes = [

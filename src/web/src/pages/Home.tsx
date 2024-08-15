@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Header } from 'semantic-ui-react'
+import Heading from '../components/Heading'
 
 const VITE_API_PORT = import.meta.env.VITE_API_PORT || 3000
 
@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <>
-      <Header as='h2'>Home</Header>
+      <Heading as='h2'>Home</Heading>
       <p>
         API Response:
         {' '}

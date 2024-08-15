@@ -150,5 +150,4 @@ graph LR
   Lambda --"FIFO"--> SQS
   SQS --"FIFO"--> FormToolbox["..."]
 ```
-- `Warning: findDOMNode is deprecated in StrictMode` is caused by the `semantic-ui-react` library. Form Toolbox will be updated when an updated version becomes available.
 - The `Upload complete!` toast is not always auto-closing after its timeout completes.

@@ -25,7 +25,7 @@ export default function Button({
       aria-label={ariaLabel}
       className={clsx(
         'rounded-lg px-7 py-3 font-semibold disabled:opacity-60',
-        primary ? 'bg-sky-600 text-white' : 'bg-stone-300 text-stone-700'
+        primary ? 'bg-sky-600 text-white' : 'bg-stone-300 text-stone-700',
       )}
       disabled={disabled}
       id={id}

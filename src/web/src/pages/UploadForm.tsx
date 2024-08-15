@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
+import Heading from '../components/Heading'
 
 export default function UploadForm() {
   const fileRef = useRef<HTMLInputElement>(null)
@@ -52,7 +53,7 @@ export default function UploadForm() {
               toast.update(toastRef.current!, { progress })
             },
             url,
-          }
+          },
         )
       })
       .then(() => {
@@ -97,7 +98,7 @@ export default function UploadForm() {
   return (
     <form onSubmit={(e) => handleUpload(e)}>
       <section className='flex flex-col items-center justify-center gap-4 border border-stone-300 bg-stone-100 py-16 shadow-inner'>
-        <div className='text-3xl font-bold tracking-tight'>Upload</div>
+        <Heading as='h2'>Upload</Heading>
         <input
           accept={acceptedMimeTypes?.join(', ')}
           className='cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-6 text-sm text-gray-900 focus:outline-none'

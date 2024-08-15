@@ -3,9 +3,9 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import {
-  Button, Divider, Form, Header
-} from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
+import Divider from '../components/Divider'
+import Heading from '../components/Heading'
 import type { Form as FormType, FormTypeOption, Schema } from '../types'
 
 type EditTabProps = {
@@ -108,8 +108,8 @@ export default function EditTab({
   return (
     <div className='ui bottom attached active tab segment' data-tab='edit'>
       <Form>
-        <Divider horizontal>
-          <Header size='small' content='Form Type' className='ftbx-uppercase' />
+        <Divider>
+          <Heading as='h6' uppercase>Form Type</Heading>
         </Divider>
 
         <Form.Select
@@ -124,8 +124,8 @@ export default function EditTab({
         <Button primary onClick={handleApply}>Apply</Button>
         <Button onClick={handleSave}>Save</Button>
 
-        <Divider horizontal>
-          <Header size='small' content='Form Data' className='ftbx-uppercase' />
+        <Divider>
+          <Heading as='h6' uppercase>Form Data</Heading>
         </Divider>
 
         {schema ? (

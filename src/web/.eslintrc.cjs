@@ -44,7 +44,7 @@ module.exports = {
         objects: 'always-multiline',
         imports: 'never',
         exports: 'never',
-        functions: 'never',
+        functions: 'always-multiline',
       },
     ],
     'import/extensions': 'off',

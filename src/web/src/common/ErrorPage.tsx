@@ -1,5 +1,5 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
-import { Header } from 'semantic-ui-react'
+import Heading from '../components/Heading'
 
 export default function ErrorPage() {
   const error = useRouteError()
@@ -8,18 +8,18 @@ export default function ErrorPage() {
 
   let errorMessage = (
     <>
-      <Header as='h2'>Error</Header>
+      <Heading as='h2'>Error</Heading>
       <p>Sorry, an unexpected error has occurred.</p>
     </>
   )
   if (isRouteErrorResponse(error)) {
     errorMessage = (
       <>
-        <Header as='h2'>
+        <Heading as='h2'>
           Error
           {' '}
           {error.status}
-        </Header>
+        </Heading>
         <p>{error.statusText}</p>
         {error.data?.message && <p>{error.data.message}</p>}
       </>

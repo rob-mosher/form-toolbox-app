@@ -2,7 +2,8 @@ import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Header, Icon, Table } from 'semantic-ui-react'
+import { Icon, Table } from 'semantic-ui-react'
+import Heading from '../components/Heading'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 import type { Form, FormsList } from '../types'
 
@@ -53,7 +54,7 @@ export default function Forms() {
 
   return (
     <>
-      <Header as='h2'>Forms</Header>
+      <Heading as='h2'>Forms</Heading>
       <Table celled>
         <Table.Header>
           <Table.Row>
