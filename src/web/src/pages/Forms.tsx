@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Icon, Table } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
+import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 import type { Form, FormsList } from '../types'
@@ -11,6 +12,7 @@ export default function Forms() {
   const [forms, setForms] = useState<FormsList[]>([])
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
   const [selectedFormId, setSelectedFormId] = useState<Form['id'] | null>(null)
+  const navigate = useNavigate()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
 
@@ -73,20 +75,30 @@ export default function Forms() {
           {forms.map((form) => (
             <Table.Row key={form.id}>
               <Table.Cell singleLine>
-                <Link to={`/forms/${form.id}/edit`}>
-                  <Icon color='grey' name='edit' />
-                </Link>
-                <Link to={`/forms/${form.id}`}>
-                  <Icon color='grey' name='eye' />
-                </Link>
-                <Icon
-                  color='grey'
-                  name='delete'
+                <button
+                  aria-label='View Form'
+                  onClick={() => navigate(`/forms/${form.id}`)}
+                  type='button'
+                >
+                  <Eye />
+                </button>
+                <button
+                  aria-label='Edit form'
+                  onClick={() => navigate(`/forms/${form.id}/edit`)}
+                  type='button'
+                >
+                  <PencilSquare />
+                </button>
+                <button
+                  aria-label='Delete form'
                   onClick={() => {
                     setSelectedFormId(form.id)
                     setIsModalDeleteOpen(true)
                   }}
-                />
+                  type='button'
+                >
+                  <Trash />
+                </button>
               </Table.Cell>
               <Table.Cell>{form.fileName}</Table.Cell>
               <Table.Cell>{form.status}</Table.Cell>
