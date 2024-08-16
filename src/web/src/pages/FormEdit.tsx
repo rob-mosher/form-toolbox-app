@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Tab } from 'semantic-ui-react'
 import Content from '../common/Content'
@@ -12,6 +12,10 @@ import InfoTab from '../tabs/InfoTab'
 import type {
   Form, FormType, FormTypeOption, Schema
 } from '../types'
+
+type FnOutletContext = {
+  setIsContentFullSize: (value: boolean) => void;
+};
 
 type FormEditParams = {
   formId: Form['id']
@@ -24,6 +28,15 @@ export default function FormEdit() {
   const [schema, setSchema] = useState<Schema | null>(null)
 
   const { formId } = useParams<FormEditParams>()
+  const { setIsContentFullSize } = useOutletContext<FnOutletContext>()
+
+  useEffect(() => {
+    // Enable full-size content mode when this component mounts
+    setIsContentFullSize(true)
+
+    // Disable full-size content mode when this component unmounts
+    return () => setIsContentFullSize(false)
+  }, [setIsContentFullSize])
 
   useEffect(() => {
     const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
@@ -109,18 +122,17 @@ export default function FormEdit() {
       menuItem: { key: 'info', icon: 'info', content: 'Info' },
       render: () => <InfoTab form={form} />,
     },
-    {
-      menuItem: { key: 'settings', icon: 'cogs', content: 'Settings' },
-      render: () => <p />,
-    },
   ]
 
   return (
-    <div className='ui grid'>
-
-      <Content imageUrls={imageUrls} />
-      <div className='six wide column ftbx-fitted-max'>
-        <Tab panes={panes} />
+    <div className='flex h-full'>
+      <div className='grid h-full grid-cols-12 gap-3'>
+        <div className='col-span-9 overflow-y-scroll'>
+          <Content imageUrls={imageUrls} />
+        </div>
+        <div className='col-span-3 overflow-x-hidden overflow-y-scroll'>
+          <Tab panes={panes} />
+        </div>
       </div>
     </div>
   )

@@ -5,7 +5,7 @@ interface ButtonProps {
   ariaLabel: string;
   children?: ReactNode;
   disabled?: boolean;
-  id: string;
+  id?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => unknown;
   primary?: boolean;
   type?: 'button' | 'submit';

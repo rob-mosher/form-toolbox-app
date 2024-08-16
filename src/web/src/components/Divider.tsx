@@ -6,9 +6,9 @@ interface DividerProps {
 
 export default function Divider({ children }: DividerProps) {
   return (
-    <div className=''>
+    <div>
       {children ? (
-        <div className='flex gap-3'>
+        <div className='my-1 flex gap-3'>
           <div className='my-4 h-px grow bg-stone-300' />
           <div className='shrink-0'>{children}</div>
           <div className='my-4 h-px grow bg-stone-300' />

@@ -2,45 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-#header {
-  display: flex;
-}
-
-#sub-header {
-  /* display: flex; */
-  background-color: #fff;
-  z-index: 100;
-  border-bottom: 2px solid #eee;
-}
-
-#main {
-  position: relative;
-  top: 90px;
-}
-
-.ftbx-fitted-max {
-  max-height: 91vh;
-  overflow-y: scroll;
-  padding-top: 1px !important;
-  /* above instead of 0px - might be needed for .card */
-}
-
-.ftbx-sticky {
-  position: sticky;
-  z-index: 10;
-}
-
-.ftbx-scanned-docs {
-  padding: 2em 2em;
-  background-color: #ededed;
-}
-
-/* .ftbx-scanned-doc {} */
-
-.ftbx-uppercase {
-  text-transform: uppercase !important;
-}
-
 .ftbx-mono {
   font-family: monospace !important;
   color: #313131 !important;

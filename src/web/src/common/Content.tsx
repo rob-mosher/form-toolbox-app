@@ -1,67 +1,37 @@
-import { Link } from 'react-router-dom'
+import ContentToolbar from './ContentToolbar'
 
 type ContentProps = {
   imageUrls: string[];
 }
 
 export default function Content({ imageUrls }: ContentProps) {
-  return (
-    <div className='ten wide column ftbx-fitted-max'>
-      <div className='ui top attached menu ftbx-sticky'>
-        <div className='ui icon item'>
-          <i className='mouse pointer icon' />
-        </div>
-        <div className='ui icon item'>
-          <i className='search icon' />
-        </div>
-        <div className='ui icon item'>
-          <i className='search plus icon' />
-        </div>
-        <div className='right menu'>
-          <div className='ui right aligned category search item'>
-            <div className='ui transparent icon input'>
-              <input
-                className='prompt'
-                type='text'
-                placeholder='Search text...'
-              />
-              <i className='search link icon' />
-            </div>
-            <div className='results' />
-          </div>
-          <div className='ui dropdown item'>
-            <i className='bars icon' />
-            Page
-            <i className='dropdown icon' />
-            <div className='menu'>
-              {/* TODO page number logic */}
-              <Link className='item' to='#todo'>
-                Page 1
-              </Link>
-              {/* end page number logic %} */}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className='ftbx-scanned-docs'>
-        {imageUrls.map((url, index) => {
-          const pageNumber = index + 1 // Pages are 1-indexed
+  const mockImageUrls = [imageUrls[0], imageUrls[0], imageUrls[0], imageUrls[0]]
 
-          return (
-            <div
-              className='ui fluid ftbx-scanned-doc'
-              id={`tbx-scanned-doc-page-${pageNumber}'`}
+  return (
+    <div className='flex size-full flex-col items-center justify-start'>
+      {/* Below needed for 'sticky' to remain */}
+      <div className='w-full'>
+        <ContentToolbar />
+        <div className='flex w-full flex-col gap-12 bg-gray-100 p-12'>
+          {mockImageUrls.map((url, index) => {
+            const pageNumber = index + 1 // Pages are 1-indexed
+
+            return (
+              <div
+                className='flex w-full flex-col gap-16'
+                id={`tbx-scanned-doc-page-${pageNumber}'`}
               // eslint-disable-next-line react/no-array-index-key
-              key={index}
-            >
-              <img
-                className='ui fluid image'
-                alt={`Page ${pageNumber}`}
-                src={url}
-              />
-            </div>
-          )
-        })}
+                key={index}
+              >
+                <img
+                  alt={`Page ${pageNumber}`}
+                  className='h-auto w-full shadow-xl'
+                  src={url}
+                />
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

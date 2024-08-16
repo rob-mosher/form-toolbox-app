@@ -1,54 +1,45 @@
-import { Link } from 'react-router-dom'
-import { Button } from 'semantic-ui-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { MagnifyingGlass } from '../assets'
+import Button from '../components/Button'
 
 function Header() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log('handleSubmit prevented form defaults.')
+    console.log('NavBar search awaiting implementation.')
   }
 
-  return (
-    <div id='header'>
-      <div id='sub-header' className='ui fixed top sticky fluid container' style={{ padding: '6px 0' }}>
+  const navigate = useNavigate()
 
-        {/* LEFT */}
-        <div className='ui menu secondary'>
-          <Link className='ui item' to='/'>
-            <i className='layer group icon' />
-            <span className='tool-name' style={{ textTransform: 'uppercase' }}>Home</span>
+  return (
+    <div className='bg-indigo-300'>
+      <div className='fixed z-50 flex w-full justify-between border-b-2 border-b-gray-200 bg-white px-6 py-3'>
+
+        <div className='flex items-center gap-12'>
+          <Link to='/'>
+            <span>Home</span>
           </Link>
-          <Link className='item' to='/forms'>
+          <Link to='/forms'>
             Forms
           </Link>
-          <div className='ui item'>
-            <Button primary as={Link} to='/upload'>
-              Upload
-            </Button>
-          </div>
-          {/* END LEFT */}
-
-          {/* RIGHT */}
-          <div className='right menu'>
-            <div className='ui item' style={{ padding: 0 }}>
-              <form className='ui form' onSubmit={handleSubmit} style={{ margin: 0, padding: '0px 8px' }}>
-                <div className='ui search'>
-                  <div className='ui icon input'>
-                    <input
-                      className='prompt'
-                      name='search'
-                      type='text'
-                      placeholder='Search'
-                    />
-                    <i className='search icon' />
-                  </div>
-                  <div className='results' />
-                </div>
-              </form>
-            </div>
-            {/* END RIGHT */}
-
-          </div>
+          <Button ariaLabel='Upload' primary onClick={() => navigate('/upload')}>
+            Upload
+          </Button>
         </div>
+
+        <form className='flex rounded-lg bg-white p-2 ring-1 ring-gray-400 focus-within:ring-2 focus-within:ring-gray-600' onSubmit={handleSubmit}>
+          <label className='sr-only' htmlFor='navbar-search'>Search</label>
+          <input
+            className='bg-inherit focus:outline-none'
+            id='navbar-search'
+            name='search'
+            placeholder='Search'
+            type='text'
+          />
+          <button type='submit' aria-label='Submit search'>
+            <MagnifyingGlass />
+          </button>
+        </form>
+
       </div>
     </div>
   )
