@@ -7,7 +7,7 @@ type InfoTabProps = {
 
 export default function InfoTab({ form }: InfoTabProps) {
   return (
-    <div className='ui bottom attached active tab segment' data-tab='info'>
+    <div className='overflow-hidden' data-tab='info'>
       <code>
         <FormDetails form={form} />
       </code>

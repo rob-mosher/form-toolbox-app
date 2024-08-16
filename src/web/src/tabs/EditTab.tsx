@@ -3,7 +3,6 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { Form } from 'semantic-ui-react'
 import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
@@ -17,14 +16,6 @@ type EditTabProps = {
   setForm: (newForm: FormType) => void;
   setSchema: (newSchema: Schema) => void;
 }
-
-const versionsTempData = [
-  {
-    key: 1,
-    value: 1,
-    text: 'WIP',
-  },
-]
 
 export default function EditTab({
   form,
@@ -81,8 +72,8 @@ export default function EditTab({
     }
   }
 
-  const handleChangeFormType = (e, data) => {
-    setSelectedFormType(data.value)
+  const handleChangeFormType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFormType(e.target.value)
   }
 
   const handleChangeFormData = ((key: string, value: string) => {
@@ -110,10 +101,9 @@ export default function EditTab({
     Object.entries(JSON.parse(schema)).map(([key, value]) => (
       <div key={key}>
         <label htmlFor={key}>
-          {/* TODO fix spacing between span and input (graphical bug appearing to right of grid) */}
           <span className='text-sm font-semibold'>{key}</span>
           <input
-            className='font-mono text-gray-700'
+            className='mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700'
             id={key}
             name={key}
             onChange={(e) => handleChangeFormData(key, e.target.value)}
@@ -131,22 +121,33 @@ export default function EditTab({
   )
 
   return (
-    <div className='ui bottom attached active tab segment' data-tab='edit'>
-      <Form>
+    <div data-tab='edit'>
+      <form>
         <Divider>
           <Heading as='h6' uppercase>Form Type</Heading>
         </Divider>
+        <div className='mb-4'>
+          <label htmlFor='form-type-select' className='mb-2 block font-semibold text-gray-700'>
+            Type
+          </label>
+          <select
+            id='form-type-select'
+            value={selectedFormType}
+            onChange={handleChangeFormType}
+            className='mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+          >
+            <option value='' disabled>
+              Select Type
+            </option>
+            {formTypes.map((option) => (
+              <option key={option.key} value={option.value}>
+                {option.text}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <Form.Select
-          label='Type'
-          options={formTypes}
-          onChange={handleChangeFormType}
-          placeholder='Select Type'
-          value={selectedFormType}
-        />
-        <Form.Select label='Version' options={versionsTempData} placeholder='Select Version' />
-
-        <div className='space-x-1'>
+        <div className='mb-4 space-x-1'>
           <Button onClick={handleApply} primary ariaLabel='Apply changes'>Apply</Button>
           <Button onClick={handleSave} ariaLabel='Save changes'>Save</Button>
         </div>
@@ -157,7 +158,7 @@ export default function EditTab({
 
         <div className='space-y-4'>{ formRows }</div>
 
-      </Form>
+      </form>
     </div>
   )
 }

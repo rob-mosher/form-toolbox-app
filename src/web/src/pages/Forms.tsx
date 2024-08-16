@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Table } from 'semantic-ui-react'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
@@ -57,60 +56,62 @@ export default function Forms() {
   return (
     <>
       <Heading as='h2'>Forms</Heading>
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Action</Table.HeaderCell>
-            <Table.HeaderCell>File Name</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Pages</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Form ID</Table.HeaderCell>
-            <Table.HeaderCell>Textract Job ID</Table.HeaderCell>
-            <Table.HeaderCell>Uploaded At</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <table className='divide-y divide-gray-300'>
+        <thead>
+          <tr>
+            <th className='p-2 text-sm uppercase'>Action</th>
+            <th className='p-2 text-sm uppercase'>File Name</th>
+            <th className='p-2 text-sm uppercase'>Status</th>
+            <th className='p-2 text-sm uppercase'>Pages</th>
+            <th className='p-2 text-sm uppercase'>Type</th>
+            <th className='p-2 text-sm uppercase'>Form ID</th>
+            <th className='p-2 text-sm uppercase'>Textract Job ID</th>
+            <th className='p-2 text-sm uppercase'>Uploaded At</th>
+          </tr>
+        </thead>
 
-        <Table.Body>
+        <tbody className='bg-white'>
           {forms.map((form) => (
-            <Table.Row key={form.id}>
-              <Table.Cell singleLine>
-                <button
-                  aria-label='View Form'
-                  onClick={() => navigate(`/forms/${form.id}`)}
-                  type='button'
-                >
-                  <Eye />
-                </button>
-                <button
-                  aria-label='Edit form'
-                  onClick={() => navigate(`/forms/${form.id}/edit`)}
-                  type='button'
-                >
-                  <PencilSquare />
-                </button>
-                <button
-                  aria-label='Delete form'
-                  onClick={() => {
-                    setSelectedFormId(form.id)
-                    setIsModalDeleteOpen(true)
-                  }}
-                  type='button'
-                >
-                  <Trash />
-                </button>
-              </Table.Cell>
-              <Table.Cell>{form.fileName}</Table.Cell>
-              <Table.Cell>{form.status}</Table.Cell>
-              <Table.Cell>{form.pageCount}</Table.Cell>
-              <Table.Cell>{form.formType?.name}</Table.Cell>
-              <Table.Cell>{form.id}</Table.Cell>
-              <Table.Cell>{form.textractJobId}</Table.Cell>
-              <Table.Cell>{new Date(form.createdAt).toLocaleString()}</Table.Cell>
-            </Table.Row>
+            <tr key={form.id} className='even:bg-gray-100'>
+              <td className='p-3'>
+                <span className='flex items-center justify-center'>
+                  <button
+                    aria-label='View Form'
+                    onClick={() => navigate(`/forms/${form.id}`)}
+                    type='button'
+                  >
+                    <Eye />
+                  </button>
+                  <button
+                    aria-label='Edit form'
+                    onClick={() => navigate(`/forms/${form.id}/edit`)}
+                    type='button'
+                  >
+                    <PencilSquare />
+                  </button>
+                  <button
+                    aria-label='Delete form'
+                    onClick={() => {
+                      setSelectedFormId(form.id)
+                      setIsModalDeleteOpen(true)
+                    }}
+                    type='button'
+                  >
+                    <Trash />
+                  </button>
+                </span>
+              </td>
+              <td className='p-3'>{form.fileName}</td>
+              <td className='p-3'>{form.status}</td>
+              <td className='p-3'>{form.pageCount}</td>
+              <td className='p-3'>{form.formType?.name}</td>
+              <td className='p-3'>{form.id}</td>
+              <td className='p-3'>{form.textractJobId}</td>
+              <td className='p-3'>{new Date(form.createdAt).toLocaleString()}</td>
+            </tr>
           ))}
-        </Table.Body>
-      </Table>
+        </tbody>
+      </table>
 
       <ModalDeleteForm
         handleDelete={handleDelete}

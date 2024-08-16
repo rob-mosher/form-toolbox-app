@@ -9,7 +9,7 @@ export default function ContentToolbar() {
   }
 
   return (
-    <div className='sticky top-0 z-10 flex w-full items-center justify-between border-y border-y-stone-300 bg-stone-200'>
+    <div className='sticky top-0 z-10 flex w-full items-center justify-between border-y border-r border-y-stone-300 border-r-stone-300 bg-white'>
       <div className='flex'>
         <div className='flex items-center justify-center p-3'>
           <Cursor />

@@ -1,12 +1,13 @@
 // TODO add check that form is ready for editing
-
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useOutletContext, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Tab } from 'semantic-ui-react'
+import { InformationCircle, PencilSquare } from '../assets'
 import Content from '../common/Content'
 import Heading from '../components/Heading'
+import Tab from '../components/Tab'
+import { mergeClassName } from '../lib/utils'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
@@ -26,6 +27,7 @@ export default function FormEdit() {
   const [formTypes, setFormTypes] = useState<FormTypeOption[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [schema, setSchema] = useState<Schema | null>(null)
+  const [activeTab, setActiveTab] = useState('edit')
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useOutletContext<FnOutletContext>()
@@ -104,34 +106,35 @@ export default function FormEdit() {
     return <Heading as='h2'>Form Details Editor Loading...</Heading>
   }
 
-  const panes = [
-    {
-      menuItem: { key: 'edit', icon: 'edit', content: 'Edit' },
-      render: () => (
-        <EditTab
-          form={form}
-          formId={formId}
-          formTypes={formTypes}
-          schema={schema}
-          setForm={setForm}
-          setSchema={setSchema}
-        />
-      ),
-    },
-    {
-      menuItem: { key: 'info', icon: 'info', content: 'Info' },
-      render: () => <InfoTab form={form} />,
-    },
+  const tabs = [
+    { key: 'edit', content: 'Edit', icon: <PencilSquare /> },
+    { key: 'info', content: 'Info', icon: <InformationCircle /> },
   ]
 
   return (
-    <div className='flex h-full'>
+    <div className='flex size-full'>
       <div className='grid h-full grid-cols-12 gap-3'>
         <div className='col-span-9 overflow-y-scroll'>
           <Content imageUrls={imageUrls} />
         </div>
         <div className='col-span-3 overflow-x-hidden overflow-y-scroll'>
-          <Tab panes={panes} />
+          <Tab tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+          <div className={mergeClassName(
+            'p-3.5 border border-gray-300',
+          )}
+          >
+            {activeTab === 'edit' && (
+              <EditTab
+                form={form}
+                formId={formId}
+                formTypes={formTypes}
+                schema={schema}
+                setForm={setForm}
+                setSchema={setSchema}
+              />
+            )}
+            {activeTab === 'info' && <InfoTab form={form} />}
+          </div>
         </div>
       </div>
     </div>

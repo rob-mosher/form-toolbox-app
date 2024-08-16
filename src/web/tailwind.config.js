@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        mono: ['monospace !important'],
+        sans: ['Lato', 'sans-serif'],
+        mono: ['monospace'],
       },
     },
   },

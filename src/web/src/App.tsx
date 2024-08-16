@@ -10,7 +10,7 @@ export default function App() {
   const [isContentFullSize, setIsContentFullSize] = useState(false)
 
   return (
-    <div className='flex h-screen w-screen flex-col'>
+    <div className='flex h-screen w-screen flex-col font-sans'>
       <Header />
       <div
         className={mergeClassName(

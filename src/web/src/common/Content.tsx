@@ -12,7 +12,7 @@ export default function Content({ imageUrls }: ContentProps) {
       {/* Below needed for 'sticky' to remain */}
       <div className='w-full'>
         <ContentToolbar />
-        <div className='flex w-full flex-col gap-12 bg-gray-100 p-12'>
+        <div className='flex w-full flex-col gap-12 border-r border-r-stone-300 bg-gray-100 p-12'>
           {mockImageUrls.map((url, index) => {
             const pageNumber = index + 1 // Pages are 1-indexed
 
