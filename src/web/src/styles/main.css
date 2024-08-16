@@ -1,8 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.ftbx-mono {
-  font-family: monospace !important;
-  color: #313131 !important;
-}

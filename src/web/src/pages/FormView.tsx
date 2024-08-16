@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Segment } from 'semantic-ui-react'
 import FormDetails from '../common/FormDetails'
 import Heading from '../components/Heading'
 import type { Form } from '../types'
@@ -38,11 +37,11 @@ export default function FormView() {
   return (
     <>
       <Heading as='h2'>Form Details</Heading>
-      <Segment>
+      <div className='p-4'>
         <code>
           <FormDetails form={form} />
         </code>
-      </Segment>
+      </div>
     </>
   )
 }

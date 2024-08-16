@@ -41,10 +41,10 @@ export default function ModalDeleteForm({
           This action cannot be undone.
         </p>
         <div className='mt-9 flex justify-end gap-2'>
-          <Button ariaLabel='No' onClick={() => setIsModalDeleteOpen(false)}>
+          <Button ariaLabel='Cancel' onClick={() => setIsModalDeleteOpen(false)}>
             Cancel
           </Button>
-          <Button ariaLabel='yes' negative onClick={() => handleDelete(selectedFormId)}>
+          <Button ariaLabel='Delete' negative onClick={() => handleDelete(selectedFormId)}>
             Delete
           </Button>
         </div>

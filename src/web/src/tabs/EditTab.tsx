@@ -3,7 +3,8 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { Button, Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
+import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type { Form as FormType, FormTypeOption, Schema } from '../types'
@@ -105,6 +106,30 @@ export default function EditTab({
     }
   }
 
+  const formRows = schema ? (
+    Object.entries(JSON.parse(schema)).map(([key, value]) => (
+      <div key={key}>
+        <label htmlFor={key}>
+          {/* TODO fix spacing between span and input (graphical bug appearing to right of grid) */}
+          <span className='text-sm font-semibold'>{key}</span>
+          <input
+            className='font-mono text-gray-700'
+            id={key}
+            name={key}
+            onChange={(e) => handleChangeFormData(key, e.target.value)}
+            required={value?.required}
+            type={
+            value?.type === 'string' ? 'text' : value?.type
+          }
+            value={form?.formData?.[key] || ''}
+          />
+        </label>
+      </div>
+    ))
+  ) : (
+    <div>Please select and apply a form type from above.</div>
+  )
+
   return (
     <div className='ui bottom attached active tab segment' data-tab='edit'>
       <Form>
@@ -121,38 +146,16 @@ export default function EditTab({
         />
         <Form.Select label='Version' options={versionsTempData} placeholder='Select Version' />
 
-        <Button primary onClick={handleApply}>Apply</Button>
-        <Button onClick={handleSave}>Save</Button>
+        <div className='space-x-1'>
+          <Button onClick={handleApply} primary ariaLabel='Apply changes'>Apply</Button>
+          <Button onClick={handleSave} ariaLabel='Save changes'>Save</Button>
+        </div>
 
         <Divider>
           <Heading as='h6' uppercase>Form Data</Heading>
         </Divider>
 
-        {schema ? (
-
-          Object.entries(JSON.parse(schema)).map(([key, value]) => (
-            <Form.Field key={key}>
-              <label htmlFor='key'>
-                {key}
-                <input
-                  className='ftbx-mono'
-                  id='key'
-                  name={key}
-                  onChange={(e) => handleChangeFormData(key, e.target.value)}
-                  required={value?.required}
-                  type={
-                    value?.type === 'string'
-                      ? 'text'
-                      : value?.type
-                  }
-                  value={form?.formData?.[key] || ''}
-                />
-              </label>
-            </Form.Field>
-          ))
-        ) : (
-          <span>Please select and apply a form type from above.</span>
-        )}
+        <div className='space-y-4'>{ formRows }</div>
 
       </Form>
     </div>
