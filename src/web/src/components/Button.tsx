@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import React, { ReactNode } from 'react'
+import { mergeClassName } from '../lib/utils'
 
 interface ButtonProps {
   ariaLabel: string;
@@ -29,12 +29,11 @@ export default function Button({
   return (
     <button
       aria-label={ariaLabel}
-      // TODO implement tw-merge and ordering for negative, positive, and primary
-      className={clsx(
-        'rounded px-7 py-3 font-semibold disabled:opacity-60',
-        negative && 'bg-red-500 text-white',
-        positive && 'bg-green-500 text-white',
-        primary ? 'bg-sky-600 text-white' : 'bg-stone-300 text-stone-700',
+      className={mergeClassName(
+        'rounded px-6 py-2 font-semibold hover:ring-2 hover:ring-inset disabled:opacity-60',
+        primary ? 'bg-sky-600 text-white hover:ring-sky-900' : 'bg-stone-200 text-stone-600 hover:ring-stone-400',
+        positive && 'bg-green-500 text-white hover:ring-green-700',
+        negative && 'bg-red-500 text-white hover:ring-red-900',
       )}
       disabled={disabled}
       id={id}

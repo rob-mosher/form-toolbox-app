@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import { ReactNode } from 'react'
+import { mergeClassName } from '../lib/utils'
 
 interface HeadingProps {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -19,7 +19,7 @@ const headingStyles = {
 export default function Heading({ as = 'h2', children, uppercase = false }: HeadingProps) {
   return (
     <div
-      className={clsx(
+      className={mergeClassName(
         'mb-3 font-bold tracking-tight',
         uppercase && 'uppercase',
         headingStyles[as],

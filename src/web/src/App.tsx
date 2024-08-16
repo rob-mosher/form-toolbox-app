@@ -1,8 +1,8 @@
-import clsx from 'clsx'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Header from './common/Header'
+import { mergeClassName } from './lib/utils'
 import 'react-toastify/dist/ReactToastify.css'
 // import 'react-toastify/dist/ReactToastify.min.css'; // TODO chose depending on dev or prod build
 
@@ -13,7 +13,7 @@ export default function App() {
     <div className='flex h-screen w-screen flex-col'>
       <Header />
       <div
-        className={clsx(
+        className={mergeClassName(
           'relative mt-[60px] flex grow flex-col pt-4',
           isContentFullSize && 'overflow-hidden',
         )}
