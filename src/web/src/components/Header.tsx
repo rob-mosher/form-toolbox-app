@@ -20,6 +20,9 @@ function Header() {
         <Link to='/forms'>
           Forms
         </Link>
+        <Link to='/formtypes'>
+          Form Types
+        </Link>
         <Button ariaLabel='Upload' primary onClick={() => navigate('/upload')}>
           Upload
         </Button>
