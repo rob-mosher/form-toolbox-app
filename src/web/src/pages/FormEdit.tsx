@@ -139,8 +139,8 @@ export default function FormEdit() {
   }
 
   return (
-    <div className='flex size-full'>
-      <div className='grid h-full grid-cols-12 gap-3'>
+    <div className='flex h-full'>
+      <div className='grid w-full grid-cols-12 gap-3'>
         <div className='col-span-9 overflow-y-scroll'>
           <Content imageUrls={imageUrls} />
         </div>
