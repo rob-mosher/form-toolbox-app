@@ -12,14 +12,14 @@ export default function App() {
   return (
     <div className='flex h-screen w-screen flex-col font-sans'>
       <Header />
-      <div
+      <main
         className={mergeClassName(
           'relative mt-[60px] flex grow flex-col pt-4 px-6',
           isContentFullSize && 'overflow-hidden px-0',
         )}
       >
         <Outlet context={{ setIsContentFullSize }} />
-      </div>
+      </main>
       <ToastContainer />
     </div>
   )
