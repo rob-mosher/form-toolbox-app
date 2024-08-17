@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { mergeClassName } from '../lib/utils'
+import { mergeClassName } from '../lib'
 
 interface ButtonProps {
   ariaLabel: string;

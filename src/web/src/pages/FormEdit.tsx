@@ -8,7 +8,7 @@ import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import useGlobalState from '../context/useGlobalState'
-import { mergeClassName } from '../lib/utils'
+import { mergeClassName } from '../lib'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {

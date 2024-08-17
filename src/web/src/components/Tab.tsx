@@ -1,4 +1,4 @@
-import { mergeClassName } from '../lib/utils'
+import { mergeClassName } from '../lib'
 
 type Tab = {
   key: string;
