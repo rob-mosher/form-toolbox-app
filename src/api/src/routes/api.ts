@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
-import formTypesRouter from './formTypes'
 import formRouter from './forms'
+import templateRouter from './templates'
 
 const router = express.Router()
 
@@ -9,6 +9,6 @@ router.get('/', (req: Request, res: Response) => {
 })
 
 router.use('/forms', formRouter)
-router.use('/formtypes', formTypesRouter)
+router.use('/templates', templateRouter)
 
 export default router

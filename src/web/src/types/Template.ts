@@ -1,4 +1,4 @@
-export type FormType = {
+export type Template = {
   id: string; // uuidv4
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

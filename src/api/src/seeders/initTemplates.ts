@@ -1,4 +1,4 @@
-import { FormType } from '../models'
+import { Template } from '../models'
 
 const seedData = [
   {
@@ -27,17 +27,17 @@ const seedData = [
   },
 ]
 
-const seedFormTypes = async () => {
+const seedTemplates = async () => {
   // eslint-disable-next-line no-restricted-syntax
   for (const item of seedData) {
-    // Check if the FormType already exists
-    const formType = await FormType.findOne({ where: { name: item.name } })
-    if (!formType) {
+    // Check if the Template already exists
+    const template = await Template.findOne({ where: { name: item.name } })
+    if (!template) {
       // eslint-disable-next-line no-await-in-loop
-      await FormType.create(item)
-      console.log(`Seeded FormType: ${item.name}`)
+      await Template.create(item)
+      console.log(`Seeded Template: ${item.name}`)
     }
   }
 }
 
-export default seedFormTypes
+export default seedTemplates

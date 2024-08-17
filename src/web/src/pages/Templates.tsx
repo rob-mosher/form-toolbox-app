@@ -4,21 +4,21 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
-import ModalDeleteFormType from '../modals/ModalDeleteFormType'
-import type { FormType } from '../types'
+import ModalDeleteTemplate from '../modals/ModalDeleteTemplate'
+import type { Template } from '../types'
 
-export default function FormTypes() {
-  const [formTypes, setFormTypes] = useState<FormType[]>([])
+export default function Templates() {
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
-  const [selectedFormTypeId, setSelectedFormTypeId] = useState<FormType['id'] | null>(null)
+  const [selectedTemplateId, setSelectedTemplateId] = useState<Template['id'] | null>(null)
+  const [templates, setTemplates] = useState<Template[]>([])
   const navigate = useNavigate()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes`
+  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates`
 
-  const loadFormTypes = useCallback(() => {
+  const loadTemplates = useCallback(() => {
     axios.get(url)
       .then((resp) => {
-        setFormTypes(resp.data)
+        setTemplates(resp.data)
       })
       .catch((error) => {
         toast.error('Error: Unable to load forms.', {
@@ -29,33 +29,33 @@ export default function FormTypes() {
       })
   }, [url])
 
-  const handleDelete = (formTypeId: FormType['id'] | null) => {
-    if (formTypeId === null) {
+  const handleDelete = (templateId: Template['id'] | null) => {
+    if (templateId === null) {
       // eslint-disable-next-line no-console
       console.warn('Attempted to delete a form with a null ID. No action will be taken.')
       return
     }
 
-    axios.delete(`${url}/${formTypeId}`)
+    axios.delete(`${url}/${templateId}`)
       .then(() => {
-        toast.success('Form type deleted successfully')
+        toast.success('Template deleted successfully')
         setIsModalDeleteOpen(false)
-        loadFormTypes()
+        loadTemplates()
       })
       .catch((error) => {
-        toast.error('Error: Unable to delete formType.')
+        toast.error('Error: Unable to delete template.')
         // eslint-disable-next-line no-console
-        console.error('Unable to delete formType:', error)
+        console.error('Unable to delete template:', error)
       })
   }
 
   useEffect(() => {
-    loadFormTypes()
-  }, [loadFormTypes])
+    loadTemplates()
+  }, [loadTemplates])
 
   return (
     <>
-      <Heading as='h2'>Form Types</Heading>
+      <Heading as='h2'>Templates</Heading>
       <table className='divide-y divide-gray-300'>
         <thead>
           <tr>
@@ -66,20 +66,20 @@ export default function FormTypes() {
         </thead>
 
         <tbody className='bg-white'>
-          {formTypes.map((formType) => (
-            <tr key={formType.id} className='even:bg-gray-100'>
+          {templates.map((template) => (
+            <tr key={template.id} className='even:bg-gray-100'>
               <td className='p-3'>
                 <span className='flex items-center justify-center gap-1'>
                   <button
-                    aria-label='View Form Type'
-                    onClick={() => navigate(`/formtypes/${formType.id}`)}
+                    aria-label='View Template'
+                    onClick={() => navigate(`/templates/${template.id}`)}
                     type='button'
                   >
                     <Eye />
                   </button>
                   <button
                     aria-label='Edit form'
-                    onClick={() => navigate(`/formtypes/${formType.id}/edit`)}
+                    onClick={() => navigate(`/templates/${template.id}/edit`)}
                     type='button'
                   >
                     <PencilSquare />
@@ -87,7 +87,7 @@ export default function FormTypes() {
                   <button
                     aria-label='Delete form'
                     onClick={() => {
-                      setSelectedFormTypeId(formType.id)
+                      setSelectedTemplateId(template.id)
                       setIsModalDeleteOpen(true)
                     }}
                     type='button'
@@ -97,17 +97,17 @@ export default function FormTypes() {
                 </span>
               </td>
               {/* TODO max-w-[xch] isn't working exactly as expected, but good enough for now */}
-              <td className='p-3'>{formType.name}</td>
-              <td className='p-3 text-center'>{formType.id}</td>
+              <td className='p-3'>{template.name}</td>
+              <td className='p-3 text-center'>{template.id}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <ModalDeleteFormType
+      <ModalDeleteTemplate
         handleDelete={handleDelete}
         isModalDeleteOpen={isModalDeleteOpen}
-        selectedFormTypeId={selectedFormTypeId}
+        selectedTemplateId={selectedTemplateId}
         setIsModalDeleteOpen={setIsModalDeleteOpen}
       />
     </>

@@ -3,7 +3,7 @@
 import { Form } from './Form'
 
 export type FormsList = Form & {
-  formType: {
+  template: {
     name: string;
   };
 };

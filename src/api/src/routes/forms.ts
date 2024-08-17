@@ -5,7 +5,7 @@ import bucketController from '../controllers/bucketController'
 // import fileController from '../controllers/fileController'
 import formController from '../controllers/formController'
 import imageController from '../controllers/imageController'
-import { Form, FormType } from '../models'
+import { Form, Template } from '../models'
 import { generatePresignedUrlsFromKeys } from '../services/aws/s3/s3Functions'
 import { createError } from '../utils/error'
 
@@ -48,8 +48,8 @@ formsRouter.get(
           isDeleted: false,
         },
         include: [{
-          model: FormType,
-          as: 'formType',
+          model: Template,
+          as: 'template',
           attributes: ['name'],
         }],
         attributes: [
@@ -166,7 +166,7 @@ formsRouter.put(
     const { updates } = req.body
     const allowedUpdates = new Set([
       'formData',
-      'formTypeId',
+      'templateId',
     ])
 
     try {
@@ -184,8 +184,8 @@ formsRouter.put(
       // Process supported updates
       // For now, handle individually in case specific logic is needed.
       // NOTE: If values match by value, sequelize will not alter changed() to true
-      if (updates.formTypeId) {
-        res.locals.form.formTypeId = updates.formTypeId
+      if (updates.templateId) {
+        res.locals.form.templateId = updates.templateId
       }
 
       if (updates.formData) {

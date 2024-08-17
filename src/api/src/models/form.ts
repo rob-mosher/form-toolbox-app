@@ -32,14 +32,6 @@ const initForm = (sequelize: Sequelize) => {
         type: DataTypes.JSONB,
         allowNull: true,
       },
-      formTypeId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-          model: sequelize.models.FormType.tableName,
-          key: 'id',
-        },
-      },
       isDeleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -59,6 +51,14 @@ const initForm = (sequelize: Sequelize) => {
           'uploading',
         ],
         allowNull: false,
+      },
+      templateId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: sequelize.models.Template.tableName,
+          key: 'id',
+        },
       },
       textractJobId: {
         type: DataTypes.STRING,

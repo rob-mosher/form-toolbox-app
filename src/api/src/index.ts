@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import listEndpoints from 'express-list-endpoints'
 import { sequelize } from './models'
 import apiRouter from './routes/api'
-import seedFormTypes from './seeders/initFormTypes'
+import seedTemplates from './seeders/initTemplates'
 import { startPolling } from './services/aws/sqs/poller'
 
 dotenv.config({ path: '../../.env' })
@@ -55,9 +55,9 @@ if (process.env.NODE_ENV !== 'test') {
   sequelize.sync()
     .then(() => {
       console.log('Successfully syncronized database schema.')
-      return seedFormTypes() // Must complete before remaining logic can occur (see below)
+      return seedTemplates() // Must complete before remaining logic can occur (see below)
     })
-    .then(() => { // Allows seedFormTypes() to complete before proceeding (see above)
+    .then(() => { // Allows seedTemplates() to complete before proceeding (see above)
       app.listen(API_PORT, API_HOST, () => {
         console.log(`Server listening on ${API_HOST}:${API_PORT}`)
         startPolling()

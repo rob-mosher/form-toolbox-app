@@ -1,15 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { FormType } from '../models'
+import { Template } from '../models'
 
-const formTypesRouter = express.Router()
+const templateRouter = express.Router()
 
-// For efficiency, only include the id and name when providing all formTypes.
-formTypesRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+// For efficiency, only include the id and name when providing all template.
+templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const formTypes = await FormType.findAll({
+    const template = await Template.findAll({
       attributes: ['id', 'name'],
     })
-    return res.json(formTypes)
+    return res.json(template)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message })
@@ -17,17 +17,17 @@ formTypesRouter.get('/', async (req: Request, res: Response, next: NextFunction)
   }
 })
 
-formTypesRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params
 
   try {
-    const formType = await FormType.findAll({
+    const template = await Template.findAll({
       attributes: ['id', 'name', 'schema'],
       where: {
         id,
       },
     })
-    return res.json(formType)
+    return res.json(template)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message })
@@ -35,4 +35,4 @@ formTypesRouter.get('/:id', async (req: Request, res: Response, next: NextFuncti
   }
 })
 
-export default formTypesRouter
+export default templateRouter

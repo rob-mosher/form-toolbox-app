@@ -12,7 +12,7 @@ import { mergeClassName } from '../lib'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  Form, FormType, FormTypeOption, Schema
+  Form, Schema, Template, TemplateOption
 } from '../types'
 
 type FormEditParams = {
@@ -21,7 +21,7 @@ type FormEditParams = {
 
 export default function FormEdit() {
   const [form, setForm] = useState<Form | null>(null)
-  const [formTypes, setFormTypes] = useState<FormTypeOption[]>([])
+  const [templates, setTemplates] = useState<TemplateOption[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [schema, setSchema] = useState<Schema | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
@@ -39,24 +39,24 @@ export default function FormEdit() {
 
   useEffect(() => {
     const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-    const formTypesApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/`
+    const templateApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/`
     const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
 
-    // Get formtypes
-    axios.get<FormType[]>(formTypesApiUrl)
+    // Get templates
+    axios.get<Template[]>(templateApiUrl)
       .then((resp) => {
-        const types = resp.data.map(({ id, name }) => (
+        const newTemplates = resp.data.map(({ id, name }) => (
           {
             key: id,
             value: id,
             text: name,
           }
         ))
-        setFormTypes(types)
+        setTemplates(newTemplates)
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
-        console.error('Error fetching formtypes:', error.message)
+        console.error('Error fetching templates:', error.message)
       })
 
     // Get form images/pages
@@ -74,10 +74,10 @@ export default function FormEdit() {
       .then(async (resp) => {
         const fetchedForm = resp.data
 
-        // If formTypeId is set, set the schema
-        if (fetchedForm.formTypeId) {
+        // If templateId is set, set the schema
+        if (fetchedForm.templateId) {
           try {
-            const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${fetchedForm.formTypeId}`)
+            const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
             setSchema(schemaResponse.data[0].schema)
           } catch (error) {
             // eslint-disable-next-line no-console
@@ -115,10 +115,10 @@ export default function FormEdit() {
         <EditTab
           form={form}
           formId={formId}
-          formTypes={formTypes}
           schema={schema}
           setForm={setForm}
           setSchema={setSchema}
+          templates={templates}
         />
       )
       break

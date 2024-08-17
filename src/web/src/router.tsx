@@ -3,12 +3,12 @@ import { createBrowserRouter } from 'react-router-dom'
 import App from './App'
 import ErrorPage from './components/ErrorPage'
 import FormEdit from './pages/FormEdit'
-import FormTypeEdit from './pages/FormTypeEdit'
-import FormTypeView from './pages/FormTypeView'
-import FormTypes from './pages/FormTypes'
 import FormView from './pages/FormView'
 import Forms from './pages/Forms'
 import Home from './pages/Home'
+import TemplateEdit from './pages/TemplateEdit'
+import TemplateView from './pages/TemplateView'
+import Templates from './pages/Templates'
 import UploadForm from './pages/UploadForm'
 
 export const router = createBrowserRouter([
@@ -19,12 +19,12 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/forms', element: <Forms /> },
       { path: '/forms/:formId', element: <FormView /> },
-      { path: '/forms/:formId/view', element: <FormView /> },
       { path: '/forms/:formId/edit', element: <FormEdit /> },
-      { path: '/formtypes', element: <FormTypes /> },
-      { path: '/formtypes/:formTypeId', element: <FormTypeView /> },
-      { path: '/formtypes/:formTypeId/view', element: <FormTypeView /> },
-      { path: '/formtypes/:formTypeId/edit', element: <FormTypeEdit /> },
+      { path: '/forms/:formId/view', element: <FormView /> },
+      { path: '/templates', element: <Templates /> },
+      { path: '/templates/:templateId', element: <TemplateView /> },
+      { path: '/templates/:templateId/edit', element: <TemplateEdit /> },
+      { path: '/templates/:templateId/view', element: <TemplateView /> },
       { path: '/upload', element: <UploadForm /> },
     ],
   },

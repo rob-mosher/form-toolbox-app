@@ -1,13 +1,13 @@
-import type { FormType } from '../types'
+import type { Template } from '../types'
 
-type FormTypeDetailsProps = {
-  formType: FormType;
+type TemplateDetailsProps = {
+  template: Template;
 }
 
-export default function FormTypeDetails({ formType }: FormTypeDetailsProps) {
+export default function TemplateDetails({ template }: TemplateDetailsProps) {
   return (
     <code>
-      {Object.entries(formType).map(([key, value]) => (
+      {Object.entries(template).map(([key, value]) => (
         <div key={key} style={{ marginBottom: '1em' }}>
           <div>
             <strong>

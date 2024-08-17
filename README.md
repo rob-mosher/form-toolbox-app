@@ -110,24 +110,18 @@ graph TD
 
 # Database Diagram
 
-To balance the diverse requirements of various form types with the need for strict schema and ACID compliance, Form Toolbox employs a hyrid approach. Utilizing PostgreSQL's JSONB datatype, each form type has its own schema, while still maintaining a consistent, overarching schema-based system. This methodology effectively merges the benefits of NoSQL/Document storage – flexibility and adaptability – with the strengths of a SQL/Schema-based system – reliability and structure. The result is a system that provides consistent document-style storage and retrieval within a structured SQL framework, catering to diverse form requirements while upholding data integrity and consistency.
+To balance the diverse requirements of various templates (types of forms) with the need for strict schema and ACID compliance, Form Toolbox employs a hyrid approach. Utilizing PostgreSQL's JSONB datatype, each template has its own schema, while still maintaining a consistent, overarching schema-based system. This methodology effectively merges the benefits of NoSQL/Document storage – flexibility and adaptability – with the strengths of a SQL/Schema-based system – reliability and structure. The result is a system that provides consistent document-style storage and retrieval within a structured SQL framework, catering to diverse form requirements while upholding data integrity and consistency.
 
 ```mermaid
 erDiagram
-  FormType {
-    UUID id PK "Primary Key"
-    STRING name
-    JSONB schema "Contains the custom schema that each FormType utilizes, adhered to by each Form"
-  }
-
   Form {
     UUID id PK "Primary Key"
     STRING analysisFolderNameS3
     STRING exportFolderNameS3
     STRING fileName
     STRING fileNameS3
-    JSONB formData "Flexible container for varied form content, adhering to its FormType schema"
-    UUID formTypeId FK "Foreign Key to FormType"
+    JSONB formData "Flexible container for varied form content, adhering to its Template schema"
+    UUID templateId FK "Foreign Key to Template"
     BOOLEAN isDeleted "For soft-delete"
     INTEGER pageCount
     ENUM status
@@ -135,7 +129,13 @@ erDiagram
     JSONB textractKeyValues
   }
 
-FormType ||--o{ Form : "has many"
+  Template {
+    UUID id PK "Primary Key"
+    STRING name
+    JSONB schema "Contains the custom schema that each Template utilizes, adhered to by each Form"
+  }
+
+Template ||--o{ Form : "has many"
 ```
 
 # Known Issues

@@ -2,19 +2,19 @@ import { XMark } from '../assets'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
 import Modal from '../components/Modal'
-import type { FormType } from '../types'
+import type { Template } from '../types'
 
 type ModalDeleteFormProps = {
-  handleDelete: (formTypeId: FormType['id'] | null) => void;
+  handleDelete: (templateId: Template['id'] | null) => void;
   isModalDeleteOpen: boolean,
-  selectedFormTypeId: FormType['id'] | null,
+  selectedTemplateId: Template['id'] | null,
   setIsModalDeleteOpen: (newIsModalDeleteOpen: boolean) => void,
 }
 
 export default function ModalDeleteForm({
   handleDelete,
   isModalDeleteOpen,
-  selectedFormTypeId,
+  selectedTemplateId,
   setIsModalDeleteOpen,
 }: ModalDeleteFormProps) {
   return (
@@ -44,7 +44,7 @@ export default function ModalDeleteForm({
           <Button ariaLabel='Cancel' onClick={() => setIsModalDeleteOpen(false)}>
             Cancel
           </Button>
-          <Button ariaLabel='Delete' negative onClick={() => handleDelete(selectedFormTypeId)}>
+          <Button ariaLabel='Delete' negative onClick={() => handleDelete(selectedTemplateId)}>
             Delete
           </Button>
         </div>

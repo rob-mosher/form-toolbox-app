@@ -1,5 +1,5 @@
 export * from './Form'
 export * from './FormsList'
-export * from './FormType'
-export * from './FormTypeOption'
+export * from './Template'
+export * from './TemplateOption'
 export * from './Schema'

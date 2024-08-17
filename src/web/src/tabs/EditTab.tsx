@@ -6,26 +6,26 @@ import { toast } from 'react-toastify'
 import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
-import type { Form as FormType, FormTypeOption, Schema } from '../types'
+import type { Form, Schema, TemplateOption } from '../types'
 
 type EditTabProps = {
-  form: FormType;
-  formId: FormType['id'];
-  formTypes: FormTypeOption[];
+  form: Form;
+  formId: Form['id'];
   schema: Schema | null;
-  setForm: (newForm: FormType) => void;
+  setForm: (newForm: Form) => void;
   setSchema: (newSchema: Schema) => void;
+  templates: TemplateOption[];
 }
 
 export default function EditTab({
   form,
   formId,
-  formTypes,
   schema,
   setForm,
   setSchema,
+  templates,
 }: EditTabProps) {
-  const [selectedFormType, setSelectedFormType] = useState(form.formTypeId || '')
+  const [selectedTemplate, setSelectedTemplate] = useState(form.templateId || '')
 
   const mapTextractKeyValuesToFormData = (newSchema, textractKeyValues) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
@@ -43,13 +43,13 @@ export default function EditTab({
 
   const handleApply = async () => {
     try {
-      // Set formTypeId on the form.
-      const setFormTypeIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-      await axios.put(setFormTypeIdUrl, { updates: { formTypeId: selectedFormType } })
+      // Set templateId on the form.
+      const setTemplateIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+      await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplate } })
 
       // Get the new schema.
-      const getFormTypeDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/formtypes/${selectedFormType}`
-      const response = await axios.get(getFormTypeDataUrl)
+      const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
+      const response = await axios.get(getTemplateDataUrl)
       const newSchema = response.data[0].schema
 
       // Update state with the above changes.
@@ -59,21 +59,21 @@ export default function EditTab({
         const mappedFormData = mapTextractKeyValuesToFormData(newSchema, prevForm.textractKeyValues)
         return {
           ...prevForm,
-          formTypeId: selectedFormType,
+          formTemplateId: selectedTemplate,
           formData: mappedFormData,
         }
       })
 
-      // toast.success('Form type updated successfully.')
+      // toast.success('Template updated successfully.')
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error('Error updating form type:', err)
-      toast.error('Error updating form type.')
+      console.error('Error updating template:', err)
+      toast.error('Error updating template.')
     }
   }
 
-  const handleChangeFormType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFormType(e.target.value)
+  const handleChangeTemplate = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTemplate(e.target.value)
   }
 
   const handleChangeFormData = ((key: string, value: string) => {
@@ -108,16 +108,14 @@ export default function EditTab({
             name={key}
             onChange={(e) => handleChangeFormData(key, e.target.value)}
             required={value?.required}
-            type={
-            value?.type === 'string' ? 'text' : value?.type
-          }
+            type={value?.type === 'string' ? 'text' : value?.type}
             value={form?.formData?.[key] || ''}
           />
         </label>
       </div>
     ))
   ) : (
-    <div>Please select and apply a form type from above.</div>
+    <div>Please select and apply a template from above.</div>
   )
 
   return (
@@ -127,19 +125,19 @@ export default function EditTab({
           <Heading as='h6' uppercase>Form Type</Heading>
         </Divider>
         <div className='mb-4'>
-          <label htmlFor='form-type-select' className='mb-2 block font-semibold text-gray-700'>
-            Type
+          <label htmlFor='template-select' className='mb-2 block font-semibold text-gray-700'>
+            Template
           </label>
           <select
-            id='form-type-select'
-            value={selectedFormType}
-            onChange={handleChangeFormType}
             className='mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+            id='template-select'
+            onChange={handleChangeTemplate}
+            value={selectedTemplate}
           >
             <option value='' disabled>
-              Select Type
+              Select Template
             </option>
-            {formTypes.map((option) => (
+            {templates.map((option) => (
               <option key={option.key} value={option.value}>
                 {option.text}
               </option>
