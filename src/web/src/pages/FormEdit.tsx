@@ -1,22 +1,19 @@
 // TODO add check that form is ready for editing
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useOutletContext, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { InformationCircle, PencilSquare } from '../assets'
 import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
+import useGlobalState from '../context/useGlobalState'
 import { mergeClassName } from '../lib/utils'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
   Form, FormType, FormTypeOption, Schema
 } from '../types'
-
-type FnOutletContext = {
-  setIsContentFullSize: (value: boolean) => void;
-};
 
 type FormEditParams = {
   formId: Form['id']
@@ -30,7 +27,7 @@ export default function FormEdit() {
   const [activeTab, setActiveTab] = useState('edit')
 
   const { formId } = useParams<FormEditParams>()
-  const { setIsContentFullSize } = useOutletContext<FnOutletContext>()
+  const { setIsContentFullSize } = useGlobalState()
 
   useEffect(() => {
     // Enable full-size content mode when this component mounts

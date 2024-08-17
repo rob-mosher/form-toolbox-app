@@ -3,12 +3,12 @@ import Button from './Button'
 import { MagnifyingGlass } from '../assets'
 
 function Header() {
+  const navigate = useNavigate()
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log('NavBar search awaiting implementation.')
   }
-
-  const navigate = useNavigate()
 
   return (
     <header className='fixed z-50 flex w-full justify-between border-b-2 border-b-gray-200 bg-white px-6 py-3'>

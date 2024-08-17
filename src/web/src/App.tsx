@@ -1,13 +1,13 @@
-import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Header from './components/Header'
+import useGlobalState from './context/useGlobalState'
 import { mergeClassName } from './lib/utils'
 import 'react-toastify/dist/ReactToastify.css'
 // import 'react-toastify/dist/ReactToastify.min.css'; // TODO chose depending on dev or prod build
 
 export default function App() {
-  const [isContentFullSize, setIsContentFullSize] = useState(false)
+  const { isContentFullSize } = useGlobalState()
 
   return (
     <div className='flex h-screen w-screen flex-col font-sans'>
@@ -18,7 +18,7 @@ export default function App() {
           isContentFullSize && 'overflow-hidden px-0',
         )}
       >
-        <Outlet context={{ setIsContentFullSize }} />
+        <Outlet />
       </main>
       <ToastContainer />
     </div>
