@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import FormDetails from '../common/FormDetails'
+import FormDetails from '../components/FormDetails'
 import Heading from '../components/Heading'
 import type { Form } from '../types'
 
@@ -38,9 +38,7 @@ export default function FormView() {
     <>
       <Heading as='h2'>Form Details</Heading>
       <div className='p-4'>
-        <code>
-          <FormDetails form={form} />
-        </code>
+        <FormDetails form={form} />
       </div>
     </>
   )

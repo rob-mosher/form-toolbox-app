@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useOutletContext, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { InformationCircle, PencilSquare } from '../assets'
-import Content from '../common/Content'
+import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { mergeClassName } from '../lib/utils'
@@ -111,29 +111,46 @@ export default function FormEdit() {
     { key: 'info', content: 'Info', icon: <InformationCircle /> },
   ]
 
+  let tabContent
+  switch (activeTab) {
+    case 'edit':
+      tabContent = (
+        <EditTab
+          form={form}
+          formId={formId}
+          formTypes={formTypes}
+          schema={schema}
+          setForm={setForm}
+          setSchema={setSchema}
+        />
+      )
+      break
+    case 'info':
+      tabContent = <InfoTab form={form} />
+      break
+    default:
+      // eslint-disable-next-line no-console
+      console.warn(`Invalid tab '${activeTab}'`)
+      tabContent = (
+        <div className='text-center text-red-700'>
+          Invalid tab
+        </div>
+      )
+  }
+
   return (
     <div className='flex size-full'>
       <div className='grid h-full grid-cols-12 gap-3'>
         <div className='col-span-9 overflow-y-scroll'>
           <Content imageUrls={imageUrls} />
         </div>
-        <div className='col-span-3 overflow-x-hidden overflow-y-scroll'>
+        <div className='col-span-3 mr-3 overflow-x-hidden overflow-y-scroll'>
           <Tab tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
           <div className={mergeClassName(
             'p-3.5 border border-gray-300',
           )}
           >
-            {activeTab === 'edit' && (
-              <EditTab
-                form={form}
-                formId={formId}
-                formTypes={formTypes}
-                schema={schema}
-                setForm={setForm}
-                setSchema={setSchema}
-              />
-            )}
-            {activeTab === 'info' && <InfoTab form={form} />}
+            {tabContent}
           </div>
         </div>
       </div>

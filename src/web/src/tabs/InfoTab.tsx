@@ -1,4 +1,4 @@
-import FormDetails from '../common/FormDetails'
+import FormDetails from '../components/FormDetails'
 import type { Form } from '../types'
 
 type InfoTabProps = {
@@ -8,9 +8,7 @@ type InfoTabProps = {
 export default function InfoTab({ form }: InfoTabProps) {
   return (
     <div className='overflow-hidden' data-tab='info'>
-      <code>
-        <FormDetails form={form} />
-      </code>
+      <FormDetails form={form} />
     </div>
   )
 }

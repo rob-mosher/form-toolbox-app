@@ -60,9 +60,9 @@ export default function Forms() {
         <thead>
           <tr>
             <th className='p-2 text-sm uppercase'>Action</th>
-            <th className='p-2 text-sm uppercase'>File Name</th>
             <th className='p-2 text-sm uppercase'>Status</th>
             <th className='p-2 text-sm uppercase'>Pages</th>
+            <th className='p-2 text-sm uppercase'>File Name</th>
             <th className='p-2 text-sm uppercase'>Type</th>
             <th className='p-2 text-sm uppercase'>Form ID</th>
             <th className='p-2 text-sm uppercase'>Textract Job ID</th>
@@ -74,7 +74,7 @@ export default function Forms() {
           {forms.map((form) => (
             <tr key={form.id} className='even:bg-gray-100'>
               <td className='p-3'>
-                <span className='flex items-center justify-center'>
+                <span className='flex items-center justify-center gap-1'>
                   <button
                     aria-label='View Form'
                     onClick={() => navigate(`/forms/${form.id}`)}
@@ -101,12 +101,13 @@ export default function Forms() {
                   </button>
                 </span>
               </td>
-              <td className='p-3'>{form.fileName}</td>
+              {/* TODO max-w-[xch] isn't working exactly as expected, but good enough for now */}
               <td className='p-3'>{form.status}</td>
-              <td className='p-3'>{form.pageCount}</td>
-              <td className='p-3'>{form.formType?.name}</td>
-              <td className='p-3'>{form.id}</td>
-              <td className='p-3'>{form.textractJobId}</td>
+              <td className='p-3 text-center'>{form.pageCount}</td>
+              <td className='max-w-xs truncate p-3'>{form.fileName}</td>
+              <td className='max-w-sm truncate p-3'>{form.formType?.name}</td>
+              <td className='max-w-[11ch] truncate p-3'>{form.id}</td>
+              <td className='max-w-[11ch] truncate p-3'>{form.textractJobId}</td>
               <td className='p-3'>{new Date(form.createdAt).toLocaleString()}</td>
             </tr>
           ))}

@@ -1,6 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { MagnifyingGlass } from '../assets'
-import Button from '../components/Button'
+import Button from './Button'
 
 function Header() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

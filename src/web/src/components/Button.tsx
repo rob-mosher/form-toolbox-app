@@ -30,10 +30,10 @@ export default function Button({
     <button
       aria-label={ariaLabel}
       className={mergeClassName(
-        'rounded px-6 py-2 font-semibold hover:ring-2 hover:ring-inset disabled:opacity-60',
-        primary ? 'bg-sky-600 text-white hover:ring-sky-900' : 'bg-stone-200 text-stone-600 hover:ring-stone-400',
-        positive && 'bg-green-500 text-white hover:ring-green-700',
-        negative && 'bg-red-500 text-white hover:ring-red-900',
+        'rounded px-6 py-2 font-semibold disabled:opacity-60',
+        primary ? 'bg-sky-600 text-white hover:bg-sky-500' : 'ring-1 ring-inset ring-gray-300 text-stone-900 hover:bg-stone-100',
+        positive && 'bg-green-600 text-white hover:bg-green-500',
+        negative && 'bg-red-600 text-white hover:bg-red-500',
       )}
       disabled={disabled}
       id={id}
