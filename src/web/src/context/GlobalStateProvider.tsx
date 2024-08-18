@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 // If adding to global state, ensure their types are also added to ./lib/GlobalStateContext.tsx
 
 import { useState, useMemo, ReactNode } from 'react'
@@ -7,7 +9,7 @@ interface GlobalStateProviderProps {
   children: ReactNode;
 }
 
-export default function GlobalStateProvider({ children }: GlobalStateProviderProps) {
+export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
   const [isContentFullSize, setIsContentFullSize] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState<ReactNode | null>(null)

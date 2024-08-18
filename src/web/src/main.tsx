@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
-import GlobalStateProvider from './context/GlobalStateProvider'
+import { GlobalStateProvider } from './context/GlobalStateProvider'
 import { router } from './router'
 import './styles/main.css'
 

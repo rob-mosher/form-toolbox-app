@@ -5,7 +5,7 @@ import {
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from './Button'
-import useGlobalState from '../context/useGlobalState'
+import { useGlobalState } from '../context/useGlobalState'
 import ModalUploadForm from '../modals/ModalUploadForm'
 
 function matchesPath(basePath: string, normalizedPath: string): boolean {

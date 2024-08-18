@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
-import useGlobalState from '../context/useGlobalState'
+import { useGlobalState } from '../context/useGlobalState'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 import type { Form, FormsList } from '../types'
 
