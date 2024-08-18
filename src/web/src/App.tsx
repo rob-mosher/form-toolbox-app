@@ -5,8 +5,11 @@ import useGlobalState from './context/useGlobalState'
 import { mergeClassName } from './lib'
 import 'react-toastify/dist/ReactToastify.css'
 // import 'react-toastify/dist/ReactToastify.min.css'; // TODO chose depending on dev or prod build
+import Modal from './modals/lib/Modal'
 
 export default function App() {
+  const { isModalOpen, modalContent, hideModal } = useGlobalState()
+
   const { isContentFullSize } = useGlobalState()
 
   return (
@@ -21,6 +24,12 @@ export default function App() {
         <Outlet />
       </main>
       <ToastContainer />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={hideModal}
+      >
+        {modalContent}
+      </Modal>
     </div>
   )
 }

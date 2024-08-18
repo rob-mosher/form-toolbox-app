@@ -3,8 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
+// import type { Form } from '../types'
 
-export default function UploadForm() {
+type ModalDeleteFormProps = {
+  hideModal: () => void,
+}
+
+export default function ModalUploadForm({
+  hideModal,
+}: ModalDeleteFormProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const toastRef = useRef<ToastId | null>(null)
   const [acceptedMimeTypes, setAcceptedMimeTypes] = useState<string[] | null>(null)
@@ -63,6 +70,9 @@ export default function UploadForm() {
           type: 'success',
         })
         if (fileRef.current) fileRef.current.value = ''
+
+        // Close the modal if the upload completes (keeping open on error)
+        hideModal()
       })
       .catch((error) => {
         toast.update(toastRef.current!, {
@@ -96,12 +106,13 @@ export default function UploadForm() {
   }
 
   return (
+
     <form onSubmit={(e) => handleUpload(e)}>
-      <section className='flex flex-col items-center justify-center gap-4 border border-stone-300 bg-stone-100 py-16 shadow-inner'>
-        <Heading as='h2'>Upload</Heading>
+      <section className='flex flex-col items-center justify-center gap-6'>
+        <Heading as='h2'>Upload New Form</Heading>
         <input
           accept={acceptedMimeTypes?.join(', ')}
-          className='cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-6 text-sm text-gray-900 focus:outline-none'
+          className='w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-6 text-sm text-gray-900 focus:outline-none'
           disabled={acceptedMimeTypes === null || isUploading}
           id='upload-picker'
             // multiple
@@ -127,6 +138,12 @@ export default function UploadForm() {
         >
           Upload
         </Button>
+        <button
+          type='button'
+          onClick={() => hideModal()}
+        >
+          close
+        </button>
         {/* {imageFile?.type?.includes('image') && (
           <>
             <br />
@@ -135,5 +152,6 @@ export default function UploadForm() {
         )} */}
       </section>
     </form>
+
   )
 }

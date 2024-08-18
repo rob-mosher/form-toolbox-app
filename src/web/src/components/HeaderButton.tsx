@@ -5,6 +5,8 @@ import {
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from './Button'
+import useGlobalState from '../context/useGlobalState'
+import ModalUploadForm from '../modals/ModalUploadForm'
 
 function matchesPath(basePath: string, normalizedPath: string): boolean {
   return normalizedPath === basePath || normalizedPath.startsWith(`${basePath}/`)
@@ -12,6 +14,7 @@ function matchesPath(basePath: string, normalizedPath: string): boolean {
 
 export default function usePathLogic(): ReactNode {
   const [headerButton, setHeaderButton] = useState<ReactNode | undefined>(undefined)
+  const { hideModal, showModal } = useGlobalState()
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -19,18 +22,27 @@ export default function usePathLogic(): ReactNode {
   const buttons = useMemo(
     () => ({
       newForm: (
-        <Button ariaLabel='New Form' primary onClick={() => navigate('/upload')}>
+        <Button
+          ariaLabel='New Form'
+          primary
+          onClick={() => {
+            showModal(
+              <ModalUploadForm
+                hideModal={hideModal}
+              />,
+            )
+          }}
+        >
           New Form
         </Button>
       ),
       newTemplate: (
-        // TODO implement destination for onClick
-        <Button ariaLabel='New Template' primary onClick={() => navigate('#')}>
+        <Button ariaLabel='New Template' primary onClick={() => navigate('upload')}>
           New Template
         </Button>
       ),
     }),
-    [navigate],
+    [hideModal, showModal, navigate],
   )
 
   useEffect(() => {
@@ -57,6 +69,8 @@ export default function usePathLogic(): ReactNode {
 
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>{headerButton}</>
+    <>
+      {headerButton}
+    </>
   )
 }

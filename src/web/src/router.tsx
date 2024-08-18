@@ -12,7 +12,6 @@ import Home from './pages/Home'
 import TemplateEdit from './pages/TemplateEdit'
 import TemplateView from './pages/TemplateView'
 import Templates from './pages/Templates'
-import UploadForm from './pages/UploadForm'
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +27,6 @@ export const router = createBrowserRouter([
       { path: '/templates/:templateId', element: <TemplateView /> },
       { path: '/templates/:templateId/edit', element: <TemplateEdit /> },
       { path: '/templates/:templateId/view', element: <TemplateView /> },
-      { path: '/upload', element: <UploadForm /> },
     ],
   },
 ])

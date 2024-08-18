@@ -1,16 +1,18 @@
+// TODO if uploading a form while on this page, reload the form list
+
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
+import useGlobalState from '../context/useGlobalState'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 import type { Form, FormsList } from '../types'
 
 export default function Forms() {
   const [forms, setForms] = useState<FormsList[]>([])
-  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
-  const [selectedFormId, setSelectedFormId] = useState<Form['id'] | null>(null)
+  const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
@@ -39,7 +41,7 @@ export default function Forms() {
     axios.delete(`${url}/${formId}`)
       .then(() => {
         toast.success('Form deleted successfully')
-        setIsModalDeleteOpen(false)
+        hideModal()
         loadForms()
       })
       .catch((error) => {
@@ -47,6 +49,18 @@ export default function Forms() {
         // eslint-disable-next-line no-console
         console.error('Unable to delete form:', error)
       })
+  }
+
+  const handleModalForDelete = (formId: string) => {
+    const JSX = (
+      <ModalDeleteForm
+        handleDelete={handleDelete}
+        selectedFormId={formId}
+        hideModal={hideModal}
+      />
+    )
+
+    showModal(JSX)
   }
 
   useEffect(() => {
@@ -91,10 +105,7 @@ export default function Forms() {
                   </button>
                   <button
                     aria-label='Delete form'
-                    onClick={() => {
-                      setSelectedFormId(form.id)
-                      setIsModalDeleteOpen(true)
-                    }}
+                    onClick={() => handleModalForDelete(form.id)}
                     type='button'
                   >
                     <Trash />
@@ -113,13 +124,6 @@ export default function Forms() {
           ))}
         </tbody>
       </table>
-
-      <ModalDeleteForm
-        handleDelete={handleDelete}
-        isModalDeleteOpen={isModalDeleteOpen}
-        selectedFormId={selectedFormId}
-        setIsModalDeleteOpen={setIsModalDeleteOpen}
-      />
     </>
   )
 }
