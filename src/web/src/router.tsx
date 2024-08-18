@@ -1,4 +1,7 @@
 /* eslint-disable import/prefer-default-export */
+
+// NOTE Ensure any changes to path are also reflected in ./components/HeaderButton.tsx
+
 import { createBrowserRouter } from 'react-router-dom'
 import App from './App'
 import ErrorPage from './components/ErrorPage'

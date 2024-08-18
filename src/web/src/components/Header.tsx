@@ -1,10 +1,8 @@
-import { useNavigate, Link } from 'react-router-dom'
-import Button from './Button'
+import { Link } from 'react-router-dom'
+import HeaderButton from './HeaderButton'
 import { MagnifyingGlass } from '../assets'
 
 function Header() {
-  const navigate = useNavigate()
-
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log('NavBar search awaiting implementation.')
@@ -23,9 +21,7 @@ function Header() {
         <Link to='/templates'>
           Templates
         </Link>
-        <Button ariaLabel='Upload' primary onClick={() => navigate('/upload')}>
-          Upload
-        </Button>
+        <HeaderButton />
       </nav>
 
       <form className='flex rounded-lg bg-white p-2 ring-1 ring-gray-400 focus-within:ring-2 focus-within:ring-gray-600' onSubmit={handleSubmit}>
