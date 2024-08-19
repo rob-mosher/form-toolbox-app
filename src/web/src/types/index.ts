@@ -1,3 +1,4 @@
+export * from './BoundingBox'
 export * from './Form'
 export * from './FormsList'
 export * from './Template'

@@ -1,4 +1,4 @@
-// TODO complete typscript refactor
+// TODO complete typescript refactor
 
 import axios from 'axios'
 import { useState } from 'react'
@@ -6,7 +6,9 @@ import { toast } from 'react-toastify'
 import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
-import type { Form, Schema, TemplateOption } from '../types'
+import type {
+  BoundingBox, Form, Schema, TemplateOption
+} from '../types'
 
 type EditTabProps = {
   form: Form;
@@ -15,6 +17,10 @@ type EditTabProps = {
   setForm: (newForm: Form) => void;
   setSchema: (newSchema: Schema) => void;
   templates: TemplateOption[];
+  onBoundingBoxFocus: (boundingBox: {
+    keyBoundingBox: BoundingBox,
+    valueBoundingBox: BoundingBox,
+  }) => void;
 }
 
 export default function EditTab({
@@ -24,12 +30,35 @@ export default function EditTab({
   setForm,
   setSchema,
   templates,
+  onBoundingBoxFocus,
 }: EditTabProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState(form.templateId || '')
+  const [selectedTemplate, setSelectedTemplate] = useState<Form['id']>(form?.templateId || '')
+
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const keyBoundingBox = {
+      Top: parseFloat(e.target.dataset.keyBboxTop || '0'),
+      Left: parseFloat(e.target.dataset.keyBboxLeft || '0'),
+      Width: parseFloat(e.target.dataset.keyBboxWidth || '0'),
+      Height: parseFloat(e.target.dataset.keyBboxHeight || '0'),
+    }
+    const valueBoundingBox = {
+      Top: parseFloat(e.target.dataset.valueBboxTop || '0'),
+      Left: parseFloat(e.target.dataset.valueBboxLeft || '0'),
+      Width: parseFloat(e.target.dataset.valueBboxWidth || '0'),
+      Height: parseFloat(e.target.dataset.valueBboxHeight || '0'),
+    }
+
+    onBoundingBoxFocus({ keyBoundingBox, valueBoundingBox })
+  }
 
   const mapTextractKeyValueAndBoundingBoxesToFormData = (
-    newSchema,
-    textractKeyValueAndBoundingBoxes,
+    newSchema: string, // wip
+    textractKeyValueAndBoundingBoxes: {
+      [key: string]: {
+        value: string,
+        keyBoundingBox: BoundingBox,
+        valueBoundingBox: BoundingBox }
+      },
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
     const newFormData = schemaKeys.reduce((acc, key) => {
@@ -119,6 +148,7 @@ export default function EditTab({
               className='mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700'
               id={key}
               name={key}
+              onFocus={handleInputFocus}
               onChange={(e) => handleChangeFormData(key, e.target.value)}
               required={value?.required}
               type={value?.type === 'string' ? 'text' : value?.type}

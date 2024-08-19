@@ -1,4 +1,5 @@
 // TODO add check that form is ready for editing
+
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -8,11 +9,10 @@ import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { useGlobalState } from '../context/useGlobalState'
-import { mergeClassName } from '../lib'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  Form, Schema, Template, TemplateOption
+  BoundingBox, Form, Schema, Template, TemplateOption
 } from '../types'
 
 type FormEditParams = {
@@ -25,6 +25,7 @@ export default function FormEdit() {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [schema, setSchema] = useState<Schema | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
+  const [focusedBoundingBox, setFocusedBoundingBox] = useState<BoundingBox[]>([])
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
@@ -103,6 +104,13 @@ export default function FormEdit() {
     return <Heading as='h2'>Form Details Editor Loading...</Heading>
   }
 
+  const handleBoundingBoxFocus = (boundingBox: {
+    keyBoundingBox: BoundingBox,
+    valueBoundingBox: BoundingBox,
+  }) => {
+    setFocusedBoundingBox([boundingBox.keyBoundingBox, boundingBox.valueBoundingBox])
+  }
+
   const tabs = [
     { key: 'edit', content: 'Edit', icon: <PencilSquare /> },
     { key: 'info', content: 'Info', icon: <InformationCircle /> },
@@ -114,11 +122,12 @@ export default function FormEdit() {
       tabContent = (
         <EditTab
           form={form}
-          formId={formId}
+          formId={formId!} // regarding '!', formId is part of the URL via useParams
           schema={schema}
           setForm={setForm}
           setSchema={setSchema}
           templates={templates}
+          onBoundingBoxFocus={handleBoundingBoxFocus}
         />
       )
       break
@@ -139,14 +148,14 @@ export default function FormEdit() {
     <div className='flex h-full'>
       <div className='grid w-full grid-cols-12 gap-3'>
         <div className='col-span-9 overflow-y-scroll'>
-          <Content imageUrls={imageUrls} />
+          <Content
+            focusedBoundingBox={focusedBoundingBox}
+            imageUrls={imageUrls}
+          />
         </div>
         <div className='col-span-3 mr-3 overflow-x-hidden overflow-y-scroll'>
           <Tab tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-          <div className={mergeClassName(
-            'p-3.5 border border-gray-300',
-          )}
-          >
+          <div className='border border-gray-300 p-3.5'>
             {tabContent}
           </div>
         </div>
