@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
-import { Form } from '../models'
+import { FormModel } from '../models'
 import { createError } from '../utils/error'
 
 dotenv.config()
 
 const createForm: RequestHandler = async (req, res, next) => {
   try {
-    res.locals.form = await Form.create({
+    res.locals.form = await FormModel.create({
       status: 'initialized',
     })
     return next()
@@ -24,7 +24,7 @@ const getForm: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params
 
-    const form = await Form.findByPk(id)
+    const form = await FormModel.findByPk(id)
 
     if (!form) {
       return next(createError({

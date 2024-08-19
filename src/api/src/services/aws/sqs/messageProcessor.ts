@@ -2,7 +2,7 @@
 
 import dotenv from 'dotenv'
 import { requeueMessage } from './sqsFunctions'
-import { Form } from '../../../models'
+import { FormModel } from '../../../models'
 import { getAnalysis } from '../s3/s3Functions'
 
 dotenv.config()
@@ -26,7 +26,7 @@ const processMessage = async (mes) => {
     case 'ANALYZING': {
       console.log(`Form ${formId} is being analyzed on textract.`)
 
-      const [updatedRows] = await Form.update(
+      const [updatedRows] = await FormModel.update(
         {
           status: 'analyzing',
           textractJobId,
@@ -47,7 +47,7 @@ const processMessage = async (mes) => {
     case 'FAILED': {
       console.log(`Form ${formId} encountered an error.`)
 
-      const [updatedRows] = await Form.update(
+      const [updatedRows] = await FormModel.update(
         {
           status: 'error',
           textractJobId,
@@ -69,7 +69,7 @@ const processMessage = async (mes) => {
       console.log(`Form with textractJobId ${textractJobId} has completed the textract process.`)
 
       // Find the form with the given textractJobId
-      const form = await Form.findOne({
+      const form = await FormModel.findOne({
         where: { textractJobId },
       })
 

@@ -2,10 +2,10 @@
 
 import { DataTypes, Model, Sequelize } from 'sequelize'
 
-class Template extends Model {}
+class TemplateModel extends Model {}
 
-const initTemplate = (sequelize: Sequelize) => {
-  Template.init(
+const initTemplateModel = (sequelize: Sequelize) => {
+  TemplateModel.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -32,7 +32,7 @@ const initTemplate = (sequelize: Sequelize) => {
     }
   )
 
-  return Template
+  return TemplateModel
 }
 
-export default initTemplate
+export default initTemplateModel

@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { Form, Template } from '../models'
+import { FormModel, TemplateModel } from '../models'
 
 const templateRouter = express.Router()
 
 // For efficiency, only include the id and name when providing all template.
 templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const templates = await Template.findAll({
+    const templates = await TemplateModel.findAll({
       where: { isDeleted: false },
       attributes: ['id', 'name'],
     })
@@ -22,7 +22,7 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
   const { id } = req.params
 
   try {
-    const template = await Template.findAll({
+    const template = await TemplateModel.findAll({
       attributes: ['id', 'name', 'schema'],
       where: {
         id,
@@ -40,7 +40,7 @@ templateRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
   const { id } = req.params
 
   try {
-    const formCount = await Form.count({
+    const formCount = await FormModel.count({
       where: { templateId: id },
     })
 
@@ -48,7 +48,7 @@ templateRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
       return res.status(400).json({ error: 'Cannot delete template. There are forms linked to this template.' })
     }
 
-    const [updatedRows] = await Template.update(
+    const [updatedRows] = await TemplateModel.update(
       { isDeleted: true },
       { where: { id, isDeleted: false } }
     )
@@ -69,7 +69,7 @@ templateRouter.get('/:id/can-delete', async (req: Request, res: Response, next: 
   const { id } = req.params
 
   try {
-    const formCount = await Form.count({
+    const formCount = await FormModel.count({
       where: { templateId: id },
     })
 

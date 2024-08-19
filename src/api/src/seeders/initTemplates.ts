@@ -1,4 +1,4 @@
-import { Template } from '../models'
+import { TemplateModel } from '../models'
 
 const seedData = [
   {
@@ -33,10 +33,10 @@ const seedTemplates = async () => {
   // eslint-disable-next-line no-restricted-syntax
   for (const item of seedData) {
     // Check if the Template already exists
-    const template = await Template.findOne({ where: { name: item.name } })
+    const template = await TemplateModel.findOne({ where: { name: item.name } })
     if (!template) {
       // eslint-disable-next-line no-await-in-loop
-      await Template.create(item)
+      await TemplateModel.create(item)
       console.log(`Seeded Template: ${item.name}`)
     }
   }

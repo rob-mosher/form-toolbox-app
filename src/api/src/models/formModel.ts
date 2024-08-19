@@ -2,10 +2,10 @@
 
 import { DataTypes, Model, Sequelize } from 'sequelize'
 
-class Form extends Model {}
+class FormModel extends Model {}
 
-const initForm = (sequelize: Sequelize) => {
-  Form.init(
+const initFormModel = (sequelize: Sequelize) => {
+  FormModel.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -75,7 +75,7 @@ const initForm = (sequelize: Sequelize) => {
     }
   )
 
-  return Form
+  return FormModel
 }
 
-export default initForm
+export default initFormModel

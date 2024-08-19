@@ -5,7 +5,7 @@ import bucketController from '../controllers/bucketController'
 // import fileController from '../controllers/fileController'
 import formController from '../controllers/formController'
 import imageController from '../controllers/imageController'
-import { Form, Template } from '../models'
+import { FormModel, TemplateModel } from '../models'
 import { generatePresignedUrlsFromKeys } from '../services/aws/s3/s3Functions'
 import { createError } from '../utils/error'
 
@@ -43,12 +43,12 @@ formsRouter.get(
 
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const forms = await Form.findAll({
+      const forms = await FormModel.findAll({
         where: {
           isDeleted: false,
         },
         include: [{
-          model: Template,
+          model: TemplateModel,
           as: 'template',
           attributes: ['name'],
         }],

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { Sequelize } from 'sequelize'
-import initForm from './form'
-import initTemplate from './template'
+import initFormModel from './formModel'
+import initTemplateModel from './templateModel'
 
 dotenv.config()
 
@@ -16,24 +16,24 @@ const sequelize = new Sequelize(
 )
 
 // The following DO NOT have any dependencies.
-const Template = initTemplate(sequelize)
+const TemplateModel = initTemplateModel(sequelize)
 
 // The following DO have dependencies from the preceding.
-const Form = initForm(sequelize)
+const FormModel = initFormModel(sequelize)
 
-Form.belongsTo(Template, {
+FormModel.belongsTo(TemplateModel, {
   foreignKey: 'templateId',
   as: 'template',
 })
 
-Template.hasMany(Form, {
+TemplateModel.hasMany(FormModel, {
   foreignKey: 'templateId',
   as: 'forms',
 })
 
 export {
   sequelize,
-  Form,
-  Template,
+  FormModel,
+  TemplateModel,
   Sequelize
 }
