@@ -1,4 +1,4 @@
-export type BoundingBox = {
+export type BoundingBoxType = {
   Left: number;
   Top: number;
   Width: number;

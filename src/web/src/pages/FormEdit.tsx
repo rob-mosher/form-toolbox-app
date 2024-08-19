@@ -12,20 +12,20 @@ import { useGlobalState } from '../context/useGlobalState'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  BoundingBox, Form, Schema, Template, TemplateOption
+  BoundingBoxType, FormType, SchemaType, TemplateType, TemplateOptionType
 } from '../types'
 
 type FormEditParams = {
-  formId: Form['id']
+  formId: FormType['id']
 }
 
 export default function FormEdit() {
-  const [form, setForm] = useState<Form | null>(null)
-  const [templates, setTemplates] = useState<TemplateOption[]>([])
+  const [form, setForm] = useState<FormType | null>(null)
+  const [templates, setTemplates] = useState<TemplateOptionType[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schema, setSchema] = useState<Schema | null>(null)
+  const [schema, setSchema] = useState<SchemaType | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
-  const [focusedBoundingBox, setFocusedBoundingBox] = useState<BoundingBox[]>([])
+  const [focusedBoundingBox, setFocusedBoundingBox] = useState<BoundingBoxType[]>([])
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
@@ -44,7 +44,7 @@ export default function FormEdit() {
     const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
 
     // Get templates
-    axios.get<Template[]>(templateApiUrl)
+    axios.get<TemplateType[]>(templateApiUrl)
       .then((resp) => {
         const newTemplates = resp.data.map(({ id, name }) => (
           {
@@ -71,7 +71,7 @@ export default function FormEdit() {
       })
 
     // Get form data
-    axios.get<Form>(formApiUrl)
+    axios.get<FormType>(formApiUrl)
       .then(async (resp) => {
         const fetchedForm = resp.data
 
@@ -105,8 +105,8 @@ export default function FormEdit() {
   }
 
   const handleBoundingBoxFocus = (boundingBox: {
-    keyBoundingBox: BoundingBox,
-    valueBoundingBox: BoundingBox,
+    keyBoundingBox: BoundingBoxType,
+    valueBoundingBox: BoundingBoxType,
   }) => {
     setFocusedBoundingBox([boundingBox.keyBoundingBox, boundingBox.valueBoundingBox])
   }

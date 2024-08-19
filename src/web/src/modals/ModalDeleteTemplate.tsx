@@ -3,12 +3,12 @@ import { ReactNode, useEffect, useState } from 'react'
 import { XMark } from '../assets'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
-import type { Template } from '../types'
+import type { TemplateType } from '../types'
 
 type ModalDeleteTemplateProps = {
-  handleDelete: (templateId: Template['id'] | null) => void;
+  handleDelete: (templateId: TemplateType['id'] | null) => void;
   hideModal: () => void,
-  templateId: Template['id'] | null,
+  templateId: TemplateType['id'] | null,
 }
 
 export default function ModalDeleteTemplate({
@@ -31,6 +31,7 @@ export default function ModalDeleteTemplate({
         const response = await axios.get(`${url}/${templateId}/can-delete`)
         setCanDeleteTemplate(response.data.canDelete)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error checking if template can be deleted:', error)
         setCanDeleteTemplate(false) // Default to not allowing deletion if there's an error
       }

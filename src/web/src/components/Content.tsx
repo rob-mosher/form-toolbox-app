@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
-import { BoundingBox } from '../types'
+import { BoundingBoxType } from '../types'
 
 type ContentProps = {
   imageUrls: string[];
-  focusedBoundingBox?: BoundingBox[];
+  focusedBoundingBox?: BoundingBoxType[];
 };
 
 export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentProps) {
@@ -12,7 +12,7 @@ export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentP
   const imageRef = useRef<HTMLImageElement | null>(null)
 
   const getPixelCoordinates = (
-    boundingBox: BoundingBox,
+    boundingBox: BoundingBoxType,
     imageWidth: number,
     imageHeight: number,
     padding:number = 0,

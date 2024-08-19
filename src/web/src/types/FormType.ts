@@ -1,4 +1,4 @@
-export type Form = {
+export type FormType = {
   createdAt: Date;
   fileName: string;
   formData: string;

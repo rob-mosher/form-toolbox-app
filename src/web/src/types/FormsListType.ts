@@ -1,8 +1,8 @@
 // used by the Forms page, which shows a list of Forms
 
-import { Form } from './Form'
+import { FormType } from './FormType'
 
-export type FormsList = Form & {
+export type FormsListType = FormType & {
   template: {
     name: string;
   };

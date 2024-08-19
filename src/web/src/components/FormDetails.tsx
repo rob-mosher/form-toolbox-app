@@ -1,7 +1,7 @@
-import type { Form } from '../types'
+import type { FormType } from '../types'
 
 type FormDetailsProps = {
-  form: Form;
+  form: FormType;
 }
 
 export default function FormDetails({ form }: FormDetailsProps) {

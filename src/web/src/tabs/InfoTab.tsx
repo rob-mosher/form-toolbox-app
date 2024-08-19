@@ -1,8 +1,8 @@
 import FormDetails from '../components/FormDetails'
-import type { Form } from '../types'
+import type { FormType } from '../types'
 
 type InfoTabProps = {
-  form: Form
+  form: FormType
 }
 
 export default function InfoTab({ form }: InfoTabProps) {

@@ -7,19 +7,19 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBox, Form, Schema, TemplateOption
+  BoundingBoxType, FormType, SchemaType, TemplateOptionType
 } from '../types'
 
 type EditTabProps = {
-  form: Form;
-  formId: Form['id'];
-  schema: Schema | null;
-  setForm: (newForm: Form) => void;
-  setSchema: (newSchema: Schema) => void;
-  templates: TemplateOption[];
+  form: FormType;
+  formId: FormType['id'];
+  schema: SchemaType | null;
+  setForm: (newForm: FormType) => void;
+  setSchema: (newSchema: SchemaType) => void;
+  templates: TemplateOptionType[];
   onBoundingBoxFocus: (boundingBox: {
-    keyBoundingBox: BoundingBox,
-    valueBoundingBox: BoundingBox,
+    keyBoundingBox: BoundingBoxType,
+    valueBoundingBox: BoundingBoxType,
   }) => void;
 }
 
@@ -32,7 +32,7 @@ export default function EditTab({
   templates,
   onBoundingBoxFocus,
 }: EditTabProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<Form['id']>(form?.templateId || '')
+  const [selectedTemplate, setSelectedTemplate] = useState<FormType['id']>(form?.templateId || '')
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const keyBoundingBox = {
@@ -56,8 +56,9 @@ export default function EditTab({
     textractKeyValueAndBoundingBoxes: {
       [key: string]: {
         value: string,
-        keyBoundingBox: BoundingBox,
-        valueBoundingBox: BoundingBox }
+        keyBoundingBox: BoundingBoxType,
+        valueBoundingBox: BoundingBoxType
+      }
       },
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
@@ -128,6 +129,7 @@ export default function EditTab({
       await axios.put(setFormDataUrl, { updates: { formData: form.formData } })
       toast.success('Form saved!')
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error saving form data:', err)
       toast.error('Error saving form data.')
     }

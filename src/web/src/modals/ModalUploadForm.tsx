@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
-// import type { Form } from '../types'
 
 type ModalDeleteFormProps = {
   hideModal: () => void,
