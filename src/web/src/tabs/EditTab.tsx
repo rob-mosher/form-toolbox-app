@@ -27,11 +27,14 @@ export default function EditTab({
 }: EditTabProps) {
   const [selectedTemplate, setSelectedTemplate] = useState(form.templateId || '')
 
-  const mapTextractKeyValuesToFormData = (newSchema, textractKeyValues) => {
+  const mapTextractKeyValueAndBoundingBoxesToFormData = (
+    newSchema,
+    textractKeyValueAndBoundingBoxes,
+  ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
     const newFormData = schemaKeys.reduce((acc, key) => {
-      if (key in textractKeyValues) {
-        acc[key] = textractKeyValues[key]
+      if (key in textractKeyValueAndBoundingBoxes) {
+        acc[key] = textractKeyValueAndBoundingBoxes[key]
       } else {
         acc[key] = ''
       }
@@ -55,8 +58,12 @@ export default function EditTab({
       // Update state with the above changes.
       setSchema(newSchema)
       setForm((prevForm) => {
-        // Since handleApply is user-initiated, map textractKeyValues to formData, replacing values
-        const mappedFormData = mapTextractKeyValuesToFormData(newSchema, prevForm.textractKeyValues)
+        // eslint-disable-next-line max-len
+        // Since handleApply is user-initiated, map textractKeyValueAndBoundingBoxes to formData, replacing values
+        const mappedFormData = mapTextractKeyValueAndBoundingBoxesToFormData(
+          newSchema,
+          prevForm.textractKeyValueAndBoundingBoxes,
+        )
         return {
           ...prevForm,
           formTemplateId: selectedTemplate,
@@ -98,22 +105,37 @@ export default function EditTab({
   }
 
   const formRows = schema ? (
-    Object.entries(JSON.parse(schema)).map(([key, value]) => (
-      <div key={key}>
-        <label htmlFor={key}>
-          <span className='text-sm font-semibold'>{key}</span>
-          <input
-            className='mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700'
-            id={key}
-            name={key}
-            onChange={(e) => handleChangeFormData(key, e.target.value)}
-            required={value?.required}
-            type={value?.type === 'string' ? 'text' : value?.type}
-            value={form?.formData?.[key] || ''}
-          />
-        </label>
-      </div>
-    ))
+    Object.entries(JSON.parse(schema)).map(([key, value]) => {
+      const textractData = form?.textractKeyValueAndBoundingBoxes?.[key]
+      const inputValue = textractData?.value || ''
+      const keyBoundingBox = textractData?.keyBoundingBox
+      const valueBoundingBox = textractData?.valueBoundingBox
+
+      return (
+        <div key={key} className='mb-4'>
+          <label htmlFor={key} className='block'>
+            <span className='text-sm font-semibold'>{key}</span>
+            <input
+              className='mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700'
+              id={key}
+              name={key}
+              onChange={(e) => handleChangeFormData(key, e.target.value)}
+              required={value?.required}
+              type={value?.type === 'string' ? 'text' : value?.type}
+              value={inputValue}
+              data-key-bbox-top={keyBoundingBox?.Top}
+              data-key-bbox-left={keyBoundingBox?.Left}
+              data-key-bbox-width={keyBoundingBox?.Width}
+              data-key-bbox-height={keyBoundingBox?.Height}
+              data-value-bbox-top={valueBoundingBox?.Top}
+              data-value-bbox-left={valueBoundingBox?.Left}
+              data-value-bbox-width={valueBoundingBox?.Width}
+              data-value-bbox-height={valueBoundingBox?.Height}
+            />
+          </label>
+        </div>
+      )
+    })
   ) : (
     <div>Please select and apply a template from above.</div>
   )

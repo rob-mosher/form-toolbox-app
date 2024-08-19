@@ -32,9 +32,15 @@ function parseKeyValuePairs(textractData) {
     return valueBlock
   }
 
-  // Get text from a block
-  function getText(block) {
+  // Get text and bounding box from a block
+  function getKeyValueAndBoundingBox(block) {
+    let boundingBox = null
     let text = ''
+
+    if (block.Geometry && block.Geometry.BoundingBox) {
+      boundingBox = block.Geometry.BoundingBox
+    }
+
     if (block.Relationships) {
       block.Relationships.forEach((relationship) => {
         if (relationship.Type === 'CHILD') {
@@ -49,18 +55,34 @@ function parseKeyValuePairs(textractData) {
         }
       })
     }
-    return text.trim()
+
+    return {
+      text: text.trim(),
+      boundingBox,
+    }
   }
 
-  // Build the key-value pairs
+  // Build the key-value pairs with bounding boxes
   const keyValuePairs = {}
   Object.keys(keyMap).forEach((keyBlockId) => {
     const keyBlock = keyMap[keyBlockId]
     const valueBlock = findValueBlock(keyBlock)
+
     if (valueBlock) {
-      const keyText = getText(keyBlock)
-      const valueText = getText(valueBlock)
-      keyValuePairs[keyText] = valueText
+      const {
+        text: keyText,
+        boundingBox: keyBoundingBox,
+      } = getKeyValueAndBoundingBox(keyBlock)
+      const {
+        text: valueText,
+        boundingBox: valueBoundingBox,
+      } = getKeyValueAndBoundingBox(valueBlock)
+
+      keyValuePairs[keyText] = {
+        value: valueText,
+        keyBoundingBox,
+        valueBoundingBox,
+      }
     }
   })
 

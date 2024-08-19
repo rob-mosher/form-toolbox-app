@@ -64,7 +64,7 @@ const initForm = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      textractKeyValues: {
+      textractKeyValueAndBoundingBoxes: {
         type: DataTypes.JSONB,
         allowNull: true,
       },

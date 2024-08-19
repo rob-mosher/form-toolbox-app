@@ -7,9 +7,7 @@ import { getAnalysis } from '../s3/s3Functions'
 
 dotenv.config()
 
-const {
-  AWS_SQS_REQUEUE_MAX_RETRIES,
-} = process.env
+const { AWS_SQS_REQUEUE_MAX_RETRIES } = process.env
 
 const processMessage = async (mes) => {
   console.log('Processing message: ', mes.Body)
@@ -95,7 +93,7 @@ const processMessage = async (mes) => {
       // Extract various information about the analysis
       const {
         pageCount,
-        textractKeyValues,
+        textractKeyValueAndBoundingBoxes,
       } = await getAnalysis(analysisFolderNameS3)
 
       // Update the form
@@ -104,7 +102,7 @@ const processMessage = async (mes) => {
       // @ts-expect-error TODO refactor with an all-container type solution
       form.status = 'ready'
       // @ts-expect-error TODO refactor with an all-container type solution
-      form.textractKeyValues = textractKeyValues
+      form.textractKeyValueAndBoundingBoxes = textractKeyValueAndBoundingBoxes
       await form.save()
 
       console.log(`Form with textractJobId ${textractJobId} has been set to 'ready'.`)

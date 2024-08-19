@@ -65,14 +65,14 @@ async function getAnalysis(analysisFolderNameS3) {
     const analysisResults = JSON.parse(data.toString())
 
     const pageCount = analysisResults.DocumentMetadata.Pages
-    const textractKeyValues = parseKeyValuePairs(analysisResults)
+    const textractKeyValueAndBoundingBoxes = parseKeyValuePairs(analysisResults)
 
     console.log('pageCount', pageCount)
-    console.log('textractKeyValues', textractKeyValues)
+    console.log('textractKeyValueAndBoundingBoxes', textractKeyValueAndBoundingBoxes)
 
     return {
       pageCount,
-      textractKeyValues,
+      textractKeyValueAndBoundingBoxes,
     }
   } catch (err) {
     throw new Error(err.message)
