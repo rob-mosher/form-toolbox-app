@@ -2,6 +2,7 @@ import { Template } from '../models'
 
 const seedData = [
   {
+    isDeleted: false,
     name: '1099-MISC (Miscellaneous Information)',
     // TODO change accounting types to 'number', 'step' to '0.01', and remove spaces and $ signs
     schema: JSON.stringify({
@@ -17,6 +18,7 @@ const seedData = [
     }),
   },
   {
+    isDeleted: false,
     name: 'DS-82 (U.S. Passport Renewal)',
     schema: JSON.stringify({
       First: { type: 'string', required: false },

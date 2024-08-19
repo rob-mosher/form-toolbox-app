@@ -8,9 +8,7 @@ interface ButtonProps {
   id?: string;
   negative?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => unknown;
-
   positive?: boolean
-
   primary?: boolean;
   type?: 'button' | 'submit';
 }
@@ -31,9 +29,13 @@ export default function Button({
       aria-label={ariaLabel}
       className={mergeClassName(
         'rounded px-6 py-2 font-semibold disabled:opacity-60',
-        primary ? 'bg-sky-600 text-white hover:bg-sky-500' : 'ring-1 ring-inset ring-gray-300 text-stone-900 hover:bg-stone-100',
-        positive && 'bg-green-600 text-white hover:bg-green-500',
-        negative && 'bg-red-600 text-white hover:bg-red-500',
+        primary ? 'bg-sky-600 text-white' : 'ring-1 ring-inset ring-gray-300 text-stone-900',
+        primary && (!disabled ? 'hover:bg-sky-500' : 'hover:bg-stone-100'),
+        positive && 'bg-green-600 text-white',
+        positive && !disabled && 'hover:bg-green-500',
+        negative && 'bg-red-600 text-white',
+        negative && !disabled && 'hover:bg-red-500',
+        disabled && 'cursor-grab',
       )}
       disabled={disabled}
       id={id}

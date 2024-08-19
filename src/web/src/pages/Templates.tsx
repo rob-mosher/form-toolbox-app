@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
+import { useGlobalState } from '../context'
 import ModalDeleteTemplate from '../modals/ModalDeleteTemplate'
 import type { Template } from '../types'
 
 export default function Templates() {
-  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
-  const [selectedTemplateId, setSelectedTemplateId] = useState<Template['id'] | null>(null)
   const [templates, setTemplates] = useState<Template[]>([])
+  const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates`
@@ -21,25 +21,25 @@ export default function Templates() {
         setTemplates(resp.data)
       })
       .catch((error) => {
-        toast.error('Error: Unable to load forms.', {
+        toast.error('Error: Unable to load templates.', {
           autoClose: 5000,
         })
         // eslint-disable-next-line no-console
-        console.error('Unable to load forms:', error)
+        console.error('Unable to load templates:', error)
       })
   }, [url])
 
   const handleDelete = (templateId: Template['id'] | null) => {
     if (templateId === null) {
       // eslint-disable-next-line no-console
-      console.warn('Attempted to delete a form with a null ID. No action will be taken.')
+      console.warn('Attempted to delete a template with a null ID. No action will be taken.')
       return
     }
 
     axios.delete(`${url}/${templateId}`)
       .then(() => {
         toast.success('Template deleted successfully')
-        setIsModalDeleteOpen(false)
+        hideModal()
         loadTemplates()
       })
       .catch((error) => {
@@ -47,6 +47,18 @@ export default function Templates() {
         // eslint-disable-next-line no-console
         console.error('Unable to delete template:', error)
       })
+  }
+
+  const handleModalForDelete = (templateId: string) => {
+    const JSX = (
+      <ModalDeleteTemplate
+        handleDelete={handleDelete}
+        templateId={templateId}
+        hideModal={hideModal}
+      />
+    )
+
+    showModal(JSX)
   }
 
   useEffect(() => {
@@ -71,45 +83,34 @@ export default function Templates() {
               <td className='p-3'>
                 <span className='flex items-center justify-center gap-1'>
                   <button
-                    aria-label='View Template'
+                    aria-label='View template'
                     onClick={() => navigate(`/templates/${template.id}`)}
                     type='button'
                   >
                     <Eye />
                   </button>
                   <button
-                    aria-label='Edit form'
+                    aria-label='Edit template'
                     onClick={() => navigate(`/templates/${template.id}/edit`)}
                     type='button'
                   >
                     <PencilSquare />
                   </button>
                   <button
-                    aria-label='Delete form'
-                    onClick={() => {
-                      setSelectedTemplateId(template.id)
-                      setIsModalDeleteOpen(true)
-                    }}
+                    aria-label='Delete template'
+                    onClick={() => handleModalForDelete(template.id)}
                     type='button'
                   >
                     <Trash />
                   </button>
                 </span>
               </td>
-              {/* TODO max-w-[xch] isn't working exactly as expected, but good enough for now */}
               <td className='p-3'>{template.name}</td>
               <td className='p-3 text-center'>{template.id}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <ModalDeleteTemplate
-        handleDelete={handleDelete}
-        isModalDeleteOpen={isModalDeleteOpen}
-        selectedTemplateId={selectedTemplateId}
-        setIsModalDeleteOpen={setIsModalDeleteOpen}
-      />
     </>
   )
 }

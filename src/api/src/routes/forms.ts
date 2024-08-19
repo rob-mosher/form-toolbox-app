@@ -128,6 +128,8 @@ formsRouter.delete(
         return res.sendStatus(200)
       }
 
+      res.locals.form.templateId = null
+      res.locals.form.formData = null
       res.locals.form.isDeleted = true
       await res.locals.form.save()
       return res.sendStatus(200)

@@ -12,6 +12,11 @@ const initTemplate = (sequelize: Sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,

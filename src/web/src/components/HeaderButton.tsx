@@ -37,7 +37,8 @@ export default function usePathLogic(): ReactNode {
         </Button>
       ),
       newTemplate: (
-        <Button ariaLabel='New Template' primary onClick={() => navigate('upload')}>
+        // TODO for now, navitage to the homepage until this is implemented
+        <Button ariaLabel='New Template' primary onClick={() => navigate('/')}>
           New Template
         </Button>
       ),

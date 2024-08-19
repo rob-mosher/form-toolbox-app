@@ -121,16 +121,17 @@ erDiagram
     STRING fileName
     STRING fileNameS3
     JSONB formData "Flexible container for varied form content, adhering to its Template schema"
-    UUID templateId FK "Foreign Key to Template"
     BOOLEAN isDeleted "For soft-delete"
     INTEGER pageCount
     ENUM status
+    UUID templateId FK "Foreign Key to Template"
     STRING textractJobId
     JSONB textractKeyValues
   }
 
   Template {
     UUID id PK "Primary Key"
+    BOOLEAN isDeleted "For soft-delete"
     STRING name
     JSONB schema "Contains the custom schema that each Template utilizes, adhered to by each Form"
   }
