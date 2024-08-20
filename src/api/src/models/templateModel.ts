@@ -28,7 +28,7 @@ const initTemplateModel = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: 'Template',
+      modelName: 'Templates',
     }
   )
 

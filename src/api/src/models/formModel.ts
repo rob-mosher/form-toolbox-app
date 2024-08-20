@@ -56,7 +56,7 @@ const initFormModel = (sequelize: Sequelize) => {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: sequelize.models.Template.tableName,
+          model: sequelize.models.Templates.tableName,
           key: 'id',
         },
       },
@@ -71,7 +71,7 @@ const initFormModel = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: 'Form',
+      modelName: 'Forms',
     }
   )
 
