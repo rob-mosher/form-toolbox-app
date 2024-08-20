@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "check:types": "npx tsc --noEmit --skipLibCheck",
     "dev": "API_HOST=127.0.0.1 nodemon --exec ts-node src/index.ts",
     "dev:docker": "API_HOST=0.0.0.0 nodemon --exec ts-node src/index.ts",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings 0",
