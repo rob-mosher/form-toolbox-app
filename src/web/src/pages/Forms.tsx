@@ -8,7 +8,13 @@ import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context/useGlobalState'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
-import type { FormType, FormsListType } from '../types'
+import type { FormType } from '../types'
+
+type FormsListType = FormType & {
+  template: {
+    name: string;
+  };
+};
 
 export default function Forms() {
   const [forms, setForms] = useState<FormsListType[]>([])

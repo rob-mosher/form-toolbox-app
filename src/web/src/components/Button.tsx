@@ -40,7 +40,7 @@ export default function Button({
       disabled={disabled}
       id={id}
       onClick={onClick}
-      // TODO resolve typescript issue
+      // ESLint rule disabled: TS and default value enforce valid 'button' or 'submit' values
       // eslint-disable-next-line react/button-has-type
       type={type}
     >

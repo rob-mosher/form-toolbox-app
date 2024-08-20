@@ -1,5 +1,7 @@
+import { TemplateType } from './TemplateType'
+
 export type TemplateOptionType = {
-  key: string; // maps from Template.id
-  value: string; // maps from Template.id
-  text: string; // maps from Template.name
+  key: TemplateType['id'];
+  value: TemplateType['id'];
+  text: TemplateType['name'];
 }

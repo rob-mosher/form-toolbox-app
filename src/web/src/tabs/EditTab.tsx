@@ -7,15 +7,15 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBoxType, FormType, SchemaType, TemplateOptionType
+  BoundingBoxType, FormType, TemplateType, TemplateOptionType
 } from '../types'
 
 type EditTabProps = {
   form: FormType;
   formId: FormType['id'];
-  schema: SchemaType | null;
+  schema: TemplateType['schema'] | null;
   setForm: (newForm: FormType) => void;
-  setSchema: (newSchema: SchemaType) => void;
+  setSchema: (newSchema: TemplateType['schema']) => void;
   templates: TemplateOptionType[];
   onBoundingBoxFocus: (boundingBox: {
     keyBoundingBox: BoundingBoxType,
@@ -100,7 +100,6 @@ export default function EditTab({
           formData: mappedFormData,
         }
       })
-
       // toast.success('Template updated successfully.')
     } catch (err) {
       // eslint-disable-next-line no-console

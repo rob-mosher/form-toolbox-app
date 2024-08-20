@@ -12,7 +12,7 @@ import { useGlobalState } from '../context/useGlobalState'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  BoundingBoxType, FormType, SchemaType, TemplateType, TemplateOptionType
+  BoundingBoxType, FormType, TemplateType, TemplateOptionType
 } from '../types'
 
 type FormEditParams = {
@@ -23,7 +23,7 @@ export default function FormEdit() {
   const [form, setForm] = useState<FormType | null>(null)
   const [templates, setTemplates] = useState<TemplateOptionType[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schema, setSchema] = useState<SchemaType | null>(null)
+  const [schema, setSchema] = useState<TemplateType['schema'] | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<BoundingBoxType[]>([])
 
