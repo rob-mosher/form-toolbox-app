@@ -1,1 +1,1 @@
-export * from './WebpFile'
+export * from './WebpFileType'

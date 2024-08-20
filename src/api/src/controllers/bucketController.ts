@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
 import { putObject } from '../services/aws/s3/s3Functions'
-import { WebpFile } from '../types'
+import { WebpFileType } from '../types'
 import { createError } from '../utils/error'
 
 dotenv.config()
@@ -16,7 +16,7 @@ const putWebpFiles: RequestHandler = async (req, res, next) => {
   }
 
   try {
-    const uploadPromises = (res.locals.webpFiles as WebpFile[]).map((file, i) => putObject({
+    const uploadPromises = (res.locals.webpFiles as WebpFileType[]).map((file, i) => putObject({
       Bucket: AWS_BUCKET_NAME,
       Key: `exports/${res.locals.form.id}/${i + 1}.webp`, // Pages are 1-indexed
       Body: file.buffer,

@@ -1,14 +1,14 @@
 import { RequestHandler } from 'express'
 import sharp from 'sharp'
 import path from 'path'
-import { WebpFile } from '../types'
+import { WebpFileType } from '../types'
 
 const convertToWebp: RequestHandler = async (req, res, next) => {
   if (!req.file) return next(new Error('No file provided'))
 
   try {
     const fileType = path.extname(req.file.originalname).toLowerCase()
-    const outputFiles: WebpFile[] = []
+    const outputFiles: WebpFileType[] = []
 
     if (fileType === '.pdf') {
       // TODO PDF logic
