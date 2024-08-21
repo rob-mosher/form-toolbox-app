@@ -138,6 +138,29 @@ export default function EditTab({
     }
   }
 
+  const templateRows = (
+    <>
+      <label htmlFor='template-select' className='mb-2 block font-semibold text-gray-700'>
+        Template
+      </label>
+      <select
+        className='mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+        id='template-select'
+        onChange={handleChangeTemplate}
+        value={selectedTemplate}
+      >
+        <option value='' disabled>
+          Select Template
+        </option>
+        {templates.map((option) => (
+          <option key={option.key} value={option.value}>
+            {option.text}
+          </option>
+        ))}
+      </select>
+    </>
+  )
+
   const formRows = schema ? (
     Object.entries(JSON.parse(schema)).map(([key, value]) => {
       const formItem = form?.formDeclared?.[key]
@@ -181,25 +204,9 @@ export default function EditTab({
         <Divider>
           <Heading as='h6' uppercase>Form Type</Heading>
         </Divider>
+
         <div className='mb-4'>
-          <label htmlFor='template-select' className='mb-2 block font-semibold text-gray-700'>
-            Template
-          </label>
-          <select
-            className='mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-            id='template-select'
-            onChange={handleChangeTemplate}
-            value={selectedTemplate}
-          >
-            <option value='' disabled>
-              Select Template
-            </option>
-            {templates.map((option) => (
-              <option key={option.key} value={option.value}>
-                {option.text}
-              </option>
-            ))}
-          </select>
+          { templateRows }
         </div>
 
         <div className='mb-4 space-x-1'>
@@ -211,7 +218,9 @@ export default function EditTab({
           <Heading as='h6' uppercase>Form Data</Heading>
         </Divider>
 
-        <div className='space-y-4'>{ formRows }</div>
+        <div className='space-y-4'>
+          { formRows }
+        </div>
 
       </form>
     </div>
