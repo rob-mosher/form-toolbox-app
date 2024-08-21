@@ -7,7 +7,7 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBoxType, FormType, TemplateType, TemplateOptionType,
+  BoundingBoxType, FormDataValueType, FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type EditTabProps = {
@@ -22,6 +22,8 @@ type EditTabProps = {
     valueBoundingBox: BoundingBoxType,
   }) => void;
 }
+
+type FormDataType = Record<string, FormDataValueType | string>;
 
 export default function EditTab({
   form,
@@ -62,14 +64,14 @@ export default function EditTab({
       },
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
-    const newFormData = schemaKeys.reduce((acc, key) => {
+    const newFormData = schemaKeys.reduce((acc: FormDataType, key: string) => {
       if (key in textractKeyValueAndBoundingBoxes) {
         acc[key] = textractKeyValueAndBoundingBoxes[key]
       } else {
         acc[key] = ''
       }
       return acc
-    }, {})
+    }, {} as FormDataType)
 
     return newFormData
   }

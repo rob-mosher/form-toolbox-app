@@ -1,9 +1,14 @@
-// TODO finish typescript conversion
-
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+  GetObjectCommandInput,
+  PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import { fromEnv } from '@aws-sdk/credential-providers'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import dotenv from 'dotenv'
+import { FormDataValueType } from '../../../types'
 import { parseKeyValuePairs } from '../textract/textractFunctions'
 
 dotenv.config()
@@ -11,10 +16,7 @@ dotenv.config()
 if (!process.env.AWS_BUCKET_NAME) throw new Error('Missing AWS_BUCKET_NAME environment variable.')
 if (!process.env.AWS_REGION) throw new Error('Missing AWS_REGION environment variable.')
 
-const {
-  AWS_BUCKET_NAME,
-  AWS_REGION,
-} = process.env
+const { AWS_BUCKET_NAME, AWS_REGION } = process.env
 
 const s3Client = new S3Client({
   credentials: fromEnv(),
@@ -22,7 +24,11 @@ const s3Client = new S3Client({
 })
 
 // Helper function -- do not export
-async function generatePresignedUrl(bucket, key, expires) {
+async function generatePresignedUrl(
+  bucket: string,
+  key: string,
+  expires: number,
+): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: bucket,
     Key: key,
@@ -30,45 +36,63 @@ async function generatePresignedUrl(bucket, key, expires) {
 
   try {
     return await getSignedUrl(s3Client, command, { expiresIn: expires })
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('Error generating presigned URL:', err)
     throw err
   }
 }
 
-async function generatePresignedUrlsFromKeys(keys) {
-  const presignedUrls = []
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key of keys) {
-    try {
-      const url = await generatePresignedUrl(AWS_BUCKET_NAME, key, 60)
-      presignedUrls.push(url)
-    } catch (err) {
-      console.error(`Error generating presigned URL for ${key}:`, err)
-      throw err
-    }
+async function generatePresignedUrlsFromKeys(keys: string[]): Promise<string[]> {
+  try {
+    const presignedUrls = await Promise.all(
+      keys.map((key) => generatePresignedUrl(AWS_BUCKET_NAME!, key, 60)),
+    )
+    console.log('presignedUrls:', presignedUrls)
+    return presignedUrls
+  } catch (err: unknown) {
+    console.error('Error generating presigned URLs:', err)
+    throw err
   }
-  console.log('presignedUrls:', presignedUrls)
-  return presignedUrls
 }
 
-async function getAnalysis(analysisFolderNameS3) {
-  // TODO account for multi-page results
+async function getObject(commandProps: GetObjectCommandInput): Promise<Buffer> {
+  try {
+    const command = new GetObjectCommand(commandProps)
+    const response = await s3Client.send(command)
+
+    if (!response.Body) {
+      throw new Error('No response body')
+    }
+
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = []
+      const stream = response.Body as NodeJS.ReadableStream
+      stream.on('data', (chunk: Buffer) => chunks.push(chunk))
+      stream.on('end', () => resolve(Buffer.concat(chunks)))
+      stream.on('error', reject)
+    })
+  } catch (err: unknown) {
+    console.error('Error getting object:', err)
+    throw err
+  }
+}
+
+async function getAnalysis(analysisFolderNameS3: string): Promise<{
+  pageCount: number;
+  textractKeyValueAndBoundingBoxes: FormDataValueType[];
+}> {
   const key = `${analysisFolderNameS3}/1`
 
   try {
-    // eslint-disable-next-line no-use-before-define
     const data = await getObject({
-      Bucket: AWS_BUCKET_NAME,
+      Bucket: AWS_BUCKET_NAME!,
       Key: key,
     })
 
-    // S3 returns a buffer, so utilize `toString()` to be safe, although it works without it
     const analysisResults = JSON.parse(data.toString())
-
     const pageCount = analysisResults.DocumentMetadata.Pages
-    const textractKeyValueAndBoundingBoxes = parseKeyValuePairs(analysisResults)
+    // eslint-disable-next-line max-len
+    const textractKeyValueAndBoundingBoxes = parseKeyValuePairs(analysisResults) as FormDataValueType[]
 
     console.log('pageCount', pageCount)
     console.log('textractKeyValueAndBoundingBoxes', textractKeyValueAndBoundingBoxes)
@@ -77,37 +101,18 @@ async function getAnalysis(analysisFolderNameS3) {
       pageCount,
       textractKeyValueAndBoundingBoxes,
     }
-  } catch (err) {
-    throw new Error(err.message)
+  } catch (err: unknown) {
+    console.error('Error getting analysis:', (err as Error).message)
+    throw new Error((err as Error).message)
   }
 }
 
-async function getObject(commandProps) {
-  try {
-    const command = new GetObjectCommand(commandProps)
-    const response = await s3Client.send(command)
-
-    return new Promise((resolve, reject) => {
-      const chunks = []
-      // @ts-expect-error TODO refactor
-      response.Body.on('data', (chunk) => chunks.push(chunk))
-      // @ts-expect-error TODO refactor
-      response.Body.on('end', () => resolve(Buffer.concat(chunks)))
-      // @ts-expect-error TODO refactor
-      response.Body.on('error', reject)
-    })
-  } catch (err) {
-    console.error(err)
-    throw err
-  }
-}
-
-async function putObject(commandProps) {
+async function putObject(commandProps: PutObjectCommandInput): Promise<void> {
   try {
     const command = new PutObjectCommand(commandProps)
-    return s3Client.send(command)
-  } catch (err) {
-    console.error(err)
+    await s3Client.send(command)
+  } catch (err: unknown) {
+    console.error('Error putting object:', (err as Error).message)
     throw err
   }
 }

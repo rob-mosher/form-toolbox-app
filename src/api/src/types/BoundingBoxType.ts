@@ -1,4 +1,4 @@
-// ensure the contents of this file are identical to ../../../api/src/types/
+// ensure the contents of this file are identical to ../../../web/src/types/
 
 export type BoundingBoxType = {
   Left: number;
