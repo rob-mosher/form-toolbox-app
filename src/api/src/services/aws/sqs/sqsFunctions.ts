@@ -32,7 +32,6 @@ async function requeueMessage(messageJSON, retryCount) {
     RetryCount: newRetryCount,
   })
 
-  // @ts-expect-error TODO refactor with a centralized way to handle env vars
   const backoffDelaySeconds = AWS_SQS_REQUEUE_DELAY * newRetryCount
   console.log('backoffDelaySeconds', backoffDelaySeconds)
 

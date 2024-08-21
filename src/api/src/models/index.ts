@@ -21,11 +21,13 @@ const TemplateModel = initTemplateModel(sequelize)
 // The following DO have dependencies from the preceding.
 const FormModel = initFormModel(sequelize)
 
+// Use singular 'template' for belongsTo association as each Form belongs to one Template
 FormModel.belongsTo(TemplateModel, {
   foreignKey: 'templateId',
   as: 'template',
 })
 
+// Use plural 'forms' for hasMany association as each Template has many Forms
 TemplateModel.hasMany(FormModel, {
   foreignKey: 'templateId',
   as: 'forms',

@@ -34,7 +34,6 @@ const getForm: RequestHandler = async (req, res, next) => {
       }))
     }
 
-    // @ts-expect-error TODO refactor with an all-container type solution
     if (!res.locals.allowDeleted && form.isDeleted) {
       return next(createError({
         err: 'Form is marked as deleted',

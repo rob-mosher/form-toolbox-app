@@ -87,7 +87,6 @@ const processMessage = async (mes) => {
       }
 
       // Extract the analysisFolderNameS3
-      // @ts-expect-error TODO refactor with an all-container type solution
       const { analysisFolderNameS3 } = form
 
       // Extract various information about the analysis
@@ -97,11 +96,8 @@ const processMessage = async (mes) => {
       } = await getAnalysis(analysisFolderNameS3)
 
       // Update the form
-      // @ts-expect-error TODO refactor with an all-container type solution
       form.pageCount = pageCount
-      // @ts-expect-error TODO refactor with an all-container type solution
       form.status = 'ready'
-      // @ts-expect-error TODO refactor with an all-container type solution
       form.textractKeyValueAndBoundingBoxes = textractKeyValueAndBoundingBoxes
       await form.save()
 

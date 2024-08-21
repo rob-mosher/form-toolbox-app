@@ -1,8 +1,22 @@
 // NOTE any changes to this model should be reflected in ../../../web/src/types/
 
+/* eslint-disable lines-between-class-members */
+
 import { DataTypes, Model, Sequelize } from 'sequelize'
 
-class TemplateModel extends Model {}
+interface TemplateModelType {
+  id: string;
+  isDeleted: boolean;
+  name: string;
+  schema: string; // TODO might need to be more specific
+}
+
+class TemplateModel extends Model<TemplateModelType> implements TemplateModelType {
+  public id!:TemplateModelType['id']
+  public isDeleted!: TemplateModelType['isDeleted']
+  public name!: TemplateModelType['name']
+  public schema!: TemplateModelType['schema']
+}
 
 const initTemplateModel = (sequelize: Sequelize) => {
   TemplateModel.init(

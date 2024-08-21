@@ -1,8 +1,38 @@
 // NOTE any changes to this model should be reflected in ../../../web/src/types/
 
+/* eslint-disable lines-between-class-members */
+
 import { DataTypes, Model, Sequelize } from 'sequelize'
 
-class FormModel extends Model {}
+interface FormModelType {
+  id: string;
+  analysisFolderNameS3?: string;
+  exportFolderNameS3?: string;
+  fileName?: string;
+  fileNameS3?: string;
+  formData?: object; // TODO consider being more specific
+  isDeleted: boolean;
+  pageCount?: number;
+  status: 'analyzing' | 'error' | 'initialized' | 'ready' | 'uploading';
+  templateId?: string;
+  textractJobId?: string;
+  textractKeyValueAndBoundingBoxes?: object; // Adjust the type if necessary
+}
+
+class FormModel extends Model<FormModelType> implements FormModelType {
+  public id!: FormModelType['id']
+  public analysisFolderNameS3?: FormModelType['analysisFolderNameS3']
+  public exportFolderNameS3?: FormModelType['exportFolderNameS3']
+  public fileName?: FormModelType['fileName']
+  public fileNameS3?: FormModelType['fileNameS3']
+  public formData?: FormModelType['formData']
+  public isDeleted!: FormModelType['isDeleted']
+  public pageCount?: FormModelType['pageCount']
+  public status!: FormModelType['status']
+  public templateId?: FormModelType['templateId']
+  public textractJobId?: FormModelType['textractJobId']
+  public textractKeyValueAndBoundingBoxes?: FormModelType['textractKeyValueAndBoundingBoxes']
+}
 
 const initFormModel = (sequelize: Sequelize) => {
   FormModel.init(
