@@ -5,6 +5,11 @@ import initTemplateModel from './templateModel'
 
 dotenv.config()
 
+if (!process.env.DB_NAME) throw new Error('Missing DB_NAME environment variable.')
+if (!process.env.DB_USER) throw new Error('Missing DB_USER environment variable.')
+if (!process.env.DB_PASS) throw new Error('Missing DB_PASS environment variable.')
+if (!process.env.DB_HOST) throw new Error('Missing DB_HOST environment variable.')
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -12,7 +17,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: 'postgres',
-  }
+  },
 )
 
 // The following DO NOT have any dependencies.
@@ -37,5 +42,5 @@ export {
   sequelize,
   FormModel,
   TemplateModel,
-  Sequelize
+  Sequelize,
 }

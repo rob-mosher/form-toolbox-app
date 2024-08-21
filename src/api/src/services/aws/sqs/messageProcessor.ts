@@ -36,7 +36,7 @@ const processMessage = async (mes) => {
           where: {
             id: formId,
           },
-        }
+        },
       )
       if (updatedRows === 0) {
         console.warn(`Form ${formId} was not set to 'analyzing'.`)
@@ -56,7 +56,7 @@ const processMessage = async (mes) => {
           where: {
             id: formId,
           },
-        }
+        },
       )
       if (updatedRows === 0) {
         console.warn(`Form ${formId} was not set to 'error'.`)

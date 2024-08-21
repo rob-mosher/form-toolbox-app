@@ -9,7 +9,7 @@
 // elements are not natively interactive.
 
 import {
-  KeyboardEvent, ReactNode, useEffect, useRef
+  KeyboardEvent, ReactNode, useEffect, useRef,
 } from 'react'
 
 interface ModalProps {

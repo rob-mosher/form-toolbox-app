@@ -50,7 +50,7 @@ templateRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
 
     const [updatedRows] = await TemplateModel.update(
       { isDeleted: true },
-      { where: { id, isDeleted: false } }
+      { where: { id, isDeleted: false } },
     )
 
     if (updatedRows === 0) {

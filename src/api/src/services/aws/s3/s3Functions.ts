@@ -113,5 +113,5 @@ export {
   generatePresignedUrlsFromKeys,
   getAnalysis,
   getObject,
-  putObject
+  putObject,
 }

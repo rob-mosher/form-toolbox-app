@@ -43,7 +43,7 @@ const initTemplateModel = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: 'Templates',
-    }
+    },
   )
 
   return TemplateModel

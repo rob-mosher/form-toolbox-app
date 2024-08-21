@@ -1,5 +1,5 @@
 import {
-  ChevronDown, Cursor, MagnifyingGlass, MagnifyingGlassMinus, MagnifyingGlassPlus
+  ChevronDown, Cursor, MagnifyingGlass, MagnifyingGlassMinus, MagnifyingGlassPlus,
 } from '../assets'
 
 export default function ContentToolbar() {

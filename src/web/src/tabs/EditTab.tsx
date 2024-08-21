@@ -7,7 +7,7 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBoxType, FormType, TemplateType, TemplateOptionType
+  BoundingBoxType, FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type EditTabProps = {

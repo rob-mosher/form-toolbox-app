@@ -69,7 +69,7 @@ formsRouter.get(
         status: 500,
       }))
     }
-  }
+  },
 )
 
 formsRouter.post(
@@ -93,7 +93,7 @@ formsRouter.post(
   // Complete the request
   (req, res) => {
     res.sendStatus(201)
-  }
+  },
 )
 
 formsRouter.get(
@@ -110,7 +110,7 @@ formsRouter.get(
         status: 500,
       }))
     }
-  }
+  },
 )
 
 formsRouter.delete(
@@ -140,7 +140,7 @@ formsRouter.delete(
         status: 500,
       }))
     }
-  }
+  },
 )
 
 formsRouter.get(
@@ -157,7 +157,7 @@ formsRouter.get(
         status: 500,
       }))
     }
-  }
+  },
 )
 
 formsRouter.put(
@@ -208,7 +208,7 @@ formsRouter.put(
         status: 400,
       }))
     }
-  }
+  },
 )
 
 formsRouter.get(
@@ -234,7 +234,7 @@ formsRouter.get(
         status: 500,
       }))
     }
-  }
+  },
 )
 
 export default formsRouter

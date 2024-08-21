@@ -1,7 +1,7 @@
 // NOTE Ensure any changes to path are also reflected in ../router.tsx
 
 import {
-  ReactNode, useEffect, useMemo, useState
+  ReactNode, useEffect, useMemo, useState,
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from './Button'

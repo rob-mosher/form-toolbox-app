@@ -7,7 +7,7 @@ const clearStoredUploads: RequestHandler = (req, res, next) => {
   const dirName = path.resolve(path.dirname(require.main!.filename), 'public/data/uploads')
   fs.readdir(dirName)
     .then((fileNames) => Promise.all(
-      fileNames.map((fileName) => fs.unlink(path.resolve(dirName, fileName)))
+      fileNames.map((fileName) => fs.unlink(path.resolve(dirName, fileName))),
     ))
     .then(() => next())
     .catch((err) => next(createError({

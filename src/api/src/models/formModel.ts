@@ -102,7 +102,7 @@ const initFormModel = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: 'Forms',
-    }
+    },
   )
 
   return FormModel

@@ -12,7 +12,7 @@ import { useGlobalState } from '../context/useGlobalState'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  BoundingBoxType, FormType, TemplateType, TemplateOptionType
+  BoundingBoxType, FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type FormEditParams = {
