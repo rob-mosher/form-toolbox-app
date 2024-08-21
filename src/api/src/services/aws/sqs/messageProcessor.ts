@@ -1,5 +1,4 @@
-// TODO finish typescript conversion
-
+import { Message as SQSMessage } from '@aws-sdk/client-sqs'
 import dotenv from 'dotenv'
 import { requeueMessage } from './sqsFunctions'
 import { FormModel } from '../../../models'
@@ -7,9 +6,15 @@ import { getAnalysis } from '../s3/s3Functions'
 
 dotenv.config()
 
-const { AWS_SQS_REQUEUE_MAX_RETRIES } = process.env
+if (!process.env.AWS_SQS_REQUEUE_MAX_RETRIES) throw new Error('Missing AWS_BUCKET_NAME environment variable.')
 
-const processMessage = async (mes) => {
+const AWS_SQS_REQUEUE_MAX_RETRIES = Number(process.env.AWS_SQS_REQUEUE_MAX_RETRIES)
+
+const processMessage = async (mes: SQSMessage) => {
+  if (!mes || !mes.Body) {
+    console.error('Malformed message, not processing.')
+    return
+  }
   console.log('Processing message: ', mes.Body)
 
   const parsedBody = JSON.parse(mes.Body)

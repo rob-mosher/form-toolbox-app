@@ -9,8 +9,14 @@ import { startPolling } from './services/aws/sqs/poller'
 
 dotenv.config({ path: '../../.env' })
 
-const API_HOST = process.env.API_HOST || 'localhost'
-const API_PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 3000
+if (!process.env.API_HOST) throw new Error('Missing API_HOST environment variable.')
+if (!process.env.API_PORT) throw new Error('Missing API_PORT environment variable.')
+
+// Allow undefined NODE_ENV until further along in the app's development
+// if (!process.env.NODE_ENV) throw new Error('Missing NODE_ENV environment variable.')
+
+const { API_HOST, NODE_ENV } = process.env
+const API_PORT = Number(process.env.API_PORT)
 
 const app = express()
 app.use(cors())
@@ -50,7 +56,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(errorObj.status).json(errorObj.message)
 })
 
-if (process.env.NODE_ENV !== 'test') {
+if (NODE_ENV !== 'test') {
   console.log('Syncronizing database schema:')
   sequelize.sync()
     .then(() => {

@@ -8,6 +8,9 @@ import { parseKeyValuePairs } from '../textract/textractFunctions'
 
 dotenv.config()
 
+if (!process.env.AWS_BUCKET_NAME) throw new Error('Missing AWS_BUCKET_NAME environment variable.')
+if (!process.env.AWS_REGION) throw new Error('Missing AWS_REGION environment variable.')
+
 const {
   AWS_BUCKET_NAME,
   AWS_REGION,

@@ -1,17 +1,21 @@
-// TODO finish typescript conversion
-
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs'
 import { fromEnv } from '@aws-sdk/credential-providers'
 import dotenv from 'dotenv'
 
 dotenv.config()
 
+if (!process.env.AWS_ACCOUNT_NUMBER) throw new Error('Missing AWS_ACCOUNT_NUMBER environment variable.')
+if (!process.env.AWS_REGION) throw new Error('Missing AWS_REGION environment variable.')
+if (!process.env.AWS_SQS_REQUEUE_DELAY) throw new Error('Missing AWS_SQS_REQUEUE_DELAY environment variable.')
+if (!process.env.AWS_SQS_QUEUE_NAME) throw new Error('Missing AWS_SQS_QUEUE_NAME environment variable.')
+
 const {
   AWS_ACCOUNT_NUMBER,
   AWS_REGION,
   AWS_SQS_QUEUE_NAME,
-  AWS_SQS_REQUEUE_DELAY,
 } = process.env
+
+const AWS_SQS_REQUEUE_DELAY = Number(process.env.AWS_SQS_REQUEUE_DELAY)
 
 const queueURL = `https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_NUMBER}/${AWS_SQS_QUEUE_NAME}`
 

@@ -1,5 +1,3 @@
-// TODO finish typescript conversion
-
 /* eslint-disable no-restricted-syntax */
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs'
 import { fromEnv } from '@aws-sdk/credential-providers'
@@ -7,6 +5,10 @@ import dotenv from 'dotenv'
 import { processMessage } from './messageProcessor'
 
 dotenv.config()
+
+if (!process.env.AWS_ACCOUNT_NUMBER) throw new Error('Missing AWS_ACCOUNT_NUMBER environment variable.')
+if (!process.env.AWS_REGION) throw new Error('Missing AWS_REGION environment variable.')
+if (!process.env.AWS_SQS_QUEUE_NAME) throw new Error('Missing AWS_SQS_QUEUE_NAME environment variable.')
 
 const {
   AWS_ACCOUNT_NUMBER,

@@ -6,9 +6,9 @@ import { createError } from '../utils/error'
 
 dotenv.config()
 
-const {
-  AWS_BUCKET_NAME,
-} = process.env
+if (!process.env.AWS_BUCKET_NAME) throw new Error('Missing AWS_BUCKET_NAME environment variable.')
+
+const { AWS_BUCKET_NAME } = process.env
 
 const putWebpFiles: RequestHandler = async (req, res, next) => {
   if (!res.locals.webpFiles || res.locals.webpFiles.length === 0) {
@@ -74,7 +74,7 @@ const putUpload: RequestHandler = async (req, res, next) => {
     })
   } catch (err) {
     return next(createError({
-      err,
+      err: err as Error,
       method: `${__filename}:putUpload`,
       status: 500,
     }))
