@@ -97,13 +97,13 @@ const processMessage = async (mes: SQSMessage) => {
       // Extract various information about the analysis
       const {
         pageCount,
-        textractKeyValueAndBoundingBoxes,
+        formItemsDetected,
       } = await getAnalysis(analysisFolderNameS3)
 
       // Update the form
       form.pageCount = pageCount
       form.status = 'ready'
-      form.textractKeyValueAndBoundingBoxes = textractKeyValueAndBoundingBoxes
+      form.formDetected = formItemsDetected
       await form.save()
 
       console.log(`Form with textractJobId ${textractJobId} has been set to 'ready'.`)

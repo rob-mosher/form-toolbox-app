@@ -1,3 +1,3 @@
 export * from './BoundingBoxType'
-export * from './FormDataValueType'
+export * from './FormItemType'
 export * from './WebpFileType'

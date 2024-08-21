@@ -1,10 +1,8 @@
 // ensure this file is synchronized with ../../../api/src/types/
 
-// TODO possibly rename to something like TextractKeyValueAndBoundingBoxesType or SchemaType
-
 import { BoundingBoxType } from './BoundingBoxType'
 
-export type FormDataValueType = {
+export type FormItemType = {
   value: string;
   keyBoundingBox: BoundingBoxType;
   valueBoundingBox: BoundingBoxType;

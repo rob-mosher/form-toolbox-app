@@ -7,7 +7,7 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBoxType, FormDataValueType, FormType, TemplateType, TemplateOptionType,
+  BoundingBoxType, FormItemType, FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type EditTabProps = {
@@ -23,7 +23,8 @@ type EditTabProps = {
   }) => void;
 }
 
-type FormDataType = Record<string, FormDataValueType | string>;
+// TODO potentially replace in favor of related type
+type FormDeclaredType = Record<string, FormItemType | string>;
 
 export default function EditTab({
   form,
@@ -53,9 +54,9 @@ export default function EditTab({
     onBoundingBoxFocus({ keyBoundingBox, valueBoundingBox })
   }
 
-  const mapTextractKeyValueAndBoundingBoxesToFormData = (
+  const mapDetectedToDeclared = (
     newSchema: string, // wip
-    textractKeyValueAndBoundingBoxes: {
+    formItems: {
       [key: string]: {
         value: string,
         keyBoundingBox: BoundingBoxType,
@@ -64,42 +65,36 @@ export default function EditTab({
       },
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
-    const newFormData = schemaKeys.reduce((acc: FormDataType, key: string) => {
-      if (key in textractKeyValueAndBoundingBoxes) {
-        acc[key] = textractKeyValueAndBoundingBoxes[key]
+    const newFormDeclared = schemaKeys.reduce((acc: FormDeclaredType, key: string) => {
+      if (key in formItems) {
+        acc[key] = formItems[key]
       } else {
         acc[key] = ''
       }
       return acc
-    }, {} as FormDataType)
+    }, {} as FormDeclaredType)
 
-    return newFormData
+    return newFormDeclared
   }
 
   const handleApply = async () => {
     try {
-      // Set templateId on the form.
       const setTemplateIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
       await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplate } })
 
-      // Get the new schema.
       const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
       const response = await axios.get(getTemplateDataUrl)
       const newSchema = response.data[0].schema
 
-      // Update state with the above changes.
       setSchema(newSchema)
       setForm((prevForm) => {
-        // eslint-disable-next-line max-len
-        // Since handleApply is user-initiated, map textractKeyValueAndBoundingBoxes to formData, replacing values
-        const mappedFormData = mapTextractKeyValueAndBoundingBoxesToFormData(
-          newSchema,
-          prevForm.textractKeyValueAndBoundingBoxes,
-        )
+        // Since handleApply is user-initiated, map formDetected to formDeclared, overwriting values
+        const mappedFormDeclared = mapDetectedToDeclared(newSchema, prevForm.formDetected)
+
         return {
           ...prevForm,
           formTemplateId: selectedTemplate,
-          formData: mappedFormData,
+          formDeclared: mappedFormDeclared,
         }
       })
       // toast.success('Template updated successfully.')
@@ -114,20 +109,27 @@ export default function EditTab({
     setSelectedTemplate(e.target.value)
   }
 
-  const handleChangeFormData = ((key: string, value: string) => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      formData: {
-        ...prevForm.formData,
-        [key]: value,
-      },
-    }))
-  })
+  const handleChangeFormData = (key: string, value: string) => {
+    setForm((prevForm) => {
+      const updatedFormDeclared = {
+        ...prevForm.formDeclared,
+        [key]: {
+          ...prevForm.formDeclared?.[key],
+          value,
+        },
+      }
+
+      return {
+        ...prevForm,
+        formDeclared: updatedFormDeclared as Record<string, FormItemType>,
+      }
+    })
+  }
 
   const handleSave = async () => {
     try {
       const setFormDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-      await axios.put(setFormDataUrl, { updates: { formData: form.formData } })
+      await axios.put(setFormDataUrl, { updates: { formDeclared: form.formDeclared } })
       toast.success('Form saved!')
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -138,10 +140,10 @@ export default function EditTab({
 
   const formRows = schema ? (
     Object.entries(JSON.parse(schema)).map(([key, value]) => {
-      const textractData = form?.textractKeyValueAndBoundingBoxes?.[key]
-      const inputValue = textractData?.value || ''
-      const keyBoundingBox = textractData?.keyBoundingBox
-      const valueBoundingBox = textractData?.valueBoundingBox
+      const formItem = form?.formDeclared?.[key]
+      const inputValue = formItem?.value || ''
+      const keyBoundingBox = formItem?.keyBoundingBox
+      const valueBoundingBox = formItem?.valueBoundingBox
 
       return (
         <div key={key} className='mb-4'>

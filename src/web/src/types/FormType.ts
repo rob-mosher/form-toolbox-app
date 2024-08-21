@@ -1,10 +1,19 @@
+// ensure this file is synchronized with ../../../api/src/models/
+
+import { FormItemType } from './FormItemType'
+
 export type FormType = {
   createdAt: Date;
-  fileName: string;
-  formData: string;
   id: string;
-  pageCount: number;
-  status: string; // will eventually be stored in the db, so likely no enum available
+  analysisFolderNameS3?: string;
+  exportFolderNameS3?: string;
+  fileName?: string;
+  fileNameS3?: string;
+  formDeclared?: Record<string, FormItemType>;
+  formDetected?: Record<string, FormItemType>;
+  isDeleted: boolean;
+  pageCount?: number;
+  status: 'analyzing' | 'error' | 'initialized' | 'ready' | 'uploading';
   templateId?: string;
-  textractJobId: string;
-}
+  textractJobId?: string;
+};

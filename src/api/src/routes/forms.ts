@@ -128,9 +128,9 @@ formsRouter.delete(
         return res.sendStatus(200)
       }
 
-      res.locals.form.templateId = null
-      res.locals.form.formData = null
+      res.locals.form.formDeclared = null
       res.locals.form.isDeleted = true
+      res.locals.form.templateId = null
       await res.locals.form.save()
       return res.sendStatus(200)
     } catch (err) {
@@ -167,7 +167,7 @@ formsRouter.put(
   async (req: Request, res: Response, next: NextFunction) => {
     const { updates } = req.body
     const allowedUpdates = new Set([
-      'formData',
+      'formDeclared',
       'templateId',
     ])
 
@@ -190,8 +190,8 @@ formsRouter.put(
         res.locals.form.templateId = updates.templateId
       }
 
-      if (updates.formData) {
-        res.locals.form.formData = updates.formData
+      if (updates.formDeclared) {
+        res.locals.form.formDeclared = updates.formDeclared
       }
 
       if (!res.locals.form.changed()) {

@@ -87,7 +87,7 @@ export default function FormEdit() {
         }
 
         // It should be fine to setForm before setSchema due to how React works, but it seems more
-        // clear to setSchema first, since setForm's formData depends on schema to exist upon.
+        // clear to setSchema first, since setForm's formDeclared depends on schema to exist upon.
         setForm(fetchedForm)
       })
       .catch((error) => {

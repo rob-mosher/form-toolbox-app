@@ -8,7 +8,7 @@ import {
 import { fromEnv } from '@aws-sdk/credential-providers'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import dotenv from 'dotenv'
-import { FormDataValueType } from '../../../types'
+import { FormItemType } from '../../../types'
 import { parseKeyValuePairs } from '../textract/textractFunctions'
 
 dotenv.config()
@@ -79,7 +79,7 @@ async function getObject(commandProps: GetObjectCommandInput): Promise<Buffer> {
 
 async function getAnalysis(analysisFolderNameS3: string): Promise<{
   pageCount: number;
-  textractKeyValueAndBoundingBoxes: FormDataValueType[];
+  formItemsDetected: Record<string, FormItemType>;
 }> {
   const key = `${analysisFolderNameS3}/1`
 
@@ -91,15 +91,14 @@ async function getAnalysis(analysisFolderNameS3: string): Promise<{
 
     const analysisResults = JSON.parse(data.toString())
     const pageCount = analysisResults.DocumentMetadata.Pages
-    // eslint-disable-next-line max-len
-    const textractKeyValueAndBoundingBoxes = parseKeyValuePairs(analysisResults) as FormDataValueType[]
+    const formItemsDetected = parseKeyValuePairs(analysisResults) as Record<string, FormItemType>
 
     console.log('pageCount', pageCount)
-    console.log('textractKeyValueAndBoundingBoxes', textractKeyValueAndBoundingBoxes)
+    console.log('formItemsDetected', formItemsDetected)
 
     return {
       pageCount,
-      textractKeyValueAndBoundingBoxes,
+      formItemsDetected,
     }
   } catch (err: unknown) {
     console.error('Error getting analysis:', (err as Error).message)
