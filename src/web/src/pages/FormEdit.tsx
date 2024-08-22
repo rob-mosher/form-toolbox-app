@@ -1,5 +1,6 @@
 // TODO add check that form is ready for editing
 
+import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -12,7 +13,7 @@ import { useGlobalState } from '../context/useGlobalState'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  BoundingBoxType, FormType, TemplateType, TemplateOptionType,
+  FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type FormEditParams = {

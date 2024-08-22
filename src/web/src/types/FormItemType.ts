@@ -1,6 +1,6 @@
 // ensure this file is synchronized with ../../../api/src/types/
 
-import { BoundingBoxType } from './BoundingBoxType'
+import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
 
 export type FormItemType = {
   value: string;

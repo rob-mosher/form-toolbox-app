@@ -1,6 +1,6 @@
+import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
-import { BoundingBoxType } from '../types'
 
 type ContentProps = {
   imageUrls: string[];
@@ -15,13 +15,20 @@ export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentP
     boundingBox: BoundingBoxType,
     imageWidth: number,
     imageHeight: number,
-    padding:number = 0,
-  ) => ({
-    x: boundingBox.Left * imageWidth - padding,
-    y: boundingBox.Top * imageHeight - padding,
-    width: boundingBox.Width * imageWidth + 2 * padding,
-    height: boundingBox.Height * imageHeight + 2 * padding,
-  })
+    padding: number = 0,
+  ) => {
+    const left = boundingBox.Left !== undefined ? boundingBox.Left : 0
+    const top = boundingBox.Top !== undefined ? boundingBox.Top : 0
+    const width = boundingBox.Width !== undefined ? boundingBox.Width : 0
+    const height = boundingBox.Height !== undefined ? boundingBox.Height : 0
+
+    return {
+      x: left * imageWidth - padding,
+      y: top * imageHeight - padding,
+      width: width * imageWidth + 2 * padding,
+      height: height * imageHeight + 2 * padding,
+    }
+  }
 
   useEffect(() => {
     if (imageRef.current && svgRef.current && focusedBoundingBox.length > 0) {

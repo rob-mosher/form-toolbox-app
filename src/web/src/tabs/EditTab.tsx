@@ -1,3 +1,4 @@
+import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -5,7 +6,7 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  BoundingBoxType, FormItemType, FormType, TemplateType, TemplateOptionType,
+  FormItemType, FormType, TemplateType, TemplateOptionType,
 } from '../types'
 
 type EditTabProps = {
