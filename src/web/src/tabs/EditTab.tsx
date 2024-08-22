@@ -1,5 +1,3 @@
-// TODO complete typescript refactor
-
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -22,9 +20,6 @@ type EditTabProps = {
     valueBoundingBox: BoundingBoxType,
   }) => void;
 }
-
-// TODO potentially replace in favor of related type
-type FormDeclaredType = Record<string, FormItemType | string>;
 
 export default function EditTab({
   form,
@@ -54,25 +49,23 @@ export default function EditTab({
     onBoundingBoxFocus({ keyBoundingBox, valueBoundingBox })
   }
 
+  interface MappedFormItemsType {
+    [key: string]: FormItemType | string;
+  }
+
   const mapDetectedToDeclared = (
     newSchema: string, // wip
-    formItems: {
-      [key: string]: {
-        value: string,
-        keyBoundingBox: BoundingBoxType,
-        valueBoundingBox: BoundingBoxType
-      }
-      },
+    formItems: MappedFormItemsType,
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
-    const newFormDeclared = schemaKeys.reduce((acc: FormDeclaredType, key: string) => {
+    const newFormDeclared = schemaKeys.reduce((acc, key) => {
       if (key in formItems) {
         acc[key] = formItems[key]
       } else {
         acc[key] = ''
       }
       return acc
-    }, {} as FormDeclaredType)
+    }, {} as MappedFormItemsType)
 
     return newFormDeclared
   }

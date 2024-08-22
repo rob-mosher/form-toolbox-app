@@ -64,7 +64,7 @@ formsRouter.get(
       return res.status(200).json(forms)
     } catch (err) {
       return next(createError({
-        err: `Error getting all forms: ${err.message}`,
+        err: `Error getting all forms: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.get /`,
         status: 500,
       }))
@@ -105,7 +105,7 @@ formsRouter.get(
       return res.status(200).send(mimeTypesJson)
     } catch (err) {
       return next(createError({
-        err: `Error processing accepted MIME types: ${err.message}`,
+        err: `Error processing accepted MIME types: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.get /accepted-mime-types`,
         status: 500,
       }))
@@ -135,7 +135,7 @@ formsRouter.delete(
       return res.sendStatus(200)
     } catch (err) {
       return next(createError({
-        err: `Error deleting form: ${err.message}`,
+        err: `Error deleting form: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.delete /:id`,
         status: 500,
       }))
@@ -152,7 +152,7 @@ formsRouter.get(
       return res.status(200).json(res.locals.form)
     } catch (err) {
       return next(createError({
-        err: `Error getting form: ${err.message}`,
+        err: `Error getting form: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.get /:id`,
         status: 500,
       }))
@@ -203,7 +203,7 @@ formsRouter.put(
       return res.sendStatus(201)
     } catch (err) {
       return next(createError({
-        err: `Error updating form: ${err.message}`,
+        err: `Error updating form: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.put /:id`,
         status: 400,
       }))
@@ -217,7 +217,7 @@ formsRouter.get(
 
   async (req: Request, res: Response, next: NextFunction) => {
     const { pageCount } = res.locals.form
-    const keys = []
+    const keys: string[] = []
 
     for (let i = 1; i <= pageCount; i += 1) {
       const key = `exports/${res.locals.form.id}/${i}.webp`
@@ -229,7 +229,7 @@ formsRouter.get(
       return res.json(presignedUrls)
     } catch (err) {
       return next(createError({
-        err: `Error generating image URLS: ${err.message}`,
+        err: `Error generating image URLS: ${(err as Error).message}`,
         method: `${__filename}:formsRouter.get /:id/image-urls`,
         status: 500,
       }))

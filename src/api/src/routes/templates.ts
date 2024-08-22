@@ -11,10 +11,10 @@ templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
       attributes: ['id', 'name'],
     })
     return res.json(templates)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: error.message })
-    return next(error) // TODO: see how this is handled in the other routes
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: (err as Error).message })
+    return next(err) // TODO: see how this is handled in the other routes
   }
 })
 
@@ -29,10 +29,10 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
       },
     })
     return res.json(template)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: error.message })
-    return next(error) // TODO see how this is handled in the other routes
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: (err as Error).message })
+    return next(err) // TODO see how this is handled in the other routes
   }
 })
 

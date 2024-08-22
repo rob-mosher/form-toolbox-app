@@ -24,7 +24,7 @@ const sqsClient = new SQSClient({
   credentials: fromEnv(),
 })
 
-async function requeueMessage(messageJSON, retryCount) {
+async function requeueMessage(messageJSON: Record<string, unknown>, retryCount: number) {
   const newRetryCount = retryCount + 1
   console.log('newRetryCount', newRetryCount)
 

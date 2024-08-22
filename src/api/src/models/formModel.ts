@@ -2,38 +2,24 @@
 
 /* eslint-disable lines-between-class-members */
 
-import { DataTypes, Model, Sequelize } from 'sequelize'
-import { FormItemType } from '../types'
+import {
+  CreationOptional, DataTypes, Model, Sequelize,
+} from 'sequelize'
+import { FormType, FormCreationAttributes } from '../types'
 
-interface FormModelType {
-  id: string;
-  analysisFolderNameS3?: string;
-  exportFolderNameS3?: string;
-  fileName?: string;
-  fileNameS3?: string;
-  formDeclared?: Record<string, FormItemType>;
-  formDetected?: Record<string, FormItemType>;
-  isDeleted: boolean;
-  pageCount?: number;
-  status: 'analyzing' | 'error' | 'initialized' | 'ready' | 'uploading';
-  templateId?: string;
-  textractJobId?: string;
-}
-
-class FormModel extends Model<FormModelType> implements FormModelType {
-  public id!: FormModelType['id']
-  public analysisFolderNameS3?: FormModelType['analysisFolderNameS3']
-  public exportFolderNameS3?: FormModelType['exportFolderNameS3']
-  public fileName?: FormModelType['fileName']
-  public fileNameS3?: FormModelType['fileNameS3']
-  public formDeclared?: FormModelType['formDeclared']
-  public formDetected?: FormModelType['formDetected']
-  public isDeleted!: FormModelType['isDeleted']
-  public pageCount?: FormModelType['pageCount']
-  public status!: FormModelType['status']
-  public templateId?: FormModelType['templateId']
-  public textractJobId?: FormModelType['textractJobId']
-  form: FormItemType[]
+class FormModel extends Model<FormType, FormCreationAttributes> implements FormType {
+  public id!: CreationOptional<FormType['id']>
+  public analysisFolderNameS3?: FormType['analysisFolderNameS3']
+  public exportFolderNameS3?: FormType['exportFolderNameS3']
+  public fileName?: FormType['fileName']
+  public fileNameS3?: FormType['fileNameS3']
+  public formDeclared?: FormType['formDeclared']
+  public formDetected?: FormType['formDetected']
+  public isDeleted!: FormType['isDeleted']
+  public pageCount?: FormType['pageCount']
+  public status!: FormType['status']
+  public templateId?: FormType['templateId']
+  public textractJobId?: FormType['textractJobId']
 }
 
 const initFormModel = (sequelize: Sequelize) => {

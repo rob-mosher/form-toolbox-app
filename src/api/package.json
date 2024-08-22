@@ -17,6 +17,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.429.0",
     "@aws-sdk/client-sqs": "^3.441.0",
+    "@aws-sdk/client-textract": "^3.635.0",
     "@aws-sdk/credential-providers": "^3.430.0",
     "@aws-sdk/s3-request-presigner": "^3.450.0",
     "cors": "^2.8.5",

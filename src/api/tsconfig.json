@@ -2,9 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    // "strict": true, // TODO restore later
-    "strict": false, // TODO remove later
-    "noImplicitAny": false, // TODO remove later
+    "strict": true,
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "./dist",

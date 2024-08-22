@@ -42,8 +42,8 @@ app.use('*', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // Disable eslint rule for Express's global error handler (requires exactly 4 params)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,

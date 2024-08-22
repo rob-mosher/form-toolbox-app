@@ -1,4 +1,4 @@
-// ensure this file is synchronized with ../../../api/src/models/
+// ensure this file is synchronized with ../../../api/src/types/
 
 import { FormItemType } from './FormItemType'
 
@@ -6,6 +6,7 @@ export type FormType = {
   createdAt: Date;
   id: string;
   analysisFolderNameS3?: string;
+  createdAt: Date; // TODO also include 'updatedAt'?
   exportFolderNameS3?: string;
   fileName?: string;
   fileNameS3?: string;

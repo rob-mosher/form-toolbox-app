@@ -2,20 +2,17 @@
 
 /* eslint-disable lines-between-class-members */
 
-import { DataTypes, Model, Sequelize } from 'sequelize'
+import {
+  CreationOptional, DataTypes, Model, Sequelize,
+} from 'sequelize'
+import { TemplateType, TemplateCreationAttributes } from '../types'
 
-interface TemplateModelType {
-  id: string;
-  isDeleted: boolean;
-  name: string;
-  schema: string; // TODO might need to be more specific
-}
-
-class TemplateModel extends Model<TemplateModelType> implements TemplateModelType {
-  public id!:TemplateModelType['id']
-  public isDeleted!: TemplateModelType['isDeleted']
-  public name!: TemplateModelType['name']
-  public schema!: TemplateModelType['schema']
+// eslint-disable-next-line max-len
+class TemplateModel extends Model<TemplateType, TemplateCreationAttributes> implements TemplateType {
+  public id!: CreationOptional<TemplateType['id']>
+  public isDeleted!: TemplateType['isDeleted']
+  public name!: TemplateType['name']
+  public schema!: TemplateType['schema']
 }
 
 const initTemplateModel = (sequelize: Sequelize) => {

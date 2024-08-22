@@ -91,14 +91,15 @@ const processMessage = async (mes: SQSMessage) => {
         break
       }
 
-      // Extract the analysisFolderNameS3
-      const { analysisFolderNameS3 } = form
+      if (!form.analysisFolderNameS3 || form.analysisFolderNameS3 === '') {
+        console.error('analysisFolderNameS3 data is missing, cannot proceed.')
+        form.status = 'error'
+        await form.save()
+        break
+      }
 
       // Extract various information about the analysis
-      const {
-        pageCount,
-        formItemsDetected,
-      } = await getAnalysis(analysisFolderNameS3)
+      const { pageCount, formItemsDetected } = await getAnalysis(form.analysisFolderNameS3)
 
       // Update the form
       form.pageCount = pageCount

@@ -1,16 +1,18 @@
-// TODO finish typescript conversion
+import {
+  AnalyzeDocumentResponse, Block, BoundingBox, Relationship,
+} from '@aws-sdk/client-textract'
 
-function parseKeyValuePairs(textractData) {
-  const keyMap = {}
-  const valueMap = {}
-  const blockMap = {}
+function parseKeyValuePairs(textractData: AnalyzeDocumentResponse) {
+  const keyMap: Record<string, Block> = {}
+  const valueMap: Record<string, Block> = {}
+  const blockMap: Record<string, Block> = {}
 
   // Build maps for key-value pairs and block IDs
-  textractData.Blocks.forEach((block) => {
-    const blockId = block.Id
+  textractData.Blocks?.forEach((block: Block) => {
+    const blockId = block.Id!
     blockMap[blockId] = block
     if (block.BlockType === 'KEY_VALUE_SET') {
-      if (block.EntityTypes.includes('KEY')) {
+      if (block.EntityTypes?.includes('KEY')) {
         keyMap[blockId] = block
       } else {
         valueMap[blockId] = block
@@ -19,13 +21,14 @@ function parseKeyValuePairs(textractData) {
   })
 
   // Find a value block given a key block
-  function findValueBlock(keyBlock) {
-    let valueBlock = null
+  function findValueBlock(keyBlock: Block): Block | null {
+    let valueBlock: Block | null = null
     if (keyBlock.Relationships) {
-      keyBlock.Relationships.forEach((relationship) => {
-        if (relationship.Type === 'VALUE') {
+      keyBlock.Relationships.forEach((relationship: Relationship) => {
+        const { Ids } = relationship
+        if (relationship.Type === 'VALUE' && Ids && Ids.length > 0) {
           // Assume that each key has only one value block for simplicity
-          valueBlock = valueMap[relationship.Ids[0]]
+          valueBlock = valueMap[Ids[0]]
         }
       })
     }
@@ -33,18 +36,18 @@ function parseKeyValuePairs(textractData) {
   }
 
   // Get text and bounding box from a block
-  function getKeyValueAndBoundingBox(block) {
-    let boundingBox = null
+  function getKeyValueAndBoundingBox(block: Block) {
+    let boundingBox: BoundingBox | undefined
     let text = ''
 
-    if (block.Geometry && block.Geometry.BoundingBox) {
+    if (block.Geometry?.BoundingBox) {
       boundingBox = block.Geometry.BoundingBox
     }
 
     if (block.Relationships) {
-      block.Relationships.forEach((relationship) => {
+      block.Relationships.forEach((relationship: Relationship) => {
         if (relationship.Type === 'CHILD') {
-          relationship.Ids.forEach((childId) => {
+          relationship.Ids?.forEach((childId: string) => {
             const wordBlock = blockMap[childId]
             if (wordBlock.BlockType === 'WORD') {
               text += `${wordBlock.Text} `
@@ -63,8 +66,12 @@ function parseKeyValuePairs(textractData) {
   }
 
   // Build the key-value pairs with bounding boxes
-  const keyValuePairs = {}
-  Object.keys(keyMap).forEach((keyBlockId) => {
+  const keyValuePairs: Record<
+    string,
+    { value: string; keyBoundingBox?: BoundingBox; valueBoundingBox?: BoundingBox }
+  > = {}
+
+  Object.keys(keyMap).forEach((keyBlockId: string) => {
     const keyBlock = keyMap[keyBlockId]
     const valueBlock = findValueBlock(keyBlock)
 
