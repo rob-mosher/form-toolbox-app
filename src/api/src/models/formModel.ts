@@ -68,7 +68,7 @@ const initFormModel = (sequelize: Sequelize) => {
         values: [
           'analyzing',
           'error',
-          'initialized',
+          'initializing',
           'ready',
           'uploading',
         ],

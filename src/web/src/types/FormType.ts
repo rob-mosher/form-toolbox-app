@@ -3,7 +3,6 @@
 import { FormItemType } from './FormItemType'
 
 export type FormType = {
-  createdAt: Date;
   id: string;
   analysisFolderNameS3?: string;
   createdAt: Date; // TODO also include 'updatedAt'?
@@ -14,7 +13,7 @@ export type FormType = {
   formDetected?: Record<string, FormItemType>;
   isDeleted: boolean;
   pageCount?: number;
-  status: 'analyzing' | 'error' | 'initialized' | 'ready' | 'uploading';
+  status: 'analyzing' | 'error' | 'initializing' | 'ready' | 'uploading';
   templateId?: string;
   textractJobId?: string;
 };
