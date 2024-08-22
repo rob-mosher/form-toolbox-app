@@ -2,12 +2,12 @@
 
 // schema is stored as JSONB (a string, essentially) so use ParsedSchemaType for type checking
 
-export type SchemaFieldType = { // WIP
+export type TSchemaField = { // WIP
   type: 'string' | 'number' | 'boolean' | 'date';
   required: boolean;
 };
 
-export type TemplateType = {
+export type TTemplate = {
   id: string; // uuidv4
   isDeleted: boolean;
   name: string;

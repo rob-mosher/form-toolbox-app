@@ -1,12 +1,12 @@
 import { XMark } from '../assets'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
-import type { FormType } from '../types'
+import type { TForm } from '../types'
 
 type ModalDeleteFormProps = {
-  handleDelete: (formId: FormType['id'] | null) => void;
+  handleDelete: (formId: TForm['id'] | null) => void;
   hideModal: () => void,
-  selectedFormId: FormType['id'] | null,
+  selectedFormId: TForm['id'] | null,
 }
 
 export default function ModalDeleteForm({

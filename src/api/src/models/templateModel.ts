@@ -5,14 +5,14 @@
 import {
   CreationOptional, DataTypes, Model, Sequelize,
 } from 'sequelize'
-import { TemplateType, TemplateCreationAttributes } from '../types'
+import { TTemplate, TTemplateCreationAttributes } from '../types'
 
 // eslint-disable-next-line max-len
-class TemplateModel extends Model<TemplateType, TemplateCreationAttributes> implements TemplateType {
-  public id!: CreationOptional<TemplateType['id']>
-  public isDeleted!: TemplateType['isDeleted']
-  public name!: TemplateType['name']
-  public schema!: TemplateType['schema']
+class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implements TTemplate {
+  public id!: CreationOptional<TTemplate['id']>
+  public isDeleted!: TTemplate['isDeleted']
+  public name!: TTemplate['name']
+  public schema!: TTemplate['schema']
 }
 
 const initTemplateModel = (sequelize: Sequelize) => {

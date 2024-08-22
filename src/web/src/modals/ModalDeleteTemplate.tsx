@@ -3,12 +3,12 @@ import { ReactNode, useEffect, useState } from 'react'
 import { XMark } from '../assets'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
-import type { TemplateType } from '../types'
+import type { TTemplate } from '../types'
 
 type ModalDeleteTemplateProps = {
-  handleDelete: (templateId: TemplateType['id'] | null) => void;
+  handleDelete: (templateId: TTemplate['id'] | null) => void;
   hideModal: () => void,
-  templateId: TemplateType['id'] | null,
+  templateId: TTemplate['id'] | null,
 }
 
 export default function ModalDeleteTemplate({

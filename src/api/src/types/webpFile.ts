@@ -1,4 +1,4 @@
-export interface WebpFileType {
+export interface TWebpFile {
   buffer: Buffer;
   filename: string;
 }

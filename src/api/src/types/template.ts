@@ -1,10 +1,10 @@
 import { Optional } from 'sequelize'
 
-export interface TemplateType {
+export interface TTemplate {
   id: string;
   isDeleted: boolean;
   name: string;
   schema: string; // TODO might need to be more specific
 }
 
-export type TemplateCreationAttributes = Optional<TemplateType, 'id'>
+export type TTemplateCreationAttributes = Optional<TTemplate, 'id'>

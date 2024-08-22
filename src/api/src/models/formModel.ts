@@ -5,21 +5,21 @@
 import {
   CreationOptional, DataTypes, Model, Sequelize,
 } from 'sequelize'
-import { FormType, FormCreationAttributes } from '../types'
+import { TForm, TFormCreationAttributes } from '../types'
 
-class FormModel extends Model<FormType, FormCreationAttributes> implements FormType {
-  public id!: CreationOptional<FormType['id']>
-  public analysisFolderNameS3?: FormType['analysisFolderNameS3']
-  public exportFolderNameS3?: FormType['exportFolderNameS3']
-  public fileName?: FormType['fileName']
-  public fileNameS3?: FormType['fileNameS3']
-  public formDeclared?: FormType['formDeclared']
-  public formDetected?: FormType['formDetected']
-  public isDeleted!: FormType['isDeleted']
-  public pageCount?: FormType['pageCount']
-  public status!: FormType['status']
-  public templateId?: FormType['templateId']
-  public textractJobId?: FormType['textractJobId']
+class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
+  public id!: CreationOptional<TForm['id']>
+  public analysisFolderNameS3?: TForm['analysisFolderNameS3']
+  public exportFolderNameS3?: TForm['exportFolderNameS3']
+  public fileName?: TForm['fileName']
+  public fileNameS3?: TForm['fileNameS3']
+  public formDeclared?: TForm['formDeclared']
+  public formDetected?: TForm['formDetected']
+  public isDeleted!: TForm['isDeleted']
+  public pageCount?: TForm['pageCount']
+  public status!: TForm['status']
+  public templateId?: TForm['templateId']
+  public textractJobId?: TForm['textractJobId']
 }
 
 const initFormModel = (sequelize: Sequelize) => {

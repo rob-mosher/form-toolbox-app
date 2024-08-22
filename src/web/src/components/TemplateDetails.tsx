@@ -1,7 +1,7 @@
-import type { TemplateType } from '../types'
+import type { TTemplate } from '../types'
 
 type TemplateDetailsProps = {
-  template: TemplateType;
+  template: TTemplate;
 }
 
 export default function TemplateDetails({ template }: TemplateDetailsProps) {

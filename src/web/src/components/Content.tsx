@@ -1,10 +1,10 @@
-import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
+import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
 
 type ContentProps = {
   imageUrls: string[];
-  focusedBoundingBox?: BoundingBoxType[];
+  focusedBoundingBox?: TBoundingBox[];
 };
 
 export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentProps) {
@@ -12,7 +12,7 @@ export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentP
   const imageRef = useRef<HTMLImageElement | null>(null)
 
   const getPixelCoordinates = (
-    boundingBox: BoundingBoxType,
+    boundingBox: TBoundingBox,
     imageWidth: number,
     imageHeight: number,
     padding: number = 0,

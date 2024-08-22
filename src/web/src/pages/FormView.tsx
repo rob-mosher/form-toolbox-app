@@ -4,21 +4,21 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import FormDetails from '../components/FormDetails'
 import Heading from '../components/Heading'
-import type { FormType } from '../types'
+import type { TForm } from '../types'
 
 type FormViewParams = {
-  formId: FormType['id']
+  formId: TForm['id']
 }
 
 export default function FormView() {
-  const [form, setForm] = useState<FormType | null>(null)
+  const [form, setForm] = useState<TForm | null>(null)
 
   const { formId } = useParams<FormViewParams>()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
 
   useEffect(() => {
-    axios.get<FormType>(url)
+    axios.get<TForm>(url)
       .then((resp) => {
         setForm(resp.data)
       })

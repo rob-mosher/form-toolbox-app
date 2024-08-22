@@ -8,16 +8,16 @@ import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context/useGlobalState'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
-import type { FormType } from '../types'
+import type { TForm } from '../types'
 
-type FormsListType = FormType & {
+type TFormsList = TForm & {
   template: {
     name: string;
   };
 };
 
 export default function Forms() {
-  const [forms, setForms] = useState<FormsListType[]>([])
+  const [forms, setForms] = useState<TFormsList[]>([])
   const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
 
@@ -37,7 +37,7 @@ export default function Forms() {
       })
   }, [url])
 
-  const handleDelete = (formId: FormType['id'] | null) => {
+  const handleDelete = (formId: TForm['id'] | null) => {
     if (formId === null) {
       // eslint-disable-next-line no-console
       console.warn('Attempted to delete a form with a null ID. No action will be taken.')

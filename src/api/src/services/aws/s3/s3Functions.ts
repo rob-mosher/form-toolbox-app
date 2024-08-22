@@ -8,7 +8,7 @@ import {
 import { fromEnv } from '@aws-sdk/credential-providers'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import dotenv from 'dotenv'
-import { FormItemType } from '../../../types'
+import { TFormItem } from '../../../types'
 import { parseKeyValuePairs } from '../textract/textractFunctions'
 
 dotenv.config()
@@ -79,7 +79,7 @@ async function getObject(commandProps: GetObjectCommandInput): Promise<Buffer> {
 
 async function getAnalysis(analysisFolderNameS3: string): Promise<{
   pageCount: number;
-  formItemsDetected: Record<string, FormItemType>;
+  formItemsDetected: Record<string, TFormItem>;
 }> {
   const key = `${analysisFolderNameS3}/1`
 
@@ -91,7 +91,7 @@ async function getAnalysis(analysisFolderNameS3: string): Promise<{
 
     const analysisResults = JSON.parse(data.toString())
     const pageCount = analysisResults.DocumentMetadata.Pages
-    const formItemsDetected = parseKeyValuePairs(analysisResults) as Record<string, FormItemType>
+    const formItemsDetected = parseKeyValuePairs(analysisResults) as Record<string, TFormItem>
 
     console.log('pageCount', pageCount)
     console.log('formItemsDetected', formItemsDetected)

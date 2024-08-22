@@ -6,10 +6,10 @@ import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context'
 import ModalDeleteTemplate from '../modals/ModalDeleteTemplate'
-import type { TemplateType } from '../types'
+import type { TTemplate } from '../types'
 
 export default function Templates() {
-  const [templates, setTemplates] = useState<TemplateType[]>([])
+  const [templates, setTemplates] = useState<TTemplate[]>([])
   const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
 
@@ -29,7 +29,7 @@ export default function Templates() {
       })
   }, [url])
 
-  const handleDelete = (templateId: TemplateType['id'] | null) => {
+  const handleDelete = (templateId: TTemplate['id'] | null) => {
     if (templateId === null) {
       // eslint-disable-next-line no-console
       console.warn('Attempted to delete a template with a null ID. No action will be taken.')

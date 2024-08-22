@@ -1,4 +1,4 @@
-import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
+import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -6,19 +6,19 @@ import Button from '../components/Button'
 import Divider from '../components/Divider'
 import Heading from '../components/Heading'
 import type {
-  FormItemType, FormType, TemplateType, TemplateOptionType,
+  TForm, TFormItem, TTemplate, TTemplateOption,
 } from '../types'
 
 type EditTabProps = {
-  form: FormType;
-  formId: FormType['id'];
-  schema: TemplateType['schema'] | null;
-  setForm: (newForm: FormType) => void;
-  setSchema: (newSchema: TemplateType['schema']) => void;
-  templates: TemplateOptionType[];
+  form: TForm;
+  formId: TForm['id'];
+  schema: TTemplate['schema'] | null;
+  setForm: (newForm: TForm) => void;
+  setSchema: (newSchema: TTemplate['schema']) => void;
+  templates: TTemplateOption[];
   onBoundingBoxFocus: (boundingBox: {
-    keyBoundingBox: BoundingBoxType,
-    valueBoundingBox: BoundingBoxType,
+    keyBoundingBox: TBoundingBox,
+    valueBoundingBox: TBoundingBox,
   }) => void;
 }
 
@@ -31,7 +31,7 @@ export default function EditTab({
   templates,
   onBoundingBoxFocus,
 }: EditTabProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<FormType['id']>(form?.templateId || '')
+  const [selectedTemplate, setSelectedTemplate] = useState<TForm['id']>(form?.templateId || '')
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const keyBoundingBox = {
@@ -50,13 +50,13 @@ export default function EditTab({
     onBoundingBoxFocus({ keyBoundingBox, valueBoundingBox })
   }
 
-  interface MappedFormItemsType {
-    [key: string]: FormItemType | string;
+  interface TMappedFormItems {
+    [key: string]: TFormItem | string;
   }
 
   const mapDetectedToDeclared = (
     newSchema: string, // wip
-    formItems: MappedFormItemsType,
+    formItems: TMappedFormItems,
   ) => {
     const schemaKeys = Object.keys(JSON.parse(newSchema))
     const newFormDeclared = schemaKeys.reduce((acc, key) => {
@@ -66,7 +66,7 @@ export default function EditTab({
         acc[key] = ''
       }
       return acc
-    }, {} as MappedFormItemsType)
+    }, {} as TMappedFormItems)
 
     return newFormDeclared
   }
@@ -115,7 +115,7 @@ export default function EditTab({
 
       return {
         ...prevForm,
-        formDeclared: updatedFormDeclared as Record<string, FormItemType>,
+        formDeclared: updatedFormDeclared as Record<string, TFormItem>,
       }
     })
   }

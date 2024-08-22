@@ -1,6 +1,6 @@
 // TODO add check that form is ready for editing
 
-import { BoundingBox as BoundingBoxType } from '@aws-sdk/client-textract'
+import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -13,20 +13,20 @@ import { useGlobalState } from '../context/useGlobalState'
 import EditTab from '../tabs/EditTab'
 import InfoTab from '../tabs/InfoTab'
 import type {
-  FormType, TemplateType, TemplateOptionType,
+  TForm, TTemplate, TTemplateOption,
 } from '../types'
 
 type FormEditParams = {
-  formId: FormType['id']
+  formId: TForm['id']
 }
 
 export default function FormEdit() {
-  const [form, setForm] = useState<FormType | null>(null)
-  const [templates, setTemplates] = useState<TemplateOptionType[]>([])
+  const [form, setForm] = useState<TForm | null>(null)
+  const [templates, setTemplates] = useState<TTemplateOption[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schema, setSchema] = useState<TemplateType['schema'] | null>(null)
+  const [schema, setSchema] = useState<TTemplate['schema'] | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
-  const [focusedBoundingBox, setFocusedBoundingBox] = useState<BoundingBoxType[]>([])
+  const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
@@ -45,7 +45,7 @@ export default function FormEdit() {
     const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
 
     // Get templates
-    axios.get<TemplateType[]>(templateApiUrl)
+    axios.get<TTemplate[]>(templateApiUrl)
       .then((resp) => {
         const newTemplates = resp.data.map(({ id, name }) => (
           {
@@ -72,7 +72,7 @@ export default function FormEdit() {
       })
 
     // Get form data
-    axios.get<FormType>(formApiUrl)
+    axios.get<TForm>(formApiUrl)
       .then(async (resp) => {
         const fetchedForm = resp.data
 
@@ -106,8 +106,8 @@ export default function FormEdit() {
   }
 
   const handleBoundingBoxFocus = (boundingBox: {
-    keyBoundingBox: BoundingBoxType,
-    valueBoundingBox: BoundingBoxType,
+    keyBoundingBox: TBoundingBox,
+    valueBoundingBox: TBoundingBox,
   }) => {
     setFocusedBoundingBox([boundingBox.keyBoundingBox, boundingBox.valueBoundingBox])
   }

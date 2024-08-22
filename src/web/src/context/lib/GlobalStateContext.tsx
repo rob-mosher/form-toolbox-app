@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from 'react'
 
-interface GlobalStateContextType {
+interface TGlobalStateContext {
   isContentFullSize: boolean;
   setIsContentFullSize: (value: boolean) => void;
   isModalOpen: boolean,
@@ -11,6 +11,6 @@ interface GlobalStateContextType {
   hideModal: () => void,
 }
 
-const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined)
+const GlobalStateContext = createContext<TGlobalStateContext | undefined>(undefined)
 
 export default GlobalStateContext

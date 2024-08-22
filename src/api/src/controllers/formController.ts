@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
 import { FormModel } from '../models'
-import { FormCreationAttributes } from '../types'
+import { TFormCreationAttributes } from '../types'
 import { createError } from '../utils/error'
 
 dotenv.config()
@@ -10,7 +10,7 @@ const createForm: RequestHandler = async (req, res, next) => {
   try {
     res.locals.form = await FormModel.create({
       status: 'initializing',
-    } as FormCreationAttributes)
+    } as TFormCreationAttributes)
     return next()
   } catch (err) {
     return next(createError({
