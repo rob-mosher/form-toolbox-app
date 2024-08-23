@@ -10,6 +10,10 @@ function parseKeyValuePairs(textractData: TAnalyzeDocumentResponse) {
   const valueMap: Record<string, TBlock> = {}
   const blockMap: Record<string, TBlock> = {}
 
+  function limitDecimalPlaces(n: number, decimalPlaces: number): number {
+    return Number(n.toFixed(decimalPlaces))
+  }
+
   // Build maps for key-value pairs and block IDs
   textractData.Blocks?.forEach((block: TBlock) => {
     const blockId = block.Id!
@@ -45,6 +49,13 @@ function parseKeyValuePairs(textractData: TAnalyzeDocumentResponse) {
 
     if (block.Geometry?.BoundingBox) {
       boundingBox = block.Geometry.BoundingBox
+
+      const decimalPlaces = 6
+
+      boundingBox.Width = limitDecimalPlaces(boundingBox.Width ?? 0, decimalPlaces)
+      boundingBox.Height = limitDecimalPlaces(boundingBox.Height ?? 0, decimalPlaces)
+      boundingBox.Left = limitDecimalPlaces(boundingBox.Left ?? 0, decimalPlaces)
+      boundingBox.Top = limitDecimalPlaces(boundingBox.Top ?? 0, decimalPlaces)
     }
 
     if (block.Relationships) {
