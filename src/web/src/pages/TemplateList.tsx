@@ -8,7 +8,7 @@ import { useGlobalState } from '../context'
 import ModalDeleteTemplate from '../modals/ModalDeleteTemplate'
 import type { TTemplate } from '../types'
 
-export default function Templates() {
+export default function TemplateList() {
   const [templates, setTemplates] = useState<TTemplate[]>([])
   const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()

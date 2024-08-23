@@ -6,12 +6,12 @@ import { createBrowserRouter } from 'react-router-dom'
 import App from './App'
 import ErrorPage from './components/ErrorPage'
 import FormEdit from './pages/FormEdit'
+import FormList from './pages/FormList'
 import FormView from './pages/FormView'
-import Forms from './pages/Forms'
 import Home from './pages/Home'
 import TemplateEdit from './pages/TemplateEdit'
+import TemplateList from './pages/TemplateList'
 import TemplateView from './pages/TemplateView'
-import Templates from './pages/Templates'
 
 export const router = createBrowserRouter([
   {
@@ -19,11 +19,11 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: '/', element: <Home /> },
-      { path: '/forms', element: <Forms /> },
+      { path: '/forms', element: <FormList /> },
       { path: '/forms/:formId', element: <FormView /> },
       { path: '/forms/:formId/edit', element: <FormEdit /> },
       { path: '/forms/:formId/view', element: <FormView /> },
-      { path: '/templates', element: <Templates /> },
+      { path: '/templates', element: <TemplateList /> },
       { path: '/templates/:templateId', element: <TemplateView /> },
       { path: '/templates/:templateId/edit', element: <TemplateEdit /> },
       { path: '/templates/:templateId/view', element: <TemplateView /> },

@@ -1,4 +1,5 @@
 export * from './ChevronDown'
+export * from './CogSixTooth'
 export * from './Cursor'
 export * from './Eye'
 export * from './InformationCircle'

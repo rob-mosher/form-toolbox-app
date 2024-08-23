@@ -16,7 +16,7 @@ type TFormsList = TForm & {
   };
 };
 
-export default function Forms() {
+export default function FormList() {
   const [forms, setForms] = useState<TFormsList[]>([])
   const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
@@ -123,9 +123,9 @@ export default function Forms() {
               <td className='p-3 text-center'>{form.pageCount}</td>
               <td className='max-w-xs truncate p-3'>{form.fileName}</td>
               <td className='max-w-sm truncate p-3'>{form.template?.name}</td>
-              <td className='max-w-[11ch] truncate p-3'>{form.id}</td>
-              <td className='max-w-[11ch] truncate p-3'>{form.textractJobId}</td>
-              <td className='p-3'>{new Date(form.createdAt).toLocaleString()}</td>
+              <td className='max-w-[11ch] truncate p-3 text-gray-500'>{form.id}</td>
+              <td className='max-w-[11ch] truncate p-3 text-gray-500'>{form.textractJobId}</td>
+              <td className='p-3 text-gray-500'>{new Date(form.createdAt).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

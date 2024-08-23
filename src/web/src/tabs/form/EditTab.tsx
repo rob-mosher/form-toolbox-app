@@ -2,12 +2,12 @@ import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Button from '../components/Button'
-import Divider from '../components/Divider'
-import Heading from '../components/Heading'
+import Button from '../../components/Button'
+import Divider from '../../components/Divider'
+import Heading from '../../components/Heading'
 import type {
   TForm, TFormItem, TTemplate, TTemplateOption,
-} from '../types'
+} from '../../types'
 
 type EditTabProps = {
   form: TForm;

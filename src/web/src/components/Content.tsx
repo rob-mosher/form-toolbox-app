@@ -1,13 +1,20 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
+import { formUserHighlightColors, mergeClassName } from '../lib'
+import { TFormUserHighlightKey } from '../types'
 
 type ContentProps = {
   imageUrls: string[];
   focusedBoundingBox?: TBoundingBox[];
+  formUserHighlightKey: TFormUserHighlightKey;
 };
 
-export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentProps) {
+export default function Content({
+  imageUrls,
+  focusedBoundingBox = [],
+  formUserHighlightKey,
+}: ContentProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const imageRef = useRef<HTMLImageElement | null>(null)
 
@@ -49,19 +56,20 @@ export default function Content({ imageUrls, focusedBoundingBox = [] }: ContentP
         rect.setAttribute('y', String(y))
         rect.setAttribute('width', String(width))
         rect.setAttribute('height', String(height))
-        rect.setAttribute('class', 'stroke-yellow-400/40 fill-yellow-400/30 fill-opacity-30 stroke-2 transition-opacity duration-300 ease-in-out')
+        rect.setAttribute('class', formUserHighlightColors[formUserHighlightKey].className)
 
         svg.appendChild(rect)
       })
     }
-  }, [focusedBoundingBox, imageUrls])
+  }, [focusedBoundingBox, formUserHighlightKey, imageUrls])
 
   return (
     <div className='flex size-full flex-col items-center justify-start'>
       {/* Below needed for 'sticky' to remain */}
-      <div className='w-full'>
+      <div className='flex w-full grow flex-col'>
         <ContentToolbar />
-        <div className='flex w-full flex-col gap-12 border-r border-r-stone-300 bg-gray-100 p-12'>
+        {/* w-full _might_ be needed */}
+        <div className='flex grow flex-col justify-center gap-12 border-r p-12'>
           {imageUrls.map((url, index) => {
             const pageNumber = index + 1 // Pages are 1-indexed
             return (

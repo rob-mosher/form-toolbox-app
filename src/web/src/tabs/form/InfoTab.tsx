@@ -1,5 +1,5 @@
-import FormDetails from '../components/FormDetails'
-import type { TForm } from '../types'
+import FormDetails from '../../components/FormDetails'
+import type { TForm } from '../../types'
 
 type InfoTabProps = {
   form: TForm

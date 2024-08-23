@@ -2,18 +2,20 @@
 
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { InformationCircle, PencilSquare } from '../assets'
+import { CogSixTooth, InformationCircle, PencilSquare } from '../assets'
 import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { useGlobalState } from '../context/useGlobalState'
-import EditTab from '../tabs/EditTab'
-import InfoTab from '../tabs/InfoTab'
+import { formUserBgColors, formUserHighlightColors, mergeClassName } from '../lib'
+import EditTab from '../tabs/form/EditTab'
+import InfoTab from '../tabs/form/InfoTab'
+import SettingsTab from '../tabs/form/SettingsTab'
 import type {
-  TForm, TTemplate, TTemplateOption,
+  TFormUserBgKeys, TFormUserHighlightKey, TForm, TTemplate, TTemplateOption,
 } from '../types'
 
 type FormEditParams = {
@@ -21,15 +23,47 @@ type FormEditParams = {
 }
 
 export default function FormEdit() {
-  const [form, setForm] = useState<TForm | null>(null)
-  const [templates, setTemplates] = useState<TTemplateOption[]>([])
-  const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schema, setSchema] = useState<TTemplate['schema'] | null>(null)
   const [activeTab, setActiveTab] = useState('edit')
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
+  const [form, setForm] = useState<TForm | null>(null)
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [schema, setSchema] = useState<TTemplate['schema'] | null>(null)
+  const [templates, setTemplates] = useState<TTemplateOption[]>([])
+
+  const [formUserBgKey, setFormUserBgKey] = useState<TFormUserBgKeys>(() => {
+    const storedFormUserBgKey = localStorage.getItem('formUserBgKey')
+    return storedFormUserBgKey && formUserBgColors[storedFormUserBgKey] ? storedFormUserBgKey : 'mediumGray'
+  })
+
+  const [formUserHighlightKey, setFormUserHighlightKey] = useState<TFormUserHighlightKey>(() => {
+    const storedFormUserHighlightKey = localStorage.getItem('formUserHighlightKey')
+    return storedFormUserHighlightKey && formUserHighlightColors[storedFormUserHighlightKey] ? storedFormUserHighlightKey : 'yellow'
+  })
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
+
+  const updateFormUserBgKey = useCallback(
+    (newFormUserBgKey: TFormUserBgKeys) => {
+      if (newFormUserBgKey && formUserBgColors[newFormUserBgKey]) {
+        setFormUserBgKey(newFormUserBgKey)
+      } else {
+        console.log('Invalid formUserBgKey:', newFormUserBgKey)
+      }
+    },
+    [setFormUserBgKey],
+  )
+
+  const updateFormUserHighlightKey = useCallback(
+    (newFormUserHighlightKey: TFormUserHighlightKey) => {
+      if (newFormUserHighlightKey && formUserHighlightColors[newFormUserHighlightKey]) {
+        setFormUserHighlightKey(newFormUserHighlightKey)
+      } else {
+        console.log('Invalid formUserHighlightKey:', newFormUserHighlightKey)
+      }
+    },
+    [setFormUserHighlightKey],
+  )
 
   useEffect(() => {
     // Enable full-size content mode when this component mounts
@@ -38,6 +72,14 @@ export default function FormEdit() {
     // Disable full-size content mode when this component unmounts
     return () => setIsContentFullSize(false)
   }, [setIsContentFullSize])
+
+  useEffect(() => {
+    localStorage.setItem('formUserBgKey', formUserBgKey)
+  }, [formUserBgKey])
+
+  useEffect(() => {
+    localStorage.setItem('formUserHighlightKey', formUserHighlightKey)
+  }, [formUserHighlightKey])
 
   useEffect(() => {
     const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
@@ -115,6 +157,7 @@ export default function FormEdit() {
   const tabs = [
     { key: 'edit', content: 'Edit', icon: <PencilSquare /> },
     { key: 'info', content: 'Info', icon: <InformationCircle /> },
+    { key: 'settings', content: 'Settings', icon: <CogSixTooth /> },
   ]
 
   let tabContent
@@ -135,6 +178,20 @@ export default function FormEdit() {
     case 'info':
       tabContent = <InfoTab form={form} />
       break
+
+    case 'settings':
+
+      tabContent = (
+        <SettingsTab
+          // TODO match chosen color and style accordingly
+          // formUserBgKey={formUserBgKey}
+          // formUserHighlightKey={formUserHighlightKey}
+          updateFormUserBgKey={updateFormUserBgKey}
+          updateFormUserHighlightKey={updateFormUserHighlightKey}
+        />
+      )
+      break
+
     default:
       // eslint-disable-next-line no-console
       console.warn(`Invalid tab '${activeTab}'`)
@@ -148,9 +205,14 @@ export default function FormEdit() {
   return (
     <div className='flex h-full'>
       <div className='grid w-full grid-cols-12 gap-3'>
-        <div className='col-span-9 overflow-y-scroll'>
+        <div className={mergeClassName(
+          'col-span-9 overflow-y-scroll shadow-inner',
+          formUserBgColors[formUserBgKey].className,
+        )}
+        >
           <Content
             focusedBoundingBox={focusedBoundingBox}
+            formUserHighlightKey={formUserHighlightKey}
             imageUrls={imageUrls}
           />
         </div>
