@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import sharp from 'sharp'
 import path from 'path'
-import { TWebpFile } from '../types'
+import type { TWebpFile } from '../types'
 
 const convertToWebp: RequestHandler = async (req, res, next) => {
   if (!req.file) return next(new Error('No file provided'))

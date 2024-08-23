@@ -1,6 +1,6 @@
 // ensure this file is synchronized with ../../../api/src/types/
 
-import { TFormItem } from './formItem'
+import type { TFormItem } from './formItem'
 
 export type TForm = {
   id: string;

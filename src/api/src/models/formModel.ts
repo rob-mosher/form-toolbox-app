@@ -5,7 +5,7 @@
 import {
   CreationOptional, DataTypes, Model, Sequelize,
 } from 'sequelize'
-import { TForm, TFormCreationAttributes } from '../types'
+import type { TForm, TFormCreationAttributes } from '../types'
 
 class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
   public id!: CreationOptional<TForm['id']>

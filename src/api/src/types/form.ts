@@ -1,5 +1,5 @@
 import { Optional } from 'sequelize'
-import { TFormItem } from './formItem'
+import type { TFormItem } from './formItem'
 
 export interface TForm {
   id: string;

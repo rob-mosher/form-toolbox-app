@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
 import { putObject } from '../services/aws/s3/s3Functions'
-import { TWebpFile } from '../types'
+import type { TWebpFile } from '../types'
 import { createError } from '../utils/error'
 
 dotenv.config()

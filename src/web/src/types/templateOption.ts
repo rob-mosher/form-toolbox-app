@@ -1,4 +1,4 @@
-import { TTemplate } from './template'
+import type { TTemplate } from './template'
 
 export type TTemplateOption = {
   key: TTemplate['id'];

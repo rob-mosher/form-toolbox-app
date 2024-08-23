@@ -5,7 +5,7 @@
 import {
   CreationOptional, DataTypes, Model, Sequelize,
 } from 'sequelize'
-import { TTemplate, TTemplateCreationAttributes } from '../types'
+import type { TTemplate, TTemplateCreationAttributes } from '../types'
 
 // eslint-disable-next-line max-len
 class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implements TTemplate {

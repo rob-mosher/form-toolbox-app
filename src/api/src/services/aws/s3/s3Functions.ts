@@ -8,7 +8,7 @@ import {
 import { fromEnv } from '@aws-sdk/credential-providers'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import dotenv from 'dotenv'
-import { TFormItem } from '../../../types'
+import type { TFormItem } from '../../../types'
 import { parseKeyValuePairs } from '../textract/textractFunctions'
 
 dotenv.config()
