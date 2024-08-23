@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import HeaderButton from './HeaderButton'
-import { MagnifyingGlass } from '../assets'
+import { MagnifyingGlass, ScrewdriverWrench } from '../assets'
 
 function Header() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -11,16 +11,30 @@ function Header() {
   return (
     <header className='fixed z-50 flex w-full justify-between border-b-2 border-b-gray-200 bg-white px-6 py-3'>
 
-      <nav className='flex items-center gap-12'>
-        <Link to='/'>
-          <span>Home</span>
-        </Link>
-        <Link to='/forms'>
+      <nav className='flex items-center gap-12 text-gray-500'>
+        <NavLink
+          to='/'
+          className={({ isActive }) => (isActive ? 'text-blue-700 ' : undefined)}
+          end
+        >
+          <div className='flex items-center justify-center'>
+            <ScrewdriverWrench className='mr-4 size-7 text-blue-500' />
+            {' '}
+            Home
+          </div>
+        </NavLink>
+        <NavLink
+          to='/forms'
+          className={({ isActive }) => (isActive ? 'text-blue-700' : undefined)}
+        >
           Forms
-        </Link>
-        <Link to='/templates'>
+        </NavLink>
+        <NavLink
+          to='/templates'
+          className={({ isActive }) => (isActive ? 'text-blue-700' : undefined)}
+        >
           Templates
-        </Link>
+        </NavLink>
         <HeaderButton />
       </nav>
 
