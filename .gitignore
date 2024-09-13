@@ -13,9 +13,6 @@ coverage/
 # Dependencies
 node_modules/
 
-# Package managers
-package-lock.json
-
 # Terraform
 *.tfstate
 *.tfstate.backup
