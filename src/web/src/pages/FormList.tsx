@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
+import CommonButtons from '../components/CommonButtons'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context/useGlobalState'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
@@ -130,6 +131,15 @@ export default function FormList() {
           ))}
         </tbody>
       </table>
+      {(!forms || !Array.isArray(forms) || forms.length < 1) && (
+        <div className='mb-6 flex size-full flex-col items-center justify-center gap-3 border border-gray-300 bg-gray-200 shadow-inner'>
+          <Heading as='h2'>No Forms Found</Heading>
+          <CommonButtons
+            text='Upload New Form'
+            variant='newForm'
+          />
+        </div>
+      )}
     </>
   )
 }
