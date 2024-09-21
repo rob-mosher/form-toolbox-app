@@ -15,7 +15,7 @@ import EditTab from '../tabs/form/EditTab'
 import InfoTab from '../tabs/form/InfoTab'
 import SettingsTab from '../tabs/form/SettingsTab'
 import type {
-  TFormUserBgKeys, TFormUserHighlightKey, TForm, TTemplate, TTemplateOption,
+  TForm, TFormUserBgKeys, TFormUserHighlightKey, TTab, TTemplate, TTemplateOption,
 } from '../types'
 
 type FormEditParams = {
@@ -48,6 +48,7 @@ export default function FormEdit() {
       if (newFormUserBgKey && formUserBgColors[newFormUserBgKey]) {
         setFormUserBgKey(newFormUserBgKey)
       } else {
+        // eslint-disable-next-line no-console
         console.log('Invalid formUserBgKey:', newFormUserBgKey)
       }
     },
@@ -59,6 +60,7 @@ export default function FormEdit() {
       if (newFormUserHighlightKey && formUserHighlightColors[newFormUserHighlightKey]) {
         setFormUserHighlightKey(newFormUserHighlightKey)
       } else {
+        // eslint-disable-next-line no-console
         console.log('Invalid formUserHighlightKey:', newFormUserHighlightKey)
       }
     },
@@ -155,10 +157,10 @@ export default function FormEdit() {
     setFocusedBoundingBox([boundingBox.keyBoundingBox, boundingBox.valueBoundingBox])
   }
 
-  const tabs = [
-    { key: 'edit', content: 'Edit', icon: <PencilSquare /> },
-    { key: 'info', content: 'Info', icon: <InformationCircle /> },
-    { key: 'settings', content: 'Settings', icon: <CogSixTooth /> },
+  const tabs: TTab[] = [
+    { id: 'edit', content: 'Edit', icon: <PencilSquare /> },
+    { id: 'info', content: 'Info', icon: <InformationCircle /> },
+    { id: 'settings', content: 'Settings', icon: <CogSixTooth /> },
   ]
 
   let tabContent

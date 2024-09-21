@@ -1,14 +1,9 @@
 import { mergeClassName } from '../lib'
-
-type Tab = {
-  key: string;
-  content: string;
-  icon?: React.ReactNode;
-};
+import type { TTab } from '../types'
 
 type TabProps = {
-  tabs: Tab[];
-  onTabChange: (key: string) => void;
+  tabs: TTab[];
+  onTabChange: (id: string) => void;
   activeTab: string;
 };
 
@@ -18,11 +13,11 @@ export default function Tab({ tabs, onTabChange, activeTab }: TabProps) {
       {tabs.map((tab) => (
         <button
           type='button'
-          key={tab.key}
-          onClick={() => onTabChange(tab.key)}
+          key={tab.id}
+          onClick={() => onTabChange(tab.id)}
           className={mergeClassName(
             'relative top-[1px] flex items-center z-10 px-6 text-sm h-9 border border-x-gray-300 border-t-gray-300 rounded-t-lg',
-            activeTab === tab.key
+            activeTab === tab.id
               ? 'bg-white border-b-transparent font-semibold'
               : 'bg-gray-50 hover:text-gray-700',
           )}
