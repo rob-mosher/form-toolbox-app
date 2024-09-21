@@ -1,10 +1,12 @@
+import { FormEvent } from 'react'
 import {
   ChevronDown, Cursor, MagnifyingGlass, MagnifyingGlassMinus, MagnifyingGlassPlus,
 } from '../assets'
 
 export default function ContentToolbar() {
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    // eslint-disable-next-line no-console
     console.log('Form search awaiting implementation.')
   }
 

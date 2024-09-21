@@ -1,7 +1,7 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
-import { formUserHighlightColors, mergeClassName } from '../lib'
+import { formUserHighlightColors } from '../lib'
 import { TFormUserHighlightKey } from '../types'
 
 type ContentProps = {
@@ -65,7 +65,7 @@ export default function Content({
 
   return (
     <div className='flex size-full flex-col items-center justify-start'>
-      {/* Below needed for 'sticky' to remain */}
+      {/* Below needed for 'sticky' to remain within ContentToolbar */}
       <div className='flex w-full grow flex-col'>
         <ContentToolbar />
         {/* w-full _might_ be needed */}

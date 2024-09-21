@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect, useRef, useState, FormEvent,
+} from 'react'
 import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
@@ -33,7 +35,7 @@ export default function ModalUploadForm({
       })
   }, [])
 
-  function handleUpload(e: React.FormEvent<HTMLFormElement>) {
+  function handleUpload(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     setIsUploading(true)

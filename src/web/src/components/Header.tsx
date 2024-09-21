@@ -1,10 +1,12 @@
+import { FormEvent } from 'react'
 import { NavLink } from 'react-router-dom'
 import HeaderButton from './HeaderButton'
 import { MagnifyingGlass, ScrewdriverWrench } from '../assets'
 
 function Header() {
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    // eslint-disable-next-line no-console
     console.log('NavBar search awaiting implementation.')
   }
 
