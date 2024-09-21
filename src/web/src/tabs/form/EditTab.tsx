@@ -6,15 +6,15 @@ import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
 import type {
-  TForm, TFormItem, TTemplate, TTemplateOption,
+  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption,
 } from '../../types'
 
 type EditTabProps = {
   form: TForm;
   formId: TForm['id'];
-  schema: TTemplate['schema'] | null;
+  schemaJSON: TTemplate['schemaJSON'] | null;
   setForm: (newForm: TForm) => void;
-  setSchema: (newSchema: TTemplate['schema']) => void;
+  setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
   templates: TTemplateOption[];
   onBoundingBoxFocus: (boundingBox: {
     keyBoundingBox: TBoundingBox,
@@ -25,9 +25,9 @@ type EditTabProps = {
 export default function EditTab({
   form,
   formId,
-  schema,
+  schemaJSON,
   setForm,
-  setSchema,
+  setSchemaJSON,
   templates,
   onBoundingBoxFocus,
 }: EditTabProps) {
@@ -55,11 +55,11 @@ export default function EditTab({
   }
 
   const mapDetectedToDeclared = (
-    newSchema: string, // wip
+    newSchemaJSON: TTemplate['schemaJSON'],
     formItems: TMappedFormItems,
   ) => {
-    const schemaKeys = Object.keys(JSON.parse(newSchema))
-    const newFormDeclared = schemaKeys.reduce((acc, key) => {
+    const schemaJSONKeys = Object.keys(JSON.parse(newSchemaJSON))
+    const newFormDeclared = schemaJSONKeys.reduce((acc, key) => {
       if (key in formItems) {
         acc[key] = formItems[key]
       } else {
@@ -78,12 +78,12 @@ export default function EditTab({
 
       const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
       const response = await axios.get(getTemplateDataUrl)
-      const newSchema = response.data[0].schema
+      const newSchemaJSON = response.data[0].schemaJSON
 
-      setSchema(newSchema)
+      setSchemaJSON(newSchemaJSON)
       setForm((prevForm) => {
         // Since handleApply is user-initiated, map formDetected to formDeclared, overwriting values
-        const mappedFormDeclared = mapDetectedToDeclared(newSchema, prevForm.formDetected)
+        const mappedFormDeclared = mapDetectedToDeclared(newSchemaJSON, prevForm.formDetected)
 
         return {
           ...prevForm,
@@ -155,8 +155,8 @@ export default function EditTab({
     </>
   )
 
-  const formRows = schema ? (
-    Object.entries(JSON.parse(schema)).map(([key, value]) => {
+  const formRows = schemaJSON ? (
+    Object.entries(JSON.parse(schemaJSON) as Record<string, TSchemaField>).map(([key, value]) => {
       const formItem = form?.formDeclared?.[key]
       const inputValue = formItem?.value || ''
       const keyBoundingBox = formItem?.keyBoundingBox

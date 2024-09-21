@@ -12,7 +12,7 @@ class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implem
   public id!: CreationOptional<TTemplate['id']>
   public isDeleted!: TTemplate['isDeleted']
   public name!: TTemplate['name']
-  public schema!: TTemplate['schema']
+  public schemaJSON!: TTemplate['schemaJSON']
 }
 
 const initTemplateModel = (sequelize: Sequelize) => {
@@ -32,7 +32,7 @@ const initTemplateModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      schema: {
+      schemaJSON: {
         type: DataTypes.JSONB,
         allowNull: false,
       },

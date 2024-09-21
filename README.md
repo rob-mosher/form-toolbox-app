@@ -133,7 +133,7 @@ erDiagram
     UUID id PK "Primary Key"
     BOOLEAN isDeleted "For soft-delete"
     STRING name
-    JSONB schema "Contains the custom schema that each Template utilizes, adhered to by each Form"
+    JSONB schemaJSON "Contains the custom schema that each Template utilizes, adhered to by each Form"
   }
 
 Template ||--o{ Form : "has many"

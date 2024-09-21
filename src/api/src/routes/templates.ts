@@ -23,7 +23,7 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
 
   try {
     const template = await TemplateModel.findAll({
-      attributes: ['id', 'name', 'schema'],
+      attributes: ['id', 'name', 'schemaJSON'],
       where: {
         id,
       },

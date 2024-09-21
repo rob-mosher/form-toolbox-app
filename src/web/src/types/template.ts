@@ -1,8 +1,7 @@
-// ensure this file is synchronized with ../../../api/src/types/
+// NOTE: ensure TTemplate is synchronized with synchronized with ../../../api/src/types/
 
-// schema is stored as JSONB (a string, essentially) so use ParsedSchemaType for type checking
-
-export type TSchemaField = { // WIP
+// TSchemaField is used to validate the structure being converted into schemaJSON.
+export type TSchemaField = {
   type: 'string' | 'number' | 'boolean' | 'date';
   required: boolean;
 };
@@ -11,5 +10,6 @@ export type TTemplate = {
   id: string; // uuidv4
   isDeleted: boolean;
   name: string;
-  schema: string; // NOTE: see above
+  // schemaJSON is stored as JSONB, which is essentially a string of JSON data.
+  schemaJSON: string;
 }

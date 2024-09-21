@@ -27,7 +27,7 @@ export default function FormEdit() {
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
   const [form, setForm] = useState<TForm | null>(null)
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schema, setSchema] = useState<TTemplate['schema'] | null>(null)
+  const [schemaJSON, setSchemaJSON] = useState<TTemplate['schemaJSON'] | null>(null)
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
 
   const [formUserBgKey, setFormUserBgKey] = useState<TFormUserBgKeys>(() => {
@@ -118,19 +118,20 @@ export default function FormEdit() {
       .then(async (resp) => {
         const fetchedForm = resp.data
 
-        // If templateId is set, set the schema
+        // If templateId is set, set the schemaJSON
         if (fetchedForm.templateId) {
           try {
-            const schemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
-            setSchema(schemaResponse.data[0].schema)
+            const schemaJSONResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
+            setSchemaJSON(schemaJSONResponse.data[0].schemaJSON)
           } catch (error) {
             // eslint-disable-next-line no-console
-            console.error('Error fetching schema:', error)
+            console.error('Error fetching schemaJSON:', error)
           }
         }
 
-        // It should be fine to setForm before setSchema due to how React works, but it seems more
-        // clear to setSchema first, since setForm's formDeclared depends on schema to exist upon.
+        // It should be fine to setForm before setSchemaJSON due to how React works, but it seems
+        // more clear to setSchemaJSON first, since setForm's formDeclared depends on schemaJSON to
+        // exist upon.
         setForm(fetchedForm)
       })
       .catch((error) => {
@@ -167,9 +168,9 @@ export default function FormEdit() {
         <EditTab
           form={form}
           formId={formId!} // regarding '!', formId is part of the URL via useParams
-          schema={schema}
+          schemaJSON={schemaJSON}
           setForm={setForm}
-          setSchema={setSchema}
+          setSchemaJSON={setSchemaJSON}
           templates={templates}
           onBoundingBoxFocus={handleBoundingBoxFocus}
         />
