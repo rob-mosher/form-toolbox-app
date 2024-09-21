@@ -7,18 +7,20 @@ module.exports = {
   extends: [
     'airbnb',
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:tailwindcss/recommended',
     'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:tailwindcss/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs','tailwind.config.js'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'tailwind.config.js'],
   parser: '@typescript-eslint/parser',
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+  parserOptions: {
+    ecmaVersion: 'latest', sourceType: 'module',
+  },
   settings: {
     react: { version: '18.2' },
     'import/resolver': {
@@ -31,22 +33,13 @@ module.exports = {
     {
       files: ["*.ts", "*.tsx"],
       rules: {
-        "react/require-default-props": "off"
-      }
-    }
+        'react/require-default-props': 'off',
+      },
+    },
   ],
   plugins: ['react-refresh'],
   rules: {
-    'comma-dangle': [
-      'error',
-      {
-        arrays: 'always-multiline',
-        objects: 'always-multiline',
-        imports: 'always-multiline',
-        exports: 'always-multiline',
-        functions: 'always-multiline',
-      },
-    ],
+    'comma-dangle': ['error', 'always-multiline'],
     'import/extensions': 'off',
     'import/order': [
       'warn',
@@ -57,14 +50,14 @@ module.exports = {
           'internal',
           'sibling',
           'parent',
-          'index'
+          'index',
         ],
         'newlines-between': 'never',
         'alphabetize': {
           'order': 'asc',
-          'caseInsensitive': false
-        }
-      }
+          'caseInsensitive': false,
+        },
+      },
     ],
     'jsx-a11y/label-has-associated-control': ['warn'],
     'jsx-quotes': ['error', 'prefer-single'],
