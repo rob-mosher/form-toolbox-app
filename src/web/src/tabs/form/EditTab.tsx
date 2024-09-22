@@ -31,7 +31,7 @@ export default function EditTab({
   templates,
   onBoundingBoxFocus,
 }: EditTabProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<TForm['id']>(form?.templateId || '')
+  const [selectedTemplate, setSelectedTemplate] = useState<TForm['templateId']>(form?.templateId || '')
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const keyBoundingBox = {
@@ -87,8 +87,8 @@ export default function EditTab({
 
         return {
           ...prevForm,
-          formTemplateId: selectedTemplate,
-          formDeclared: mappedFormDeclared,
+          formDeclared: mappedFormDeclared as Record<string, TFormItem>,
+          templateId: selectedTemplate,
         }
       })
       // toast.success('Template updated successfully.')
