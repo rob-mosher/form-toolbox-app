@@ -7,7 +7,6 @@ import {
 } from 'sequelize'
 import type { TTemplate, TTemplateCreationAttributes } from '../types'
 
-// eslint-disable-next-line max-len
 class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implements TTemplate {
   public id!: CreationOptional<TTemplate['id']>
   public isDeleted!: TTemplate['isDeleted']
