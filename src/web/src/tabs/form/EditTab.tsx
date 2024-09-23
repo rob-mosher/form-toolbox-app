@@ -1,6 +1,6 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
@@ -13,7 +13,10 @@ type EditTabProps = {
   form: TForm;
   formId: TForm['id'];
   schemaJSON: TTemplate['schemaJSON'] | null;
-  setForm: (newForm: TForm) => void;
+  // setForm accepts `null` to match the type from FormEdit where the form state starts as null
+  // while data is being fetched. In this component, setForm is safely used with non-null
+  // assertions because the logic to update the form is only executed once the form is loaded.
+  setForm: Dispatch<SetStateAction<TForm | null>>;
   setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
   templates: TTemplateOption[];
   onBoundingBoxFocus: (boundingBox: {
@@ -82,11 +85,17 @@ export default function EditTab({
 
       setSchemaJSON(newSchemaJSON)
       setForm((prevForm) => {
+        // Non-null assertion is safe here because handleApply is only called after form is loaded.
+        const nonNullPrevForm = prevForm!
+
         // Since handleApply is user-initiated, map formDetected to formDeclared, overwriting values
-        const mappedFormDeclared = mapDetectedToDeclared(newSchemaJSON, prevForm.formDetected)
+        const mappedFormDeclared = mapDetectedToDeclared(
+          newSchemaJSON,
+          nonNullPrevForm.formDetected!,
+        )
 
         return {
-          ...prevForm,
+          ...nonNullPrevForm,
           formDeclared: mappedFormDeclared as Record<string, TFormItem>,
           templateId: selectedTemplate,
         }
@@ -105,16 +114,20 @@ export default function EditTab({
 
   const handleChangeFormData = (key: string, value: string) => {
     setForm((prevForm) => {
+      // Non-null assertion is safe here because handleChangeFormData is only called after form is
+      // loaded.
+      const nonNullPrevForm = prevForm!
+
       const updatedFormDeclared = {
-        ...prevForm.formDeclared,
+        ...nonNullPrevForm.formDeclared,
         [key]: {
-          ...prevForm.formDeclared?.[key],
+          ...nonNullPrevForm.formDeclared?.[key],
           value,
         },
       }
 
       return {
-        ...prevForm,
+        ...nonNullPrevForm,
         formDeclared: updatedFormDeclared as Record<string, TFormItem>,
       }
     })
