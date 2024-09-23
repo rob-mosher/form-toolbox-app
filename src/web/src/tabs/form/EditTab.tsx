@@ -84,7 +84,7 @@ export default function EditTab({
       const newSchemaJSON = response.data[0].schemaJSON
 
       setSchemaJSON(newSchemaJSON)
-      setForm((prevForm) => {
+      setForm((prevForm): TForm => {
         // Non-null assertion is safe here because handleApply is only called after form is loaded.
         const nonNullPrevForm = prevForm!
 
@@ -113,7 +113,7 @@ export default function EditTab({
   }
 
   const handleChangeFormData = (key: string, value: string) => {
-    setForm((prevForm) => {
+    setForm((prevForm): TForm => {
       // Non-null assertion is safe here because handleChangeFormData is only called after form is
       // loaded.
       const nonNullPrevForm = prevForm!
