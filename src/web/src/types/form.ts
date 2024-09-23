@@ -1,11 +1,11 @@
-// ensure this file is synchronized with ../../../api/src/types/
+// ensure this file is 'synchronized' with ../../../api/src/types/
 
 import type { TFormItem } from './formItem'
 
 export type TForm = {
   id: string;
   analysisFolderNameS3?: string;
-  createdAt: Date; // TODO also include 'updatedAt'?
+  createdAt: Date; // unlike API, non-optional since record now exists
   exportFolderNameS3?: string;
   fileName?: string;
   fileNameS3?: string;
@@ -16,4 +16,5 @@ export type TForm = {
   status: 'analyzing' | 'error' | 'initializing' | 'ready' | 'uploading';
   templateId?: string;
   textractJobId?: string;
+  updatedAt: Date; // unlike API, non-optional since record now exists
 };

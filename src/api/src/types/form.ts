@@ -1,9 +1,12 @@
+// ensure this file is 'synchronized' with ../../../web/src/types/
+
 import { Optional } from 'sequelize'
 import type { TFormItem } from './formItem'
 
 export interface TForm {
   id: string;
   analysisFolderNameS3?: string;
+  createdAt?: Date; // Optional since it's set after creation
   exportFolderNameS3?: string;
   fileName?: string;
   fileNameS3?: string;
@@ -14,6 +17,7 @@ export interface TForm {
   status: 'analyzing' | 'error' | 'initializing' | 'ready' | 'uploading';
   templateId?: string;
   textractJobId?: string;
+  updatedAt?: Date; // Optional since it's set after creation
 }
 
 // Sequelize provides the `id` automatically as a primary key during record creation.
