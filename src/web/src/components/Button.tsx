@@ -35,7 +35,6 @@ export default function Button({
         positive && !disabled && 'hover:bg-green-500',
         negative && 'bg-red-600 text-white',
         negative && !disabled && 'hover:bg-red-500',
-        disabled && 'cursor-grab',
       )}
       disabled={disabled}
       id={id}
