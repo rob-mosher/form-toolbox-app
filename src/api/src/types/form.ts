@@ -6,7 +6,7 @@ import type { TFormItem } from './formItem'
 export interface TForm {
   id: string;
   analysisFolderNameS3?: string;
-  createdAt?: Date; // Optional since it's set after creation
+  createdAt: Date;
   exportFolderNameS3?: string;
   fileName?: string;
   fileNameS3?: string;
@@ -17,10 +17,10 @@ export interface TForm {
   status: 'analyzing' | 'error' | 'initializing' | 'ready' | 'uploading';
   templateId?: string;
   textractJobId?: string;
-  updatedAt?: Date; // Optional since it's set after creation
+  updatedAt: Date;
 }
 
 // Sequelize provides the `id` automatically as a primary key during record creation.
 // The `isDeleted` field is non-optional in the model but has a default value of `false`
 // which Sequelize applies automatically if not provided during instantiation.
-export type TFormCreationAttributes = Optional<TForm, 'id' | 'isDeleted'>;
+export type TFormCreationAttributes = Optional<TForm, 'createdAt' | 'id' | 'isDeleted' | 'updatedAt'>;

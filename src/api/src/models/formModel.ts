@@ -20,6 +20,12 @@ class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
   public status!: TForm['status']
   public templateId?: TForm['templateId']
   public textractJobId?: TForm['textractJobId']
+
+  // `readonly` from the perspective of the application layer. These fields are automatically
+  // managed by Sequelize during related transactions and should not be manually modified in the
+  // code.
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 const initFormModel = (sequelize: Sequelize) => {
@@ -33,6 +39,11 @@ const initFormModel = (sequelize: Sequelize) => {
       analysisFolderNameS3: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       exportFolderNameS3: {
         type: DataTypes.STRING,
@@ -86,10 +97,17 @@ const initFormModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
       modelName: 'Forms',
+      // 'timestamps' ensures Sequelize handles `createdAt` and `updatedAt`
+      timestamps: true,
     },
   )
 
