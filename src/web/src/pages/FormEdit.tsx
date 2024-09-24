@@ -1,9 +1,7 @@
-// TODO add check that form is ready for editing
-
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CogSixTooth, InformationCircle, PencilSquare } from '../assets'
 import Content from '../components/Content'
@@ -42,6 +40,7 @@ export default function FormEdit() {
 
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
+  const navigate = useNavigate()
 
   const updateFormUserBgKey = useCallback(
     (newFormUserBgKey: TFormUserBgKeys) => {
@@ -120,6 +119,15 @@ export default function FormEdit() {
       .then(async (resp) => {
         const fetchedForm = resp.data
 
+        if (resp.data.status !== 'ready') {
+          // NOTE renders twice when in dev strict mode
+          toast.warning('Form is not ready for editing', {
+            autoClose: 5000,
+          })
+          navigate('/forms')
+          return
+        }
+
         // If templateId is set, set the schemaJSON
         if (fetchedForm.templateId) {
           try {
@@ -183,7 +191,6 @@ export default function FormEdit() {
       break
 
     case 'settings':
-
       tabContent = (
         <SettingsTab
           // TODO match chosen color and style accordingly
