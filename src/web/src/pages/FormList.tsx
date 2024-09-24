@@ -98,6 +98,7 @@ export default function FormList() {
                 <span className='flex items-center justify-center gap-1'>
                   <button
                     aria-label='View Form'
+                    className='hover:text-sky-600'
                     onClick={() => navigate(`/forms/${form.id}`)}
                     type='button'
                   >
@@ -105,13 +106,23 @@ export default function FormList() {
                   </button>
                   <button
                     aria-label='Edit form'
-                    onClick={() => navigate(`/forms/${form.id}/edit`)}
+                    className={
+                      form.status === 'ready'
+                        ? 'hover:text-sky-600'
+                        : 'cursor-default text-gray-300'
+                    }
+                    onClick={
+                      form.status === 'ready'
+                        ? () => navigate(`/forms/${form.id}/edit`)
+                        : undefined
+                    }
                     type='button'
                   >
                     <PencilSquare />
                   </button>
                   <button
                     aria-label='Delete form'
+                    className='hover:text-red-500'
                     onClick={() => handleModalForDelete(form.id)}
                     type='button'
                   >

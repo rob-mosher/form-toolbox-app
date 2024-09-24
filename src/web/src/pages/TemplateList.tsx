@@ -84,6 +84,7 @@ export default function TemplateList() {
                 <span className='flex items-center justify-center gap-1'>
                   <button
                     aria-label='View template'
+                    className='hover:text-sky-600'
                     onClick={() => navigate(`/templates/${template.id}`)}
                     type='button'
                   >
@@ -91,6 +92,7 @@ export default function TemplateList() {
                   </button>
                   <button
                     aria-label='Edit template'
+                    className='hover:text-sky-600'
                     onClick={() => navigate(`/templates/${template.id}/edit`)}
                     type='button'
                   >
@@ -98,6 +100,7 @@ export default function TemplateList() {
                   </button>
                   <button
                     aria-label='Delete template'
+                    className='hover:text-red-500'
                     onClick={() => handleModalForDelete(template.id)}
                     type='button'
                   >
