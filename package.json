@@ -2,9 +2,9 @@
   "scripts": {
     "dev": "echo \"Error: Only tests are intended to be run from this location.\" && exit 1",
     "start": "echo \"Error: Only tests are intended to be run from this location.\" && exit 1",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test API_HOST=127.0.0.1 jest",
     "test:watch": "NODE_ENV=test jest --watch",
-    "test:coverage": "NODE_ENV=test jest --coverage"
+    "test:coverage": "NODE_ENV=test API_HOST=127.0.0.1 jest --coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
