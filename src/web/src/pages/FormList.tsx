@@ -1,5 +1,3 @@
-// TODO if uploading a form while on this page, reload the form list
-
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +17,9 @@ type TFormsList = TForm & {
 
 export default function FormList() {
   const [forms, setForms] = useState<TFormsList[]>([])
-  const { hideModal, showModal } = useGlobalState()
+  const {
+    hideModal, showModal, isFormListReloadNeeded, setIsFormListReloadNeeded,
+  } = useGlobalState()
   const navigate = useNavigate()
 
   const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
@@ -71,8 +71,19 @@ export default function FormList() {
   }
 
   useEffect(() => {
+    setIsFormListReloadNeeded(false)
     loadForms()
-  }, [loadForms])
+    // This effect is intended to run only on initial load, but we include all dependencies (ie
+    // loadForms and setIsFormListReloadNeeded) to ensure correctness and avoid potential issues in
+    // the future.
+  }, [loadForms, setIsFormListReloadNeeded])
+
+  useEffect(() => {
+    if (isFormListReloadNeeded) {
+      setIsFormListReloadNeeded(false)
+      loadForms()
+    }
+  }, [isFormListReloadNeeded, loadForms, setIsFormListReloadNeeded])
 
   return (
     <>

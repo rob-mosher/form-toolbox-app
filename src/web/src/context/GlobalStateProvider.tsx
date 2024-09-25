@@ -11,30 +11,37 @@ interface GlobalStateProviderProps {
 
 export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
   const [isContentFullSize, setIsContentFullSize] = useState(false)
+  const [isFormListReloadNeeded, setIsFormListReloadNeeded] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState<ReactNode | null>(null)
-
-  const showModal = (content: ReactNode) => {
-    setModalContent(content)
-    setIsModalOpen(true)
-  }
 
   const hideModal = () => {
     setIsModalOpen(false)
     setModalContent(null)
   }
 
+  const showModal = (content: ReactNode) => {
+    setModalContent(content)
+    setIsModalOpen(true)
+  }
+
   // Memoize the context value to prevent unnecessary re-renders
   const value = useMemo(() => ({
     isContentFullSize,
     setIsContentFullSize,
+
+    isFormListReloadNeeded,
+    setIsFormListReloadNeeded,
+
     isModalOpen,
     setIsModalOpen,
+
     modalContent,
     setModalContent,
-    showModal,
+
     hideModal,
-  }), [isContentFullSize, isModalOpen, modalContent])
+    showModal,
+  }), [isContentFullSize, isFormListReloadNeeded, isModalOpen, modalContent])
 
   return (
     <GlobalStateContext.Provider value={value}>

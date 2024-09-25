@@ -5,6 +5,7 @@ import {
 import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
+import { useGlobalState } from '../context'
 
 type ModalDeleteFormProps = {
   hideModal: () => void,
@@ -17,6 +18,7 @@ export default function ModalUploadForm({
   const toastRef = useRef<ToastId | null>(null)
   const [acceptedMimeTypes, setAcceptedMimeTypes] = useState<string[] | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const { setIsFormListReloadNeeded } = useGlobalState()
   // const [imageFile, setImageFile] = useState(null)
 
   // setAcceptedMimeTypes
@@ -74,6 +76,7 @@ export default function ModalUploadForm({
 
         // Close the modal if the upload completes (keeping open on error)
         hideModal()
+        setIsFormListReloadNeeded(true)
       })
       .catch((error) => {
         toast.update(toastRef.current!, {
