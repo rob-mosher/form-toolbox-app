@@ -75,6 +75,12 @@ export default function EditTab({
   }
 
   const handleApply = async () => {
+    // TODO refactor to inline warning, ie non-toast.
+    if (!selectedTemplate || selectedTemplate.trim().length < 1) {
+      toast.warning('No template selected.')
+      return
+    }
+
     try {
       const setTemplateIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
       await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplate } })
