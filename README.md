@@ -1,12 +1,12 @@
-# form-toolbox
+# Form Toolbox 🛠️
 
 Form Toolbox simplifies and automates the process of entering and validating physical forms that have been digitized, saving time, increasing accuracy, and lowering business costs. Its architecture focuses on practicality and adaptability, using Docker containers for consistent and manageable deployment, Terraform for efficient and reliable orchestration of AWS resources, and AWS services to contextually extract data and securely store form artifacts and metadata. A unique namespace is utilized within Terraform to ensure that it can co-exist with other resources while also being easily identifiable.
 
 In the future, Form Toolbox can be extended to provide contextual analysis, and verification of expected data.
 
-## Screenshots
+## Example Workflow
 
-![Form Edit Window](./assets/images/form-toolbox-screenshot-1.png)
+https://github.com/user-attachments/assets/b9f753c2-2fba-4944-860c-32cc188be738
 
 # Local Development
 
