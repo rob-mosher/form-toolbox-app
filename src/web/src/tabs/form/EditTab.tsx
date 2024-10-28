@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
+import { mergeClassName } from '../../lib'
 import type {
   TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption,
 } from '../../types'
@@ -176,24 +177,30 @@ export default function EditTab({
 
   const formRows = schemaJSON ? (
     Object.entries(JSON.parse(schemaJSON) as Record<string, TSchemaField>).map(([key, value]) => {
-      const formItem = form?.formDeclared?.[key]
-      const inputValue = formItem?.value || ''
-      const keyBoundingBox = formItem?.keyBoundingBox
-      const valueBoundingBox = formItem?.valueBoundingBox
+      const itemDeclared = form?.formDeclared?.[key]
+      const itemDetected = form?.formDetected?.[key]
+
+      const keyBoundingBox = itemDeclared?.keyBoundingBox
+      const valueBoundingBox = itemDeclared?.valueBoundingBox
+      const valueDeclared = itemDeclared?.value ?? ''
+      const valueDetected = itemDetected?.value ?? ''
 
       return (
         <div key={key} className='mb-4'>
           <label htmlFor={key} className='block'>
             <span className='text-sm font-semibold'>{key}</span>
             <input
-              className='mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700'
+              className={mergeClassName(
+                'mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700',
+                (valueDetected !== valueDeclared) && 'bg-yellow-100',
+              )}
               id={key}
               name={key}
               onFocus={handleInputFocus}
               onChange={(e) => handleChangeFormData(key, e.target.value)}
               required={value?.required}
               type={value?.type === 'string' ? 'text' : value?.type}
-              value={inputValue}
+              value={valueDeclared}
               data-key-bbox-top={keyBoundingBox?.Top}
               data-key-bbox-left={keyBoundingBox?.Left}
               data-key-bbox-width={keyBoundingBox?.Width}
