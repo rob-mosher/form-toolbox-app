@@ -2,13 +2,13 @@ import ColorItem from '../../components/ColorItem'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
 import { formUserBgColors, formUserHighlightColors, tabUserOverrideColors } from '../../lib'
-import type { TFormUserBgKeys, TFormUserHighlightKey, TTabUserOverrideKey } from '../../types'
+import type { TFormUserBgKey, TFormUserHighlightKey, TTabUserOverrideKey } from '../../types'
 
 type SettingsTabProps = {
-  // formUserBgKey: TFormUserBgKeys
+  // formUserBgKey: TFormUserBgKey
   // formUserHighlightKey: TFormUserHighlightKey
-  updateFormUserBgKey: (newContentBgKey: TFormUserBgKeys) => void
-  updateFormUserHighlightKey: (newContentBgKey: TFormUserHighlightKey) => void
+  updateFormUserBgKey: (newBgKey: TFormUserBgKey) => void
+  updateFormUserHighlightKey: (newHighlightKey: TFormUserHighlightKey) => void
   updateTabUserOverrideKey: (newOverrideKey: TTabUserOverrideKey) => void
 }
 

@@ -16,7 +16,7 @@ import InfoTab from '../tabs/form/InfoTab'
 import SettingsTab from '../tabs/form/SettingsTab'
 import type {
   TForm,
-  TFormUserBgKeys,
+  TFormUserBgKey,
   TFormUserHighlightKey,
   TTab,
   TTabUserOverrideKey,
@@ -36,7 +36,7 @@ export default function FormEdit() {
   const [schemaJSON, setSchemaJSON] = useState<TTemplate['schemaJSON'] | null>(null)
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
 
-  const [formUserBgKey, setFormUserBgKey] = useState<TFormUserBgKeys>(() => {
+  const [formUserBgKey, setFormUserBgKey] = useState<TFormUserBgKey>(() => {
     const storedFormUserBgKey = localStorage.getItem('formUserBgKey')
     return storedFormUserBgKey && formUserBgColors[storedFormUserBgKey] ? storedFormUserBgKey : 'mediumGray'
   })
@@ -56,7 +56,7 @@ export default function FormEdit() {
   const navigate = useNavigate()
 
   const updateFormUserBgKey = useCallback(
-    (newFormUserBgKey: TFormUserBgKeys) => {
+    (newFormUserBgKey: TFormUserBgKey) => {
       if (newFormUserBgKey && formUserBgColors[newFormUserBgKey]) {
         setFormUserBgKey(newFormUserBgKey)
       } else {
