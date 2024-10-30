@@ -8,12 +8,20 @@ import Content from '../components/Content'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { useGlobalState } from '../context/useGlobalState'
-import { formUserBgColors, formUserHighlightColors, mergeClassName } from '../lib'
+import {
+  formUserBgColors, formUserHighlightColors, mergeClassName, tabUserOverrideColors,
+} from '../lib'
 import EditTab from '../tabs/form/EditTab'
 import InfoTab from '../tabs/form/InfoTab'
 import SettingsTab from '../tabs/form/SettingsTab'
 import type {
-  TForm, TFormUserBgKeys, TFormUserHighlightKey, TTab, TTemplate, TTemplateOption,
+  TForm,
+  TFormUserBgKeys,
+  TFormUserHighlightKey,
+  TTab,
+  TTabUserOverrideKey,
+  TTemplate,
+  TTemplateOption,
 } from '../types'
 
 type FormEditParams = {
@@ -36,6 +44,11 @@ export default function FormEdit() {
   const [formUserHighlightKey, setFormUserHighlightKey] = useState<TFormUserHighlightKey>(() => {
     const storedFormUserHighlightKey = localStorage.getItem('formUserHighlightKey')
     return storedFormUserHighlightKey && formUserHighlightColors[storedFormUserHighlightKey] ? storedFormUserHighlightKey : 'yellow'
+  })
+
+  const [tabUserOverrideKey, setTabUserOverrideKey] = useState<TTabUserOverrideKey>(() => {
+    const storedTabUserOverrideKey = localStorage.getItem('tabUserOverrideKey')
+    return storedTabUserOverrideKey && tabUserOverrideColors[storedTabUserOverrideKey] ? storedTabUserOverrideKey : 'green'
   })
 
   const { formId } = useParams<FormEditParams>()
@@ -66,6 +79,18 @@ export default function FormEdit() {
     [setFormUserHighlightKey],
   )
 
+  const updateTabUserOverrideKey = useCallback(
+    (newTabUserOverrideKey: TTabUserOverrideKey) => {
+      if (newTabUserOverrideKey && tabUserOverrideColors[newTabUserOverrideKey]) {
+        setTabUserOverrideKey(newTabUserOverrideKey)
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('Invalid tabUserOverrideKey:', newTabUserOverrideKey)
+      }
+    },
+    [setTabUserOverrideKey],
+  )
+
   useEffect(() => {
     // Enable full-size content mode when this component mounts
     setIsContentFullSize(true)
@@ -81,6 +106,10 @@ export default function FormEdit() {
   useEffect(() => {
     localStorage.setItem('formUserHighlightKey', formUserHighlightKey)
   }, [formUserHighlightKey])
+
+  useEffect(() => {
+    localStorage.setItem('tabUserOverrideKey', tabUserOverrideKey)
+  }, [tabUserOverrideKey])
 
   useEffect(() => {
     const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
@@ -178,11 +207,12 @@ export default function FormEdit() {
         <EditTab
           form={form}
           formId={formId!} // regarding '!', formId is part of the URL via useParams
+          onBoundingBoxFocus={handleBoundingBoxFocus}
           schemaJSON={schemaJSON}
           setForm={setForm}
           setSchemaJSON={setSchemaJSON}
+          tabUserOverrideKey={tabUserOverrideKey}
           templates={templates}
-          onBoundingBoxFocus={handleBoundingBoxFocus}
         />
       )
       break
@@ -198,6 +228,7 @@ export default function FormEdit() {
           // formUserHighlightKey={formUserHighlightKey}
           updateFormUserBgKey={updateFormUserBgKey}
           updateFormUserHighlightKey={updateFormUserHighlightKey}
+          updateTabUserOverrideKey={updateTabUserOverrideKey}
         />
       )
       break

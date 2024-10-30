@@ -1,14 +1,15 @@
 import ColorItem from '../../components/ColorItem'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
-import { formUserBgColors, formUserHighlightColors } from '../../lib'
-import type { TFormUserBgKeys, TFormUserHighlightKey } from '../../types'
+import { formUserBgColors, formUserHighlightColors, tabUserOverrideColors } from '../../lib'
+import type { TFormUserBgKeys, TFormUserHighlightKey, TTabUserOverrideKey } from '../../types'
 
 type SettingsTabProps = {
   // formUserBgKey: TFormUserBgKeys
   // formUserHighlightKey: TFormUserHighlightKey
   updateFormUserBgKey: (newContentBgKey: TFormUserBgKeys) => void
   updateFormUserHighlightKey: (newContentBgKey: TFormUserHighlightKey) => void
+  updateTabUserOverrideKey: (newOverrideKey: TTabUserOverrideKey) => void
 }
 
 export default function SettingsTab({
@@ -16,6 +17,7 @@ export default function SettingsTab({
   // formUserHighlightKey,
   updateFormUserBgKey,
   updateFormUserHighlightKey,
+  updateTabUserOverrideKey,
 }: SettingsTabProps) {
   const bgColorKeys = Object.keys(formUserBgColors)
   const bgColorChooser = bgColorKeys.map((bgColorKey) => (
@@ -37,6 +39,16 @@ export default function SettingsTab({
     />
   ))
 
+  const tabUserOverrideColorKeys = Object.keys(tabUserOverrideColors)
+  const tabUserOverrideColorChooser = tabUserOverrideColorKeys.map((overrideColorKey) => (
+    <ColorItem
+      ariaLabel='Set value difference color'
+      colorClassName={tabUserOverrideColors[overrideColorKey].preview}
+      key={overrideColorKey}
+      onClick={() => updateTabUserOverrideKey(overrideColorKey)}
+    />
+  ))
+
   return (
     <div data-tab='settings'>
       <Divider>
@@ -52,12 +64,21 @@ export default function SettingsTab({
         </div>
       </fieldset>
 
-      <fieldset>
+      <fieldset className='mb-4'>
         <legend className='mb-2 block font-semibold text-gray-700'>
           Form Highlight Color
         </legend>
         <div id='highlight-color-chooser' className='flex gap-1'>
           {highlightColorChooser}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend className='mb-2 block font-semibold text-gray-700'>
+          Tab Value Override Color
+        </legend>
+        <div id='value-difference-color-chooser' className='flex gap-1'>
+          {tabUserOverrideColorChooser}
         </div>
       </fieldset>
     </div>

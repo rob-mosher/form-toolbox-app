@@ -5,35 +5,37 @@ import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
-import { mergeClassName } from '../../lib'
+import { mergeClassName, tabUserOverrideColors } from '../../lib'
 import type {
-  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption,
+  TForm, TFormItem, TSchemaField, TTabUserOverrideKey, TTemplate, TTemplateOption,
 } from '../../types'
 
 type EditTabProps = {
   form: TForm;
   formId: TForm['id'];
+  onBoundingBoxFocus: (boundingBox: {
+    keyBoundingBox: TBoundingBox,
+    valueBoundingBox: TBoundingBox,
+  }) => void;
   schemaJSON: TTemplate['schemaJSON'] | null;
   // setForm accepts `null` to match the type from FormEdit where the form state starts as null
   // while data is being fetched. In this component, setForm is safely used with non-null
   // assertions because the logic to update the form is only executed once the form is loaded.
   setForm: Dispatch<SetStateAction<TForm | null>>;
   setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
+  tabUserOverrideKey: TTabUserOverrideKey;
   templates: TTemplateOption[];
-  onBoundingBoxFocus: (boundingBox: {
-    keyBoundingBox: TBoundingBox,
-    valueBoundingBox: TBoundingBox,
-  }) => void;
 }
 
 export default function EditTab({
   form,
   formId,
+  onBoundingBoxFocus,
   schemaJSON,
   setForm,
   setSchemaJSON,
+  tabUserOverrideKey,
   templates,
-  onBoundingBoxFocus,
 }: EditTabProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<TForm['templateId']>(form?.templateId || '')
 
@@ -192,7 +194,9 @@ export default function EditTab({
             <input
               className={mergeClassName(
                 'mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700',
-                (valueDetected !== valueDeclared) && 'bg-yellow-100',
+                (valueDetected !== valueDeclared) && (
+                  tabUserOverrideColors[tabUserOverrideKey].className
+                ),
               )}
               id={key}
               name={key}
