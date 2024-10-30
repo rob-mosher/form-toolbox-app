@@ -1,2 +1,2 @@
-export * from './formUserColors'
 export * from './mergeClassName'
+export * from './userStyles'

@@ -1,19 +1,19 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
-import { formUserHighlightColors } from '../lib'
-import { TFormUserHighlightKey } from '../types'
+import { userFormHighlightColors } from '../lib'
+import { TUserFormHighlightKey } from '../types'
 
 type ContentProps = {
   imageUrls: string[];
   focusedBoundingBox?: TBoundingBox[];
-  formUserHighlightKey: TFormUserHighlightKey;
+  userFormHighlightKey: TUserFormHighlightKey;
 };
 
 export default function Content({
   imageUrls,
   focusedBoundingBox = [],
-  formUserHighlightKey,
+  userFormHighlightKey,
 }: ContentProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const imageRef = useRef<HTMLImageElement | null>(null)
@@ -56,12 +56,12 @@ export default function Content({
         rect.setAttribute('y', String(y))
         rect.setAttribute('width', String(width))
         rect.setAttribute('height', String(height))
-        rect.setAttribute('class', formUserHighlightColors[formUserHighlightKey].className)
+        rect.setAttribute('class', userFormHighlightColors[userFormHighlightKey].className)
 
         svg.appendChild(rect)
       })
     }
-  }, [focusedBoundingBox, formUserHighlightKey, imageUrls])
+  }, [focusedBoundingBox, imageUrls, userFormHighlightKey])
 
   return (
     <div className='flex size-full flex-col items-center justify-start'>

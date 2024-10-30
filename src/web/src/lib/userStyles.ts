@@ -1,11 +1,11 @@
-type TFormUserPrefs = {
+type TUserStylePrefs = {
   preview: string;
   className: string
 }
 
 // TODO ensure display order is shown in a reliable way (ie via equivalent array)
 
-export const formUserBgColors: Record<string, TFormUserPrefs> = {
+export const userFormBgColors: Record<string, TUserStylePrefs> = {
   white: {
     preview: 'bg-white border border-gray-300 shadow-inner',
     className: 'bg-white',
@@ -28,7 +28,7 @@ export const formUserBgColors: Record<string, TFormUserPrefs> = {
   },
 }
 
-export const formUserHighlightColors: Record<string, TFormUserPrefs> = {
+export const userFormHighlightColors: Record<string, TUserStylePrefs> = {
   yellow: {
     preview: 'bg-yellow-300 border border-yellow-400 shadow-inner',
     className: 'stroke-2 stroke-yellow-400/40 fill-yellow-400/30',
@@ -43,7 +43,7 @@ export const formUserHighlightColors: Record<string, TFormUserPrefs> = {
   },
 }
 
-export const tabUserOverrideColors: Record<string, TFormUserPrefs> = {
+export const userTabOverrideColors: Record<string, TUserStylePrefs> = {
   yellow: {
     preview: 'bg-yellow-300 border border-yellow-400 shadow-inner',
     className: 'bg-yellow-400/30',

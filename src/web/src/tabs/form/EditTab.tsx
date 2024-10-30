@@ -5,9 +5,9 @@ import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
-import { mergeClassName, tabUserOverrideColors } from '../../lib'
+import { mergeClassName, userTabOverrideColors } from '../../lib'
 import type {
-  TForm, TFormItem, TSchemaField, TTabUserOverrideKey, TTemplate, TTemplateOption,
+  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption, TUserTabOverrideKey,
 } from '../../types'
 
 type EditTabProps = {
@@ -23,8 +23,8 @@ type EditTabProps = {
   // assertions because the logic to update the form is only executed once the form is loaded.
   setForm: Dispatch<SetStateAction<TForm | null>>;
   setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
-  tabUserOverrideKey: TTabUserOverrideKey;
   templates: TTemplateOption[];
+  userTabOverrideKey: TUserTabOverrideKey;
 }
 
 export default function EditTab({
@@ -34,8 +34,8 @@ export default function EditTab({
   schemaJSON,
   setForm,
   setSchemaJSON,
-  tabUserOverrideKey,
   templates,
+  userTabOverrideKey,
 }: EditTabProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<TForm['templateId']>(form?.templateId || '')
 
@@ -195,7 +195,7 @@ export default function EditTab({
               className={mergeClassName(
                 'mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-gray-700',
                 (valueDetected !== valueDeclared) && (
-                  tabUserOverrideColors[tabUserOverrideKey].className
+                  userTabOverrideColors[userTabOverrideKey].className
                 ),
               )}
               id={key}
