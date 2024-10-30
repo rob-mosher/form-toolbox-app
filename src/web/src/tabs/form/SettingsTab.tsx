@@ -52,12 +52,12 @@ export default function SettingsTab({
   return (
     <div data-tab='settings'>
       <Divider>
-        <Heading as='h6' uppercase>Form Options</Heading>
+        <Heading as='h6' uppercase>Form</Heading>
       </Divider>
 
       <fieldset className='mb-4'>
         <legend className='mb-2 block font-semibold text-gray-700'>
-          Form Background Color
+          Background Color:
         </legend>
         <div id='bg-color-chooser' className='flex gap-1'>
           {bgColorChooser}
@@ -66,16 +66,20 @@ export default function SettingsTab({
 
       <fieldset className='mb-4'>
         <legend className='mb-2 block font-semibold text-gray-700'>
-          Form Highlight Color
+          Highlight Color:
         </legend>
         <div id='highlight-color-chooser' className='flex gap-1'>
           {highlightColorChooser}
         </div>
       </fieldset>
 
+      <Divider>
+        <Heading as='h6' uppercase>Edit Tab</Heading>
+      </Divider>
+
       <fieldset>
         <legend className='mb-2 block font-semibold text-gray-700'>
-          Tab Value Override Color
+          Override Color:
         </legend>
         <div id='value-difference-color-chooser' className='flex gap-1'>
           {userTabOverrideColorChooser}
