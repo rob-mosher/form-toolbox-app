@@ -223,12 +223,12 @@ export default function FormEdit() {
     case 'settings':
       tabContent = (
         <SettingsTab
-          // TODO match chosen color and style accordingly
-          // userFormBgKey={userFormBgKey}
-          // userFormHighlightKey={userFormHighlightKey}
           updateUserFormBgKey={updateUserFormBgKey}
           updateUserFormHighlightKey={updateUserFormHighlightKey}
           updateUserTabOverrideKey={updateUserTabOverrideKey}
+          userFormBgKey={userFormBgKey}
+          userFormHighlightKey={userFormHighlightKey}
+          userTabOverrideKey={userTabOverrideKey}
         />
       )
       break

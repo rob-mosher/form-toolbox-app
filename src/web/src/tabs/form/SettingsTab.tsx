@@ -5,25 +5,28 @@ import { userFormBgColors, userFormHighlightColors, userTabOverrideColors } from
 import type { TUserFormBgKey, TUserFormHighlightKey, TUserTabOverrideKey } from '../../types'
 
 type SettingsTabProps = {
-  // userFormBgKey: TUserFormBgKey
-  // userFormHighlightKey: TUserFormHighlightKey
   updateUserFormBgKey: (newKey: TUserFormBgKey) => void
   updateUserFormHighlightKey: (newKey: TUserFormHighlightKey) => void
   updateUserTabOverrideKey: (newKey: TUserTabOverrideKey) => void
+  userFormBgKey: TUserFormBgKey
+  userFormHighlightKey: TUserFormHighlightKey
+  userTabOverrideKey: TUserTabOverrideKey
 }
 
 export default function SettingsTab({
-  // userFormBgKey,
-  // userFormHighlightKey,
   updateUserFormBgKey,
   updateUserFormHighlightKey,
   updateUserTabOverrideKey,
+  userFormBgKey,
+  userFormHighlightKey,
+  userTabOverrideKey,
 }: SettingsTabProps) {
   const bgColorKeys = Object.keys(userFormBgColors)
   const bgColorChooser = bgColorKeys.map((bgColorKey) => (
     <ColorItem
       ariaLabel='Set form background color'
       colorClassName={userFormBgColors[bgColorKey].preview}
+      isSelected={userFormBgKey === bgColorKey}
       key={bgColorKey}
       onClick={() => updateUserFormBgKey(bgColorKey)}
     />
@@ -34,6 +37,7 @@ export default function SettingsTab({
     <ColorItem
       ariaLabel='Set form highlight color'
       colorClassName={userFormHighlightColors[highlightColorKey].preview}
+      isSelected={userFormHighlightKey === highlightColorKey}
       key={highlightColorKey}
       onClick={() => updateUserFormHighlightKey(highlightColorKey)}
     />
@@ -44,6 +48,7 @@ export default function SettingsTab({
     <ColorItem
       ariaLabel='Set value difference color'
       colorClassName={userTabOverrideColors[overrideColorKey].preview}
+      isSelected={userTabOverrideKey === overrideColorKey}
       key={overrideColorKey}
       onClick={() => updateUserTabOverrideKey(overrideColorKey)}
     />
