@@ -4,7 +4,7 @@ const seedData = [
   {
     isDeleted: false,
     name: '1099-MISC (Miscellaneous Information)',
-    // TODO change accounting types to 'number', 'step' to '0.01', and remove spaces and $ signs
+    // TODO: change accounting types to 'number', 'step' to '0.01', and remove spaces and $ signs
     schemaJSON: JSON.stringify({
       "RECIPIENT'S name": { type: 'string', required: false },
       '1 Rents': { type: 'string', required: false },

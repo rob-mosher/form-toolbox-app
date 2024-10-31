@@ -4,7 +4,7 @@ import Header from './components/Header'
 import { useGlobalState } from './context/useGlobalState'
 import { mergeClassName } from './lib'
 import 'react-toastify/dist/ReactToastify.css'
-// import 'react-toastify/dist/ReactToastify.min.css'; // TODO chose depending on dev or prod build
+// import 'react-toastify/dist/ReactToastify.min.css'; // TODO: chose depending on dev or prod build
 import Modal from './modals/lib/Modal'
 
 export default function App() {

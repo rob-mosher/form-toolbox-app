@@ -86,7 +86,7 @@ module "s3_bucket" {
   source        = "terraform-aws-modules/s3-bucket/aws"
   version       = "3.15.1"
   bucket        = "${local.prefix}-s3-bucket"
-  force_destroy = true # TODO remove later
+  force_destroy = true # TODO: remove later
 }
 
 module "sns" {

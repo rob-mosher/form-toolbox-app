@@ -8,7 +8,7 @@ type TStyleOption = {
   preview: string;
 }
 
-// TODO ensure display order is shown in a reliable way (ie via equivalent array)
+// TODO: ensure display order is shown in a reliable way (ie via equivalent array)
 
 export const userFormBgColors: Record<string, TStyleOption> = {
   white: {

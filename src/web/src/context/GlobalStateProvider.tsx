@@ -33,7 +33,7 @@ export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
       const parsedPrefs = JSON.parse(storedPrefs) as TUserPrefs
 
       // Validate stored preferences against available options
-      // TODO convert to dynamic validator function
+      // TODO: convert to dynamic validator function
       if (!userFormBgColors[parsedPrefs.form.bgKey]
           || !userFormHighlightColors[parsedPrefs.form.highlightKey]
           || !userTabOverrideColors[parsedPrefs.tab.overrideKey]) {
@@ -49,7 +49,7 @@ export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
   })
 
   useEffect(() => {
-    // TODO run userPrefs through validator before saving to localStorage
+    // TODO: run userPrefs through validator before saving to localStorage
     localStorage.setItem(STORAGE_KEYS.USER_PREFS, JSON.stringify(userPrefs))
   }, [userPrefs])
 

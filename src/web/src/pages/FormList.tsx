@@ -141,7 +141,7 @@ export default function FormList() {
                   </button>
                 </span>
               </td>
-              {/* TODO max-w-[xch] isn't working exactly as expected, but good enough for now */}
+              {/* TODO: max-w-[xch] isn't working exactly as expected, but good enough for now */}
               <td className='p-3'>{form.status}</td>
               <td className='p-3 text-center'>{form.pageCount}</td>
               <td className='max-w-xs truncate p-3'>{form.fileName}</td>

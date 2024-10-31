@@ -31,7 +31,7 @@ module.exports.handler = async (event) => {
     const headObjectOutput = await s3Client.send(new HeadObjectCommand(headObjectParams))
     metadata = headObjectOutput.Metadata
   } catch (error) {
-    // TODO notify SQS queue
+    // TODO: notify SQS queue
     console.error('Error retrieving object metadata:', error)
     throw error
   }
@@ -90,7 +90,7 @@ module.exports.handler = async (event) => {
     const sqsCommand = new SendMessageCommand(sqsParams)
     await sqsClient.send(sqsCommand)
   } catch (error) {
-    // TODO notify SQS queue
+    // TODO: notify SQS queue
     console.error('Error starting Textract job:', error)
     throw error
   }

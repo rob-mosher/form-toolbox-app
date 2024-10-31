@@ -11,7 +11,7 @@ const convertToWebp: RequestHandler = async (req, res, next) => {
     const outputFiles: TWebpFile[] = []
 
     if (fileType === '.pdf') {
-      // TODO PDF logic
+      // TODO: PDF logic
       return next({ log: 'imageController.convertToWebp: Intentional error thrown - middleware does not yet support PDF files.' })
     }
 

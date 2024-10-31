@@ -58,7 +58,7 @@ module.exports = {
       }
     ],
     'import/prefer-default-export': 'off',
-    'no-console': 'off', // TODO refactor with a more production-ready logging solution 
+    'no-console': 'off', // TODO: refactor with a more production-ready logging solution
     'no-unused-vars': 'off',
     'semi': ['warn', 'never'],
   },

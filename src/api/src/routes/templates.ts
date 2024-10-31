@@ -32,7 +32,7 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: (err as Error).message })
-    return next(err) // TODO see how this is handled in the other routes
+    return next(err) // TODO: see how this is handled in the other routes
   }
 })
 
