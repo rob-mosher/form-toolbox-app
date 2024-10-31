@@ -2,15 +2,15 @@ import ColorItem from '../../components/ColorItem'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
 import { userFormBgColors, userFormHighlightColors, userTabOverrideColors } from '../../lib'
-import type { TUserFormBgKey, TUserFormHighlightKey, TUserTabOverrideKey } from '../../types'
+import type { TUserPrefs } from '../../types'
 
 type SettingsTabProps = {
-  updateUserFormBgKey: (newKey: TUserFormBgKey) => void
-  updateUserFormHighlightKey: (newKey: TUserFormHighlightKey) => void
-  updateUserTabOverrideKey: (newKey: TUserTabOverrideKey) => void
-  userFormBgKey: TUserFormBgKey
-  userFormHighlightKey: TUserFormHighlightKey
-  userTabOverrideKey: TUserTabOverrideKey
+  updateUserFormBgKey: (newKey: TUserPrefs['form']['bgKey']) => void
+  updateUserFormHighlightKey: (newKey: TUserPrefs['form']['highlightKey']) => void
+  updateUserTabOverrideKey: (newKey: TUserPrefs['tab']['overrideKey']) => void
+  userFormBgKey: TUserPrefs['form']['bgKey']
+  userFormHighlightKey: TUserPrefs['form']['highlightKey']
+  userTabOverrideKey: TUserPrefs['tab']['overrideKey']
 }
 
 export default function SettingsTab({

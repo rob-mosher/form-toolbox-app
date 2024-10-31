@@ -2,12 +2,12 @@ import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
 import ContentToolbar from './ContentToolbar'
 import { userFormHighlightColors } from '../lib'
-import { TUserFormHighlightKey } from '../types'
+import { TUserPrefs } from '../types'
 
 type ContentProps = {
   imageUrls: string[];
   focusedBoundingBox?: TBoundingBox[];
-  userFormHighlightKey: TUserFormHighlightKey;
+  userFormHighlightKey: TUserPrefs['form']['highlightKey'];
 };
 
 export default function Content({

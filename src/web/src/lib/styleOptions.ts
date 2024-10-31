@@ -1,11 +1,16 @@
-type TUserPrefs = {
+/**
+ * Defines the structure for a style picker option
+ * @property className - The Tailwind classes to apply to the element
+ * @property preview - The Tailwind classes to show in the preview/selector
+ */
+type TStyleOption = {
   className: string;
   preview: string;
 }
 
 // TODO ensure display order is shown in a reliable way (ie via equivalent array)
 
-export const userFormBgColors: Record<string, TUserPrefs> = {
+export const userFormBgColors: Record<string, TStyleOption> = {
   white: {
     className: 'bg-white',
     preview: 'bg-white border border-gray-300 shadow-inner',
@@ -28,7 +33,7 @@ export const userFormBgColors: Record<string, TUserPrefs> = {
   },
 }
 
-export const userFormHighlightColors: Record<string, TUserPrefs> = {
+export const userFormHighlightColors: Record<string, TStyleOption> = {
   yellow: {
     className: 'stroke-2 stroke-yellow-400/40 fill-yellow-400/30',
     preview: 'bg-yellow-300 border border-yellow-400 shadow-inner',
@@ -43,7 +48,7 @@ export const userFormHighlightColors: Record<string, TUserPrefs> = {
   },
 }
 
-export const userTabOverrideColors: Record<string, TUserPrefs> = {
+export const userTabOverrideColors: Record<string, TStyleOption> = {
   yellow: {
     className: 'bg-yellow-400/30',
     preview: 'bg-yellow-300 border border-yellow-400 shadow-inner',

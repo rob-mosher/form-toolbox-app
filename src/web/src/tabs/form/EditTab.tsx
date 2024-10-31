@@ -7,7 +7,7 @@ import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
 import { mergeClassName, userTabOverrideColors } from '../../lib'
 import type {
-  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption, TUserTabOverrideKey,
+  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption, TUserPrefs,
 } from '../../types'
 
 type EditTabProps = {
@@ -24,7 +24,7 @@ type EditTabProps = {
   setForm: Dispatch<SetStateAction<TForm | null>>;
   setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
   templates: TTemplateOption[];
-  userTabOverrideKey: TUserTabOverrideKey;
+  userTabOverrideKey: TUserPrefs['tab']['overrideKey'];
 }
 
 export default function EditTab({

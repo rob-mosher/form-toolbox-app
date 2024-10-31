@@ -19,9 +19,7 @@ import type {
   TTab,
   TTemplate,
   TTemplateOption,
-  TUserFormBgKey,
-  TUserFormHighlightKey,
-  TUserTabOverrideKey,
+  TUserPrefs,
 } from '../types'
 
 type FormEditParams = {
@@ -36,17 +34,17 @@ export default function FormEdit() {
   const [schemaJSON, setSchemaJSON] = useState<TTemplate['schemaJSON'] | null>(null)
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
 
-  const [userFormBgKey, setUserFormBgKey] = useState<TUserFormBgKey>(() => {
+  const [userFormBgKey, setUserFormBgKey] = useState<TUserPrefs['form']['bgKey']>(() => {
     const storedUserFormBgKey = localStorage.getItem('userFormBgKey')
     return storedUserFormBgKey && userFormBgColors[storedUserFormBgKey] ? storedUserFormBgKey : 'mediumGray'
   })
 
-  const [userFormHighlightKey, setUserFormHighlightKey] = useState<TUserFormHighlightKey>(() => {
+  const [userFormHighlightKey, setUserFormHighlightKey] = useState<TUserPrefs['form']['highlightKey']>(() => {
     const storedUserFormHighlightKey = localStorage.getItem('userFormHighlightKey')
     return storedUserFormHighlightKey && userFormHighlightColors[storedUserFormHighlightKey] ? storedUserFormHighlightKey : 'yellow'
   })
 
-  const [userTabOverrideKey, setUserTabOverrideKey] = useState<TUserTabOverrideKey>(() => {
+  const [userTabOverrideKey, setUserTabOverrideKey] = useState<TUserPrefs['tab']['overrideKey']>(() => {
     const storedUserTabOverrideKey = localStorage.getItem('userTabOverrideKey')
     return storedUserTabOverrideKey && userTabOverrideColors[storedUserTabOverrideKey] ? storedUserTabOverrideKey : 'green'
   })
@@ -56,7 +54,7 @@ export default function FormEdit() {
   const navigate = useNavigate()
 
   const updateUserFormBgKey = useCallback(
-    (newUserFormBgKey: TUserFormBgKey) => {
+    (newUserFormBgKey: TUserPrefs['form']['bgKey']) => {
       if (newUserFormBgKey && userFormBgColors[newUserFormBgKey]) {
         setUserFormBgKey(newUserFormBgKey)
       } else {
@@ -68,7 +66,7 @@ export default function FormEdit() {
   )
 
   const updateUserFormHighlightKey = useCallback(
-    (newUserFormHighlightKey: TUserFormHighlightKey) => {
+    (newUserFormHighlightKey: TUserPrefs['form']['highlightKey']) => {
       if (newUserFormHighlightKey && userFormHighlightColors[newUserFormHighlightKey]) {
         setUserFormHighlightKey(newUserFormHighlightKey)
       } else {
@@ -80,7 +78,7 @@ export default function FormEdit() {
   )
 
   const updateUserTabOverrideKey = useCallback(
-    (newUserTabOverrideKey: TUserTabOverrideKey) => {
+    (newUserTabOverrideKey: TUserPrefs['tab']['overrideKey']) => {
       if (newUserTabOverrideKey && userTabOverrideColors[newUserTabOverrideKey]) {
         setUserTabOverrideKey(newUserTabOverrideKey)
       } else {
