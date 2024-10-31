@@ -7,11 +7,13 @@ import {
 } from 'react'
 import GlobalStateContext from './lib/GlobalStateContext'
 import {
-  DEFAULT_USER_PREFS, userFormBgColors, userFormHighlightColors, userTabOverrideColors,
+  DEFAULT_USER_PREFS,
+  STORAGE_KEYS,
+  userFormBgColors,
+  userFormHighlightColors,
+  userTabOverrideColors,
 } from '../lib'
 import type { TUserPrefs } from '../types'
-
-const USER_PREFS_KEY = 'userPrefs'
 
 interface GlobalStateProviderProps {
   children: ReactNode;
@@ -24,7 +26,7 @@ export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
   const [modalContent, setModalContent] = useState<ReactNode | null>(null)
 
   const [userPrefs, setUserPrefs] = useState<TUserPrefs>(() => {
-    const storedPrefs = localStorage.getItem(USER_PREFS_KEY)
+    const storedPrefs = localStorage.getItem(STORAGE_KEYS.USER_PREFS)
     if (!storedPrefs) return DEFAULT_USER_PREFS
 
     try {
@@ -48,7 +50,7 @@ export function GlobalStateProvider({ children }: GlobalStateProviderProps) {
 
   useEffect(() => {
     // TODO run userPrefs through validator before saving to localStorage
-    localStorage.setItem(USER_PREFS_KEY, JSON.stringify(userPrefs))
+    localStorage.setItem(STORAGE_KEYS.USER_PREFS, JSON.stringify(userPrefs))
   }, [userPrefs])
 
   const hideModal = () => {
