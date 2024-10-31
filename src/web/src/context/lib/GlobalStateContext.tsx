@@ -1,4 +1,5 @@
 import { createContext, ReactNode } from 'react'
+import type { TUserPrefs } from '../../types'
 
 interface TGlobalStateContext {
   isContentFullSize: boolean;
@@ -12,6 +13,9 @@ interface TGlobalStateContext {
 
   modalContent: ReactNode,
   setModalContent: (value: ReactNode | null) => void,
+
+  userPrefs: TUserPrefs,
+  setUserPrefs: (value: TUserPrefs | ((prev: TUserPrefs) => TUserPrefs)) => void,
 
   hideModal: () => void,
   showModal: (value: ReactNode) => void,

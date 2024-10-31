@@ -1,2 +1,2 @@
 export * from './mergeClassName'
-export * from './styleOptions'
+export * from './userPrefs'

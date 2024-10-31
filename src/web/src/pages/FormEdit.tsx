@@ -33,22 +33,7 @@ export default function FormEdit() {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [schemaJSON, setSchemaJSON] = useState<TTemplate['schemaJSON'] | null>(null)
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
-
-  const [userFormBgKey, setUserFormBgKey] = useState<TUserPrefs['form']['bgKey']>(() => {
-    const storedUserFormBgKey = localStorage.getItem('userFormBgKey')
-    return storedUserFormBgKey && userFormBgColors[storedUserFormBgKey] ? storedUserFormBgKey : 'mediumGray'
-  })
-
-  const [userFormHighlightKey, setUserFormHighlightKey] = useState<TUserPrefs['form']['highlightKey']>(() => {
-    const storedUserFormHighlightKey = localStorage.getItem('userFormHighlightKey')
-    return storedUserFormHighlightKey && userFormHighlightColors[storedUserFormHighlightKey] ? storedUserFormHighlightKey : 'yellow'
-  })
-
-  const [userTabOverrideKey, setUserTabOverrideKey] = useState<TUserPrefs['tab']['overrideKey']>(() => {
-    const storedUserTabOverrideKey = localStorage.getItem('userTabOverrideKey')
-    return storedUserTabOverrideKey && userTabOverrideColors[storedUserTabOverrideKey] ? storedUserTabOverrideKey : 'green'
-  })
-
+  const { userPrefs, setUserPrefs } = useGlobalState()
   const { formId } = useParams<FormEditParams>()
   const { setIsContentFullSize } = useGlobalState()
   const navigate = useNavigate()
@@ -56,37 +41,46 @@ export default function FormEdit() {
   const updateUserFormBgKey = useCallback(
     (newUserFormBgKey: TUserPrefs['form']['bgKey']) => {
       if (newUserFormBgKey && userFormBgColors[newUserFormBgKey]) {
-        setUserFormBgKey(newUserFormBgKey)
+        setUserPrefs((prev) => ({
+          ...prev,
+          form: { ...prev.form, bgKey: newUserFormBgKey },
+        }))
       } else {
         // eslint-disable-next-line no-console
         console.log('Invalid userFormBgKey:', newUserFormBgKey)
       }
     },
-    [setUserFormBgKey],
+    [setUserPrefs],
   )
 
   const updateUserFormHighlightKey = useCallback(
     (newUserFormHighlightKey: TUserPrefs['form']['highlightKey']) => {
       if (newUserFormHighlightKey && userFormHighlightColors[newUserFormHighlightKey]) {
-        setUserFormHighlightKey(newUserFormHighlightKey)
+        setUserPrefs((prev) => ({
+          ...prev!,
+          form: { ...prev!.form, highlightKey: newUserFormHighlightKey },
+        }))
       } else {
         // eslint-disable-next-line no-console
         console.log('Invalid userFormHighlightKey:', newUserFormHighlightKey)
       }
     },
-    [setUserFormHighlightKey],
+    [setUserPrefs],
   )
 
   const updateUserTabOverrideKey = useCallback(
     (newUserTabOverrideKey: TUserPrefs['tab']['overrideKey']) => {
       if (newUserTabOverrideKey && userTabOverrideColors[newUserTabOverrideKey]) {
-        setUserTabOverrideKey(newUserTabOverrideKey)
+        setUserPrefs((prev) => ({
+          ...prev!,
+          tab: { ...prev!.tab, overrideKey: newUserTabOverrideKey },
+        }))
       } else {
         // eslint-disable-next-line no-console
         console.log('Invalid userTabOverrideKey:', newUserTabOverrideKey)
       }
     },
-    [setUserTabOverrideKey],
+    [setUserPrefs],
   )
 
   useEffect(() => {
@@ -96,18 +90,6 @@ export default function FormEdit() {
     // Disable full-size content mode when this component unmounts
     return () => setIsContentFullSize(false)
   }, [setIsContentFullSize])
-
-  useEffect(() => {
-    localStorage.setItem('userFormBgKey', userFormBgKey)
-  }, [userFormBgKey])
-
-  useEffect(() => {
-    localStorage.setItem('userFormHighlightKey', userFormHighlightKey)
-  }, [userFormHighlightKey])
-
-  useEffect(() => {
-    localStorage.setItem('userTabOverrideKey', userTabOverrideKey)
-  }, [userTabOverrideKey])
 
   useEffect(() => {
     const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
@@ -210,7 +192,7 @@ export default function FormEdit() {
           setForm={setForm}
           setSchemaJSON={setSchemaJSON}
           templates={templates}
-          userTabOverrideKey={userTabOverrideKey}
+          userTabOverrideKey={userPrefs.tab.overrideKey}
         />
       )
       break
@@ -224,9 +206,9 @@ export default function FormEdit() {
           updateUserFormBgKey={updateUserFormBgKey}
           updateUserFormHighlightKey={updateUserFormHighlightKey}
           updateUserTabOverrideKey={updateUserTabOverrideKey}
-          userFormBgKey={userFormBgKey}
-          userFormHighlightKey={userFormHighlightKey}
-          userTabOverrideKey={userTabOverrideKey}
+          userFormBgKey={userPrefs.form.bgKey}
+          userFormHighlightKey={userPrefs.form.highlightKey}
+          userTabOverrideKey={userPrefs.tab.overrideKey}
         />
       )
       break
@@ -246,13 +228,13 @@ export default function FormEdit() {
       <div className='grid w-full grid-cols-12 gap-3'>
         <div className={mergeClassName(
           'col-span-9 overflow-y-scroll shadow-inner',
-          userFormBgColors[userFormBgKey].className,
+          userFormBgColors[userPrefs.form.bgKey].className,
         )}
         >
           <Content
             focusedBoundingBox={focusedBoundingBox}
             imageUrls={imageUrls}
-            userFormHighlightKey={userFormHighlightKey}
+            userFormHighlightKey={userPrefs.form.highlightKey}
           />
         </div>
         <div className='col-span-3 mr-3 overflow-x-hidden overflow-y-scroll'>
