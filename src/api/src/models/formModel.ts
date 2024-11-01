@@ -20,6 +20,7 @@ class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
   public status!: TForm['status']
   public templateId?: TForm['templateId']
   public textractJobId?: TForm['textractJobId']
+  public uploadFolderNameS3?: TForm['uploadFolderNameS3']
 
   // `readonly` from the perspective of the application layer. These fields are automatically
   // managed by Sequelize during related transactions and should not be manually modified in the
@@ -101,6 +102,10 @@ const initFormModel = (sequelize: Sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
+      },
+      uploadFolderNameS3: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

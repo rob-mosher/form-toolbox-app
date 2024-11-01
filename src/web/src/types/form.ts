@@ -17,4 +17,5 @@ export type TForm = {
   templateId?: string;
   textractJobId?: string;
   updatedAt: Date;
+  uploadFolderNameS3?: string;
 };

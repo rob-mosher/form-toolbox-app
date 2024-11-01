@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
-import { S3_PREVIEWS_FOLDER_NAME } from '../constants/s3FolderNames'
+import { S3_PREVIEWS_FOLDER_NAME, S3_UPLOADS_FOLDER_NAME } from '../constants/s3FolderNames'
 import { putObject } from '../services/aws/s3/s3Functions'
 import type { TWebpFile } from '../types'
 import { createError } from '../utils/error'
@@ -54,24 +54,26 @@ const putUpload: RequestHandler = async (req, res, next) => {
     }))
   }
 
-  const fileNameS3 = `uploads/${res.locals.form.id}/${Date.now()}-${req.file.originalname}`
+  const uploadFolderNameS3 = `${S3_UPLOADS_FOLDER_NAME}/${res.locals.form.id}`
+  const fileNameS3 = `${Date.now()}-${req.file.originalname}`
 
   try {
-    res.locals.form.status = 'uploading'
     res.locals.form.fileNameOriginal = req.file.originalname
     res.locals.form.fileNameS3 = fileNameS3
-    console.log(`bucketController.putUpload: Attempting to write status, fileNameOriginal, and fileNameS3 to database for the following formId: '${res.locals.form.id}'`)
+    res.locals.form.status = 'uploading'
+    res.locals.form.uploadFolderNameS3 = uploadFolderNameS3
+    console.log(`bucketController.putUpload: Attempting to write fileNameOriginal, fileNameS3, status, and uploadFolderNameS3 to database for the following formId: '${res.locals.form.id}'`)
     await res.locals.form.save()
 
     console.log(`bucketController.putUpload: Uploading document with the following formId: '${res.locals.form.id}'`)
     await putObject({
-      Bucket: AWS_BUCKET_NAME, // string
-      Key: fileNameS3, // string
+      Bucket: AWS_BUCKET_NAME,
+      Key: `${uploadFolderNameS3}/${fileNameS3}`,
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
       Metadata: {
         // NOTE: key will be converted to lower-case, so doing so here.
-        formid: res.locals.form.id, // string
+        formid: res.locals.form.id,
       },
     })
   } catch (err) {

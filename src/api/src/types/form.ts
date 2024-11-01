@@ -18,6 +18,7 @@ export interface TForm {
   templateId?: string;
   textractJobId?: string;
   updatedAt: Date;
+  uploadFolderNameS3?: string;
 }
 
 // Sequelize provides the `id` automatically as a primary key during record creation.

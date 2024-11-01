@@ -127,6 +127,7 @@ erDiagram
     ENUM status
     UUID templateId FK "Foreign Key to Template"
     STRING textractJobId
+    STRING uploadFolderNameS3
   }
 
   Template {
