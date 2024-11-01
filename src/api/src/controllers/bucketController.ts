@@ -63,10 +63,11 @@ const putUpload: RequestHandler = async (req, res, next) => {
     await res.locals.form.save()
 
     console.log(`bucketController.putUpload: Uploading document with the following formId: '${res.locals.form.id}'`)
-    putObject({
+    await putObject({
       Bucket: AWS_BUCKET_NAME, // string
       Key: fileNameS3, // string
       Body: req.file.buffer,
+      ContentType: req.file.mimetype,
       Metadata: {
         // NOTE: key will be converted to lower-case, so doing so here.
         formid: res.locals.form.id, // string
