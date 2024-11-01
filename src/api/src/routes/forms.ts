@@ -220,7 +220,7 @@ formsRouter.get(
     const keys: string[] = []
 
     for (let i = 1; i <= pageCount; i += 1) {
-      const key = `exports/${res.locals.form.id}/${i}.webp`
+      const key = `${res.locals.form.previewFolderNameS3}/${i}.webp`
       keys.push(key)
     }
 

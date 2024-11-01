@@ -117,13 +117,13 @@ erDiagram
   Form {
     UUID id PK "Primary Key"
     STRING analysisFolderNameS3
-    STRING exportFolderNameS3
     STRING fileName
     STRING fileNameS3
     JSONB formDeclared "Flexible container for varied form content, adhering to its Template schema"
     JSONB formDetected "Flexible container for what formDeclared likely is"
     BOOLEAN isDeleted "For soft-delete"
     INTEGER pageCount
+    STRING previewFolderNameS3
     ENUM status
     UUID templateId FK "Foreign Key to Template"
     STRING textractJobId

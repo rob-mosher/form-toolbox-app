@@ -10,13 +10,13 @@ import type { TForm, TFormCreationAttributes } from '../types'
 class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
   public id!: CreationOptional<TForm['id']>
   public analysisFolderNameS3?: TForm['analysisFolderNameS3']
-  public exportFolderNameS3?: TForm['exportFolderNameS3']
   public fileName?: TForm['fileName']
   public fileNameS3?: TForm['fileNameS3']
   public formDeclared?: TForm['formDeclared']
   public formDetected?: TForm['formDetected']
   public isDeleted!: TForm['isDeleted']
   public pageCount?: TForm['pageCount']
+  public previewFolderNameS3?: TForm['previewFolderNameS3']
   public status!: TForm['status']
   public templateId?: TForm['templateId']
   public textractJobId?: TForm['textractJobId']
@@ -45,10 +45,6 @@ const initFormModel = (sequelize: Sequelize) => {
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
-      exportFolderNameS3: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       fileName: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -72,6 +68,10 @@ const initFormModel = (sequelize: Sequelize) => {
       },
       pageCount: {
         type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      previewFolderNameS3: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       status: {

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
+import { S3_PREVIEWS_FOLDER_NAME } from '../constants/s3FolderNames'
 import { putObject } from '../services/aws/s3/s3Functions'
 import type { TWebpFile } from '../types'
 import { createError } from '../utils/error'
@@ -16,14 +17,14 @@ const putWebpFiles: RequestHandler = async (req, res, next) => {
   }
 
   try {
-    const exportFolderNameS3 = `exports/${res.locals.form.id}`
-    res.locals.form.exportFolderNameS3 = exportFolderNameS3
-    console.log(`bucketController.putWebpFiles: Attempting to set 'exportFolderNameS3' for formId: '${res.locals.form.id}'`)
+    const previewFolderNameS3 = `${S3_PREVIEWS_FOLDER_NAME}/${res.locals.form.id}`
+    res.locals.form.previewFolderNameS3 = previewFolderNameS3
+    console.log(`bucketController.putWebpFiles: Attempting to set 'previewFolderNameS3' for formId: '${res.locals.form.id}'`)
     await res.locals.form.save()
 
     const uploadPromises = (res.locals.webpFiles as TWebpFile[]).map((file, i) => putObject({
       Bucket: AWS_BUCKET_NAME,
-      Key: `${exportFolderNameS3}/${i + 1}.webp`, // Pages are 1-indexed
+      Key: `${previewFolderNameS3}/${i + 1}.webp`, // Pages are 1-indexed
       Body: file.buffer,
       ContentType: 'image/webp',
     }))
