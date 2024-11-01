@@ -10,7 +10,7 @@ import type { TForm, TFormCreationAttributes } from '../types'
 class FormModel extends Model<TForm, TFormCreationAttributes> implements TForm {
   public id!: CreationOptional<TForm['id']>
   public analysisFolderNameS3?: TForm['analysisFolderNameS3']
-  public fileName?: TForm['fileName']
+  public fileNameOriginal?: TForm['fileNameOriginal']
   public fileNameS3?: TForm['fileNameS3']
   public formDeclared?: TForm['formDeclared']
   public formDetected?: TForm['formDetected']
@@ -45,7 +45,7 @@ const initFormModel = (sequelize: Sequelize) => {
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
-      fileName: {
+      fileNameOriginal: {
         type: DataTypes.STRING,
         allowNull: true,
       },

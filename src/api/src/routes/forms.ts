@@ -54,7 +54,7 @@ formsRouter.get(
         }],
         attributes: [
           'createdAt',
-          'fileName',
+          'fileNameOriginal',
           'id',
           'pageCount',
           'status',

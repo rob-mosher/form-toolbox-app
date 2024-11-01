@@ -7,7 +7,7 @@ export interface TForm {
   id: string;
   analysisFolderNameS3?: string;
   createdAt: Date;
-  fileName?: string;
+  fileNameOriginal?: string;
   fileNameS3?: string;
   formDeclared?: Record<string, TFormItem>;
   formDetected?: Record<string, TFormItem>;

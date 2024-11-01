@@ -58,9 +58,9 @@ const putUpload: RequestHandler = async (req, res, next) => {
 
   try {
     res.locals.form.status = 'uploading'
-    res.locals.form.fileName = req.file.originalname
+    res.locals.form.fileNameOriginal = req.file.originalname
     res.locals.form.fileNameS3 = fileNameS3
-    console.log(`bucketController.putUpload: Attempting to write status, fileName, and fileNameS3 to database for the following formId: '${res.locals.form.id}'`)
+    console.log(`bucketController.putUpload: Attempting to write status, fileNameOriginal, and fileNameS3 to database for the following formId: '${res.locals.form.id}'`)
     await res.locals.form.save()
 
     console.log(`bucketController.putUpload: Uploading document with the following formId: '${res.locals.form.id}'`)

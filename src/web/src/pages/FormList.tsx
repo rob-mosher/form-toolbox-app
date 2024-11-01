@@ -144,7 +144,7 @@ export default function FormList() {
               {/* TODO: max-w-[xch] isn't working exactly as expected, but good enough for now */}
               <td className='p-3'>{form.status}</td>
               <td className='p-3 text-center'>{form.pageCount}</td>
-              <td className='max-w-xs truncate p-3'>{form.fileName}</td>
+              <td className='max-w-xs truncate p-3'>{form.fileNameOriginal}</td>
               <td className='max-w-sm truncate p-3'>{form.template?.name}</td>
               <td className='max-w-[11ch] truncate p-3 text-gray-500'>{form.id}</td>
               <td className='max-w-[11ch] truncate p-3 text-gray-500'>{form.textractJobId}</td>
