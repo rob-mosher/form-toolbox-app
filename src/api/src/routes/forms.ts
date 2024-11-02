@@ -81,7 +81,7 @@ formsRouter.post(
   formController.createForm,
 
   // Starts the artifact upload to S3 which triggers textraction etc
-  bucketController.putUpload,
+  bucketController.putUploadFiles,
 
   // Local image processing for a preview of each page, then upload
   imageController.convertToPreview,

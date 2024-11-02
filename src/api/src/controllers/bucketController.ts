@@ -37,7 +37,7 @@ const putPreviewFiles: RequestHandler = async (req, res, next) => {
   }
 }
 
-const putUpload: RequestHandler = async (req, res, next) => {
+const putUploadFiles: RequestHandler = async (req, res, next) => {
   if (!req.file) {
     return next(createError({
       err: 'File not found',
@@ -62,10 +62,10 @@ const putUpload: RequestHandler = async (req, res, next) => {
     res.locals.form.fileNameS3 = fileNameS3
     res.locals.form.status = 'uploading'
     res.locals.form.uploadFolderNameS3 = uploadFolderNameS3
-    console.log(`bucketController.putUpload: Attempting to write fileNameOriginal, fileNameS3, status, and uploadFolderNameS3 to database for the following formId: '${res.locals.form.id}'`)
+    console.log(`bucketController.putUploadFiles: Attempting to write fileNameOriginal, fileNameS3, status, and uploadFolderNameS3 to database for the following formId: '${res.locals.form.id}'`)
     await res.locals.form.save()
 
-    console.log(`bucketController.putUpload: Uploading document with the following formId: '${res.locals.form.id}'`)
+    console.log(`bucketController.putUploadFiles: Uploading document with the following formId: '${res.locals.form.id}'`)
     await putObject({
       Bucket: AWS_BUCKET_NAME,
       Key: `${uploadFolderNameS3}/${fileNameS3}`,
@@ -79,7 +79,7 @@ const putUpload: RequestHandler = async (req, res, next) => {
   } catch (err) {
     return next(createError({
       err: err as Error,
-      method: `${__filename}:putUpload`,
+      method: `${__filename}:putUploadFiles`,
       status: 500,
     }))
   }
@@ -89,7 +89,7 @@ const putUpload: RequestHandler = async (req, res, next) => {
 
 const bucketController = {
   putPreviewFiles,
-  putUpload,
+  putUploadFiles,
 }
 
 export default bucketController
