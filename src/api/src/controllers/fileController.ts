@@ -1,8 +1,7 @@
 import type { RequestHandler as TRequestHandler } from 'express'
 import fs from 'fs/promises'
 import path from 'path'
-import { TEMP_UPLOAD_DIR } from '../constants/paths'
-import { createError } from '../utils/error'
+import { TEMP_UPLOAD_DIR, createError } from '../lib'
 
 // Ensure temp directory exists on module load
 fs.mkdir(TEMP_UPLOAD_DIR, { recursive: true })

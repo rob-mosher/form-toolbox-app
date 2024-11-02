@@ -1,10 +1,9 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
 import fs from 'fs/promises'
-import { S3_PREVIEWS_FOLDER_NAME, S3_UPLOADS_FOLDER_NAME } from '../constants/s3FolderNames'
+import { S3_PREVIEWS_FOLDER_NAME, S3_UPLOADS_FOLDER_NAME, createError } from '../lib'
 import { putObject } from '../services/aws/s3/s3Functions'
 import type { TPreviewFile } from '../types'
-import { createError } from '../utils/error'
 
 dotenv.config()
 

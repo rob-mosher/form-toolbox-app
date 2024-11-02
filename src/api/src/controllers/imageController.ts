@@ -4,7 +4,7 @@ import type { Options as TOptions } from 'pdf2pic/dist/types/options'
 import sharp from 'sharp'
 import fs from 'fs/promises'
 import path from 'path'
-import { TEMP_UPLOAD_DIR } from '../constants/paths'
+import { TEMP_UPLOAD_DIR } from '../lib'
 import type { TPreviewFile } from '../types'
 
 // TODO: Refine this approach, perhaps with ConvertResponse or WriteImageResponse

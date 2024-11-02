@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
+import { createError } from '../lib'
 import { FormModel } from '../models'
 import type { TFormCreationAttributes } from '../types'
-import { createError } from '../utils/error'
 
 dotenv.config()
 
