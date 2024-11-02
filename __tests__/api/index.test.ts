@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import request from 'supertest';
 import app from '../../src/api/src/index';
 
-import { ACCEPTED_UPLOAD_MIME_TYPES } from '../../src/api/src/constants/acceptedUploadMimeTypes';
+import { SUPPORTED_UPLOAD_MIME_TYPES } from '../../src/api/src/lib/constants/supportedUploadMimeTypes';
 
 describe('API server', () => {
   const invalidRandomURL = `/invalid-random-url-${crypto.randomUUID()}`;
@@ -39,7 +39,7 @@ describe('API server', () => {
     it('should match an expected list of supported MIME types', async () => {
       const response = await request(app).get('/api/forms/accepted-mime-types');
       const responseStringified = response.text;
-      const acceptedStringified = JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES);
+      const acceptedStringified = JSON.stringify(SUPPORTED_UPLOAD_MIME_TYPES);
       expect(responseStringified === acceptedStringified).toBe(true);
     })
   });
@@ -48,7 +48,7 @@ describe('API server', () => {
     it('should not match an invalid list of supported MIME types', async () => {
       const response = await request(app).get('/api/forms/accepted-mime-types');
       const responseStringified = response.text;
-      const invalidTypes = [...ACCEPTED_UPLOAD_MIME_TYPES, 'invalidEntry'];
+      const invalidTypes = [...SUPPORTED_UPLOAD_MIME_TYPES, 'invalidEntry'];
       const invalidStringified = JSON.stringify(invalidTypes);
       expect(responseStringified === invalidStringified).toBe(false);
     })

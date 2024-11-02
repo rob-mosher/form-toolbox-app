@@ -5,7 +5,7 @@ import bucketController from '../controllers/bucketController'
 import fileController from '../controllers/fileController'
 import formController from '../controllers/formController'
 import imageController from '../controllers/imageController'
-import { ACCEPTED_UPLOAD_MIME_TYPES, TEMP_UPLOAD_DIR, createError } from '../lib'
+import { SUPPORTED_UPLOAD_MIME_TYPES, TEMP_UPLOAD_DIR, createError } from '../lib'
 import { FormModel, TemplateModel } from '../models'
 import { generatePresignedUrlsFromKeys } from '../services/aws/s3/s3Functions'
 
@@ -18,7 +18,7 @@ const limits = {
 const useMemory = false
 
 function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
-  const acceptedMimeTypes = new Set([...ACCEPTED_UPLOAD_MIME_TYPES])
+  const acceptedMimeTypes = new Set([...SUPPORTED_UPLOAD_MIME_TYPES])
   if (!file) return cb(new Error('Missing file')) // TODO: Refactor with custom error handler
   if (!acceptedMimeTypes.has(file.mimetype)) return cb(new Error('Invalid file type')) // TODO: Refactor with custom error handler
   return cb(null, true)
@@ -121,7 +121,7 @@ formsRouter.get(
 
   (req: Request, res: Response, next: NextFunction) => {
     try {
-      const mimeTypesJson = JSON.stringify(ACCEPTED_UPLOAD_MIME_TYPES)
+      const mimeTypesJson = JSON.stringify(SUPPORTED_UPLOAD_MIME_TYPES)
       return res.status(200).send(mimeTypesJson)
     } catch (err) {
       return next(createError({
