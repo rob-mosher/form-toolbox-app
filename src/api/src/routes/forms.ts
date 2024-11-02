@@ -83,9 +83,9 @@ formsRouter.post(
   // Starts the artifact upload to S3 which triggers textraction etc
   bucketController.putUpload,
 
-  // Local image processing for a screenshot of each page, then upload
-  imageController.convertToWebp,
-  bucketController.putWebpFiles,
+  // Local image processing for a preview of each page, then upload
+  imageController.convertToPreview,
+  bucketController.putPreviewFiles,
 
   // Only applicable if diskStorage is used, i.e. useMemory === false
   // fileController.clearStoredUploads,

@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
 import { S3_PREVIEWS_FOLDER_NAME, S3_UPLOADS_FOLDER_NAME } from '../constants/s3FolderNames'
 import { putObject } from '../services/aws/s3/s3Functions'
-import type { TWebpFile } from '../types'
+import type { TPreviewFile } from '../types'
 import { createError } from '../utils/error'
 
 dotenv.config()
@@ -11,18 +11,18 @@ if (!process.env.AWS_BUCKET_NAME) throw new Error('Missing AWS_BUCKET_NAME envir
 
 const { AWS_BUCKET_NAME } = process.env
 
-const putWebpFiles: RequestHandler = async (req, res, next) => {
-  if (!res.locals.webpFiles || res.locals.webpFiles.length === 0) {
-    return next(new Error('No WEBP files to upload'))
+const putPreviewFiles: RequestHandler = async (req, res, next) => {
+  if (!res.locals.previewFiles || res.locals.previewFiles.length === 0) {
+    return next(new Error('No preview files to upload'))
   }
 
   try {
     const previewFolderNameS3 = `${S3_PREVIEWS_FOLDER_NAME}/${res.locals.form.id}`
     res.locals.form.previewFolderNameS3 = previewFolderNameS3
-    console.log(`bucketController.putWebpFiles: Attempting to set 'previewFolderNameS3' for formId: '${res.locals.form.id}'`)
+    console.log(`bucketController.putPreviewFiles: Attempting to set 'previewFolderNameS3' for formId: '${res.locals.form.id}'`)
     await res.locals.form.save()
 
-    const uploadPromises = (res.locals.webpFiles as TWebpFile[]).map((file, i) => putObject({
+    const uploadPromises = (res.locals.previewFiles as TPreviewFile[]).map((file, i) => putObject({
       Bucket: AWS_BUCKET_NAME,
       Key: `${previewFolderNameS3}/${i + 1}.webp`, // Pages are 1-indexed
       Body: file.buffer,
@@ -88,7 +88,7 @@ const putUpload: RequestHandler = async (req, res, next) => {
 }
 
 const bucketController = {
-  putWebpFiles,
+  putPreviewFiles,
   putUpload,
 }
 

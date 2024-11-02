@@ -3,7 +3,7 @@ import { fromBuffer as pdf2picFromBuffer } from 'pdf2pic'
 import type { Options as TOptions } from 'pdf2pic/dist/types/options'
 import sharp from 'sharp'
 import path from 'path'
-import type { TWebpFile } from '../types'
+import type { TPreviewFile } from '../types'
 
 // TODO: Refine this approach, perhaps with ConvertResponse or WriteImageResponse
 interface TConversionResult {
@@ -14,15 +14,15 @@ interface TConversionResult {
   size: string | undefined
 }
 
-const createWebpFromImage = async (file: Express.Multer.File): Promise<TWebpFile> => {
-  const webpBuffer = await sharp(file.buffer).webp().toBuffer()
+const createPreviewFromImage = async (file: Express.Multer.File): Promise<TPreviewFile> => {
+  const previewBuffer = await sharp(file.buffer).webp().toBuffer()
   return {
-    buffer: webpBuffer,
+    buffer: previewBuffer,
     filename: '', // filename will be set by controller
   }
 }
 
-const createWebpFromPdf = async (file: Express.Multer.File): Promise<TWebpFile> => {
+const createPreviewFromPdf = async (file: Express.Multer.File): Promise<TPreviewFile> => {
   const options: TOptions = {
     density: 300,
     format: 'webp',
@@ -42,37 +42,38 @@ const createWebpFromPdf = async (file: Express.Multer.File): Promise<TWebpFile> 
     throw new Error('PDF conversion failed to produce valid output')
   }
 
-  const webpBuffer = await sharp(result.path).toBuffer()
+  // TODO: Continue using pdf2pic instead of sharp for this portion
+  const previewBuffer = await sharp(result.path).toBuffer()
   return {
-    buffer: webpBuffer,
+    buffer: previewBuffer,
     filename: '', // filename will be set by controller
   }
 }
 
-const convertToWebp: RequestHandler = async (req, res, next) => {
+const convertToPreview: RequestHandler = async (req, res, next) => {
   if (!req.file) {
     return next(new Error('No file provided'))
   }
 
   try {
     const fileType = path.extname(req.file.originalname).toLowerCase()
-    const outputFiles: TWebpFile[] = []
+    const previewFiles: TPreviewFile[] = []
 
     switch (fileType) {
       case '.jpg':
       case '.jpeg':
       case '.png': {
-        const webpFile = await createWebpFromImage(req.file)
-        outputFiles.push({
-          ...webpFile,
+        const previewFile = await createPreviewFromImage(req.file)
+        previewFiles.push({
+          ...previewFile,
           filename: '1.webp',
         })
         break
       }
       case '.pdf': {
-        const webpFile = await createWebpFromPdf(req.file)
-        outputFiles.push({
-          ...webpFile,
+        const previewFile = await createPreviewFromPdf(req.file)
+        previewFiles.push({
+          ...previewFile,
           filename: '1.webp',
         })
         break
@@ -81,16 +82,16 @@ const convertToWebp: RequestHandler = async (req, res, next) => {
         throw new Error(`Unsupported file type: ${fileType}`)
     }
 
-    res.locals.webpFiles = outputFiles
+    res.locals.previewFiles = previewFiles
     return next()
   } catch (err) {
-    console.error('convertToWebp: Error during conversion:', err)
+    console.error('convertToPreview: Error during conversion:', err)
     return next(err)
   }
 }
 
 const imageController = {
-  convertToWebp,
+  convertToPreview,
 }
 
 export default imageController

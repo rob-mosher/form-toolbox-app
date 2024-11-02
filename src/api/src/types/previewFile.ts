@@ -1,4 +1,4 @@
-export interface TWebpFile {
+export interface TPreviewFile {
   buffer: Buffer;
   filename: string;
 }
