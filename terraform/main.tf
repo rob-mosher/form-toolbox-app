@@ -131,7 +131,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   lambda_function {
     lambda_function_arn = module.lambda.lambda_on_upload_arn
     events              = ["s3:ObjectCreated:*"]
-    # Ensure any changes here are matched with the API's `S3_UPLOADS_FOLDER_NAME`.
+    # NOTE: Ensure any changes here are matched with the API's `S3_UPLOADS_FOLDER_NAME`.
     filter_prefix       = "uploads/"
   }
 }

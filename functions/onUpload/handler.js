@@ -59,6 +59,7 @@ module.exports.handler = async (event) => {
       ],
       OutputConfig: {
         S3Bucket: bucketName,
+        // NOTE: Ensure any changes here are matched with the API's `S3_ANALYSIS_FOLDER_NAME`.
         S3Prefix: 'analysis',
       },
     }

@@ -1,6 +1,7 @@
 import { Message as SQSMessage } from '@aws-sdk/client-sqs'
 import dotenv from 'dotenv'
 import { requeueMessage } from './sqsFunctions'
+import { S3_ANALYSIS_FOLDER_NAME } from '../../../lib'
 import { FormModel } from '../../../models'
 import { getAnalysis } from '../s3/s3Functions'
 
@@ -35,7 +36,7 @@ const processMessage = async (mes: SQSMessage) => {
         {
           status: 'analyzing',
           textractJobId,
-          analysisFolderNameS3: `analysis/${textractJobId}`,
+          analysisFolderNameS3: `${S3_ANALYSIS_FOLDER_NAME}/${textractJobId}`,
         },
         {
           where: {
