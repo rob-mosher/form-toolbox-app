@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { RequestHandler } from 'express'
+import fs from 'fs/promises'
 import { S3_PREVIEWS_FOLDER_NAME, S3_UPLOADS_FOLDER_NAME } from '../constants/s3FolderNames'
 import { putObject } from '../services/aws/s3/s3Functions'
 import type { TPreviewFile } from '../types'
@@ -46,13 +47,23 @@ const putUploadFiles: RequestHandler = async (req, res, next) => {
     }))
   }
 
-  if (!req.file.originalname || !req.file.buffer) {
+  const hasBuffer = Boolean(req.file.buffer) // useMemory is inferred to be true
+  const hasPath = Boolean(req.file.path) // useMemory is inferred to be false
+
+  const hasValidName = Boolean(req.file.originalname)
+  const hasValidContent = hasBuffer || hasPath
+
+  if (!hasValidName || !hasValidContent) {
     return next(createError({
       err: 'Missing file properties',
       method: `${__filename}:putObject`,
       status: 500,
     }))
   }
+
+  const fileContent = hasBuffer
+    ? req.file.buffer // useMemory is inferred to be true
+    : await fs.readFile(req.file.path) // useMemory is inferred to be false
 
   const uploadFolderNameS3 = `${S3_UPLOADS_FOLDER_NAME}/${res.locals.form.id}`
   const fileNameS3 = `${Date.now()}-${req.file.originalname}`
@@ -69,7 +80,7 @@ const putUploadFiles: RequestHandler = async (req, res, next) => {
     await putObject({
       Bucket: AWS_BUCKET_NAME,
       Key: `${uploadFolderNameS3}/${fileNameS3}`,
-      Body: req.file.buffer,
+      Body: fileContent,
       ContentType: req.file.mimetype,
       Metadata: {
         // NOTE: key will be converted to lower-case, so doing so here.

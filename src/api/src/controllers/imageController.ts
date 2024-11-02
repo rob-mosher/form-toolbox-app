@@ -2,7 +2,9 @@ import { RequestHandler } from 'express'
 import { fromBuffer as pdf2picFromBuffer } from 'pdf2pic'
 import type { Options as TOptions } from 'pdf2pic/dist/types/options'
 import sharp from 'sharp'
+import fs from 'fs/promises'
 import path from 'path'
+import { TEMP_UPLOAD_DIR } from '../constants/paths'
 import type { TPreviewFile } from '../types'
 
 // TODO: Refine this approach, perhaps with ConvertResponse or WriteImageResponse
@@ -15,7 +17,8 @@ interface TConversionResult {
 }
 
 const createPreviewFromImage = async (file: Express.Multer.File): Promise<TPreviewFile> => {
-  const previewBuffer = await sharp(file.buffer).webp().toBuffer()
+  const sourceContent = file.buffer || await fs.readFile(file.path)
+  const previewBuffer = await sharp(sourceContent).webp().toBuffer()
   return {
     buffer: previewBuffer,
     filename: '', // filename will be set by controller
@@ -23,6 +26,7 @@ const createPreviewFromImage = async (file: Express.Multer.File): Promise<TPrevi
 }
 
 const createPreviewFromPdf = async (file: Express.Multer.File): Promise<TPreviewFile> => {
+  const sourceContent = file.buffer || await fs.readFile(file.path)
   const options: TOptions = {
     density: 300,
     format: 'webp',
@@ -31,10 +35,10 @@ const createPreviewFromPdf = async (file: Express.Multer.File): Promise<TPreview
     quality: 80,
     preserveAspectRatio: true,
     saveFilename: 'page',
-    savePath: '/tmp',
+    savePath: TEMP_UPLOAD_DIR,
   }
 
-  const converted = pdf2picFromBuffer(file.buffer, options)
+  const converted = pdf2picFromBuffer(sourceContent, options)
   // TODO: Handle multi-page PDFs
   const result = await converted(1) as TConversionResult
 

@@ -1,13 +1,23 @@
 import express, { NextFunction, Request, Response } from 'express'
 import multer, { FileFilterCallback } from 'multer'
+import fs from 'fs/promises'
 import { ACCEPTED_UPLOAD_MIME_TYPES } from '../constants/acceptedUploadMimeTypes'
+import { TEMP_UPLOAD_DIR } from '../constants/paths'
 import bucketController from '../controllers/bucketController'
-// import fileController from '../controllers/fileController'
+import fileController from '../controllers/fileController'
 import formController from '../controllers/formController'
 import imageController from '../controllers/imageController'
 import { FormModel, TemplateModel } from '../models'
 import { generatePresignedUrlsFromKeys } from '../services/aws/s3/s3Functions'
 import { createError } from '../utils/error'
+
+// TODO: Abstract this to a lib/const file
+const limits = {
+  fileSize: 26214400, // 25 MB
+}
+
+// TODO: Abstract this to a lib/const file
+const useMemory = false
 
 function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
   const acceptedMimeTypes = new Set([...ACCEPTED_UPLOAD_MIME_TYPES])
@@ -16,15 +26,21 @@ function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallb
   return cb(null, true)
 }
 
-const limits = {
-  fileSize: 26214400, // 25 MB
+// This logic is only called when the API is first loaded, preventing multiple calls
+const initTempDir = async () => {
+  try {
+    await fs.mkdir(TEMP_UPLOAD_DIR, { recursive: true })
+  } catch (err) {
+    console.error('Failed to create temp upload directory:', err)
+    process.exit(1) // Exit with error code, stopping the API
+  }
 }
+if (!useMemory) initTempDir()
 
-const useMemory = true
 const storage = useMemory
   ? multer.memoryStorage()
   : multer.diskStorage({
-    destination: 'public/data/uploads',
+    destination: TEMP_UPLOAD_DIR,
     filename(req, file, cb) {
       cb(null, `${Date.now()}-${file.originalname}`)
     },
@@ -88,11 +104,17 @@ formsRouter.post(
   bucketController.putPreviewFiles,
 
   // Only applicable if diskStorage is used, i.e. useMemory === false
-  // fileController.clearStoredUploads,
+  (req, res, next) => {
+    if (!useMemory) {
+      return fileController.clearStoredUploads(req, res, next)
+    }
+    return next()
+  },
 
-  // Complete the request
+  // Complete the request.
+  // eslint-disable-next-line arrow-body-style
   (req, res) => {
-    res.sendStatus(201)
+    return res.sendStatus(201)
   },
 )
 

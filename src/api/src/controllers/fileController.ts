@@ -1,19 +1,32 @@
-import { RequestHandler } from 'express'
+import type { RequestHandler as TRequestHandler } from 'express'
 import fs from 'fs/promises'
 import path from 'path'
+import { TEMP_UPLOAD_DIR } from '../constants/paths'
 import { createError } from '../utils/error'
 
-const clearStoredUploads: RequestHandler = (req, res, next) => {
-  const dirName = path.resolve(path.dirname(require.main!.filename), 'public/data/uploads')
-  fs.readdir(dirName)
-    .then((fileNames) => Promise.all(
-      fileNames.map((fileName) => fs.unlink(path.resolve(dirName, fileName))),
-    ))
-    .then(() => next())
-    .catch((err) => next(createError({
+// Ensure temp directory exists on module load
+fs.mkdir(TEMP_UPLOAD_DIR, { recursive: true })
+  .catch((err) => {
+    console.error('Failed to create temporary upload directory:', err)
+    process.exit(1) // Exit with error code, stopping the API
+  })
+
+const clearStoredUploads: TRequestHandler = async (req, res, next) => {
+  try {
+    const tempFiles = await fs.readdir(TEMP_UPLOAD_DIR)
+    await Promise.all(
+      tempFiles.map((tempFile) => {
+        console.log(`Deleting temp file: ${TEMP_UPLOAD_DIR}/${tempFile}`)
+        return fs.unlink(path.resolve(TEMP_UPLOAD_DIR, tempFile))
+      }),
+    )
+    next()
+  } catch (err) {
+    next(createError({
       method: `${__filename}:clearStoredUploads`,
-      err,
-    })))
+      err: err as Error,
+    }))
+  }
 }
 
 const fileController = {
