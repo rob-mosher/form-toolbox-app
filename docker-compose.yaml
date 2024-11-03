@@ -1,6 +1,9 @@
 services:
   api:
-    build: ./src/api
+    build:
+      context: ./src/api
+      args:
+        NODE_VERSION: ${NODE_VERSION:-20.18.0}
     command: npm run dev:docker
     depends_on:
       db:
@@ -58,7 +61,10 @@ services:
     # volumes:
     #   - pgdata:/var/lib/postgresql/data
   web:
-    build: ./src/web
+    build:
+      context: ./src/web
+      args:
+        NODE_VERSION: ${NODE_VERSION:-20.18.0}
     command: npm run dev:docker
     depends_on:
       api:

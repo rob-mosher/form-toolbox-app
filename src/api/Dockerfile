@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18.18.1
+ARG NODE_VERSION
+FROM node:${NODE_VERSION}
 
 WORKDIR /code
 
