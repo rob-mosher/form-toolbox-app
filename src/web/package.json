@@ -1,7 +1,8 @@
 {
-  "name": "form-toolbox-web",
+  "name": "form-toolbox-app-web",
   "private": true,
   "version": "0.0.1",
+  "description": "Form Toolbox web interface",
   "type": "module",
   "scripts": {
     "build": "vite build",

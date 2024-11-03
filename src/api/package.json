@@ -1,9 +1,8 @@
 {
-  "name": "form-toolbox-api",
+  "name": "form-toolbox-app-api",
   "private": true,
-  "version": "0.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "version": "0.0.1",
+  "description": "Form Toolbox API service",
   "scripts": {
     "build": "tsc",
     "check:types": "npx tsc --noEmit --skipLibCheck",
