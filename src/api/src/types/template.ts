@@ -2,8 +2,8 @@
 
 import { Optional } from 'sequelize'
 
-// TSchemaField is used to validate the structure being converted into schemaJSON.
-export type TSchemaField = {
+// TFormSchema is used to validate the structure being converted into schema.
+export type TFormSchema = {
   type: 'string' | 'number' | 'boolean' | 'date';
   required: boolean;
 };
@@ -11,10 +11,10 @@ export type TSchemaField = {
 export interface TTemplate {
   id: string;
   isDeleted: boolean;
+  // formSchema is stored as JSONB and automatically parsed by Sequelize
+  formSchema: Record<string, TFormSchema>;
+  formSchemaCount: number;
   name: string;
-  schemaFieldCount: number;
-  // schemaJSON is stored as JSONB and automatically parsed by Sequelize
-  schemaJSON: Record<string, TSchemaField>;
 }
 
-export type TTemplateCreationAttributes = Optional<TTemplate, 'id' | 'schemaFieldCount'>
+export type TTemplateCreationAttributes = Optional<TTemplate, 'id' | 'formSchemaCount'>

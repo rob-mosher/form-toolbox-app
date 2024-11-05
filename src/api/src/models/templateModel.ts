@@ -10,9 +10,9 @@ import type { TTemplate, TTemplateCreationAttributes } from '../types'
 class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implements TTemplate {
   public id!: CreationOptional<TTemplate['id']>
   public isDeleted!: TTemplate['isDeleted']
+  public formSchema!: TTemplate['formSchema']
+  public formSchemaCount!: number
   public name!: TTemplate['name']
-  public schemaFieldCount!: number
-  public schemaJSON!: TTemplate['schemaJSON']
 }
 
 const initTemplateModel = (sequelize: Sequelize) => {
@@ -28,16 +28,16 @@ const initTemplateModel = (sequelize: Sequelize) => {
         defaultValue: false,
         allowNull: false,
       },
-      name: {
-        type: DataTypes.STRING,
+      formSchema: {
+        type: DataTypes.JSONB,
         allowNull: false,
       },
-      schemaFieldCount: {
+      formSchemaCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      schemaJSON: {
-        type: DataTypes.JSONB,
+      name: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

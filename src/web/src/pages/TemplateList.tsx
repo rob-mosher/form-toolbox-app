@@ -110,7 +110,7 @@ export default function TemplateList() {
                 </span>
               </td>
               <td className='p-3'>{template.name}</td>
-              <td className='p-3 text-center'>{template.schemaFieldCount}</td>
+              <td className='p-3 text-center'>{template.formSchemaCount}</td>
               <td className='p-3 text-center'>{template.id}</td>
             </tr>
           ))}

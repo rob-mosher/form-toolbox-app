@@ -7,22 +7,22 @@ import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
 import { mergeClassName, userTabOverrideColors } from '../../lib'
 import type {
-  TForm, TFormItem, TSchemaField, TTemplate, TTemplateOption, TUserPrefs,
+  TForm, TFormItem, TFormSchema, TTemplate, TTemplateOption, TUserPrefs,
 } from '../../types'
 
 type EditTabProps = {
   form: TForm;
   formId: TForm['id'];
+  formSchema: Record<string, TFormSchema>;
   onBoundingBoxFocus: (boundingBox: {
     keyBoundingBox: TBoundingBox,
     valueBoundingBox: TBoundingBox,
   }) => void;
-  schemaJSON: Record<string, TSchemaField>;
   // setForm accepts `null` to match the type from FormEdit where the form state starts as null
   // while data is being fetched. In this component, setForm is safely used with non-null
   // assertions because the logic to update the form is only executed once the form is loaded.
   setForm: Dispatch<SetStateAction<TForm | null>>;
-  setSchemaJSON: (newSchemaJSON: TTemplate['schemaJSON']) => void;
+  setFormSchema: (newFormSchema: TTemplate['formSchema']) => void;
   templates: TTemplateOption[];
   userTabOverrideKey: TUserPrefs['tab']['overrideKey'];
 }
@@ -30,10 +30,10 @@ type EditTabProps = {
 export default function EditTab({
   form,
   formId,
+  formSchema,
   onBoundingBoxFocus,
-  schemaJSON,
   setForm,
-  setSchemaJSON,
+  setFormSchema,
   templates,
   userTabOverrideKey,
 }: EditTabProps) {
@@ -61,11 +61,11 @@ export default function EditTab({
   }
 
   const mapDetectedToDeclared = (
-    newSchemaJSON: TTemplate['schemaJSON'],
+    newFormSchema: TTemplate['formSchema'],
     formItems: TMappedFormItems,
   ) => {
-    const schemaJSONKeys = Object.keys(newSchemaJSON)
-    const newFormDeclared = schemaJSONKeys.reduce((acc, key) => {
+    const formSchemaKeys = Object.keys(newFormSchema)
+    const newFormDeclared = formSchemaKeys.reduce((acc, key) => {
       if (key in formItems) {
         acc[key] = formItems[key]
       } else {
@@ -90,16 +90,16 @@ export default function EditTab({
 
       const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
       const response = await axios.get(getTemplateDataUrl)
-      const newSchemaJSON = response.data[0].schemaJSON
+      const newFormSchema = response.data[0].formSchema
 
-      setSchemaJSON(newSchemaJSON)
+      setFormSchema(newFormSchema)
       setForm((prevForm): TForm => {
         // Non-null assertion is safe here because handleApply is only called after form is loaded.
         const nonNullPrevForm = prevForm!
 
         // Since handleApply is user-initiated, map formDetected to formDeclared, overwriting values
         const mappedFormDeclared = mapDetectedToDeclared(
-          newSchemaJSON,
+          newFormSchema,
           nonNullPrevForm.formDetected!,
         )
 
@@ -177,8 +177,8 @@ export default function EditTab({
     </>
   )
 
-  const formRows = schemaJSON ? (
-    Object.entries(schemaJSON).map(([key, value]) => {
+  const formRows = formSchema ? (
+    Object.entries(formSchema).map(([key, value]) => {
       const itemDeclared = form?.formDeclared?.[key]
       const itemDetected = form?.formDetected?.[key]
 

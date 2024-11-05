@@ -133,9 +133,9 @@ erDiagram
   Template {
     UUID id PK "Primary Key"
     BOOLEAN isDeleted "For soft-delete"
+    JSONB formSchema "Contains the custom schema that each Template utilizes, adhered to by each Form"
+    INTEGER formSchemaCount "Count of fields in formSchema, automatically maintained"
     STRING name
-    INTEGER schemaFieldCount "Count of fields in schemaJSON, automatically maintained"
-    JSONB schemaJSON "Contains the custom schema that each Template utilizes, adhered to by each Form"
   }
 
 Template ||--o{ Form : "has many"

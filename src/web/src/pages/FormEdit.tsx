@@ -20,7 +20,7 @@ import type {
   TTemplate,
   TTemplateOption,
   TUserPrefs,
-  TSchemaField,
+  TFormSchema,
 } from '../types'
 
 type FormEditParams = {
@@ -31,8 +31,8 @@ export default function FormEdit() {
   const [activeTab, setActiveTab] = useState('edit')
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
   const [form, setForm] = useState<TForm | null>(null)
+  const [formSchema, setFormSchema] = useState<Record<string, TFormSchema>>({})
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schemaJSON, setSchemaJSON] = useState<Record<string, TSchemaField>>({})
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
   const { userPrefs, setUserPrefs } = useGlobalState()
   const { formId } = useParams<FormEditParams>()
@@ -138,19 +138,19 @@ export default function FormEdit() {
           return
         }
 
-        // If templateId is set, set the schemaJSON
+        // If templateId is set, set the formSchema
         if (fetchedForm.templateId) {
           try {
-            const schemaJSONResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
-            setSchemaJSON(schemaJSONResponse.data[0].schemaJSON)
+            const formSchemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
+            setFormSchema(formSchemaResponse.data[0].formSchema)
           } catch (error) {
             // eslint-disable-next-line no-console
-            console.error('Error fetching schemaJSON:', error)
+            console.error('Error fetching formSchema:', error)
           }
         }
 
-        // It should be fine to setForm before setSchemaJSON due to how React works, but it seems
-        // more clear to setSchemaJSON first, since setForm's formDeclared depends on schemaJSON to
+        // It should be fine to setForm before setFormSchema due to how React works, but it seems
+        // more clear to setFormSchema first, since setForm's formDeclared depends on formSchema to
         // exist upon.
         setForm(fetchedForm)
       })
@@ -188,10 +188,10 @@ export default function FormEdit() {
         <EditTab
           form={form}
           formId={formId!} // regarding '!', formId is part of the URL via useParams
+          formSchema={formSchema}
           onBoundingBoxFocus={handleBoundingBoxFocus}
-          schemaJSON={schemaJSON}
           setForm={setForm}
-          setSchemaJSON={setSchemaJSON}
+          setFormSchema={setFormSchema}
           templates={templates}
           userTabOverrideKey={userPrefs.tab.overrideKey}
         />
