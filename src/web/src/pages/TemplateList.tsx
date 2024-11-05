@@ -73,6 +73,7 @@ export default function TemplateList() {
           <tr>
             <th className='p-2 text-sm uppercase'>Action</th>
             <th className='p-2 text-sm uppercase'>Name</th>
+            <th className='p-2 text-sm uppercase'>Fields</th>
             <th className='p-2 text-sm uppercase'>ID</th>
           </tr>
         </thead>
@@ -109,6 +110,7 @@ export default function TemplateList() {
                 </span>
               </td>
               <td className='p-3'>{template.name}</td>
+              <td className='p-3 text-center'>{template.schemaFieldCount}</td>
               <td className='p-3 text-center'>{template.id}</td>
             </tr>
           ))}

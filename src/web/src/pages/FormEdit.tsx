@@ -20,6 +20,7 @@ import type {
   TTemplate,
   TTemplateOption,
   TUserPrefs,
+  TSchemaField,
 } from '../types'
 
 type FormEditParams = {
@@ -31,7 +32,7 @@ export default function FormEdit() {
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
   const [form, setForm] = useState<TForm | null>(null)
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [schemaJSON, setSchemaJSON] = useState<TTemplate['schemaJSON'] | null>(null)
+  const [schemaJSON, setSchemaJSON] = useState<Record<string, TSchemaField>>({})
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
   const { userPrefs, setUserPrefs } = useGlobalState()
   const { formId } = useParams<FormEditParams>()

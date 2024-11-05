@@ -134,6 +134,7 @@ erDiagram
     UUID id PK "Primary Key"
     BOOLEAN isDeleted "For soft-delete"
     STRING name
+    INTEGER schemaFieldCount "Count of fields in schemaJSON, automatically maintained"
     JSONB schemaJSON "Contains the custom schema that each Template utilizes, adhered to by each Form"
   }
 

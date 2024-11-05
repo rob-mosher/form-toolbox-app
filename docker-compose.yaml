@@ -4,7 +4,6 @@ services:
       context: ./src/api
       args:
         NODE_VERSION: ${NODE_VERSION:-20.18.0}
-    command: npm run dev:docker
     depends_on:
       db:
         condition: service_healthy

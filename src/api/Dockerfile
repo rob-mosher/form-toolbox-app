@@ -16,4 +16,12 @@ RUN npm install
 
 COPY . .
 
+CMD /bin/sh -c '\
+    echo "Running migrations..." && \
+    npm run migrate && \
+    echo "Running seeds..." && \
+    npm run seed && \
+    echo "Starting application..." && \
+    npm run dev:docker'
+
 EXPOSE ${API_PORT}

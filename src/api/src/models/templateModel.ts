@@ -11,6 +11,7 @@ class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implem
   public id!: CreationOptional<TTemplate['id']>
   public isDeleted!: TTemplate['isDeleted']
   public name!: TTemplate['name']
+  public schemaFieldCount!: number
   public schemaJSON!: TTemplate['schemaJSON']
 }
 
@@ -29,6 +30,10 @@ const initTemplateModel = (sequelize: Sequelize) => {
       },
       name: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      schemaFieldCount: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       schemaJSON: {

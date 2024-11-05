@@ -17,7 +17,7 @@ type EditTabProps = {
     keyBoundingBox: TBoundingBox,
     valueBoundingBox: TBoundingBox,
   }) => void;
-  schemaJSON: TTemplate['schemaJSON'] | null;
+  schemaJSON: Record<string, TSchemaField>;
   // setForm accepts `null` to match the type from FormEdit where the form state starts as null
   // while data is being fetched. In this component, setForm is safely used with non-null
   // assertions because the logic to update the form is only executed once the form is loaded.
@@ -64,7 +64,7 @@ export default function EditTab({
     newSchemaJSON: TTemplate['schemaJSON'],
     formItems: TMappedFormItems,
   ) => {
-    const schemaJSONKeys = Object.keys(JSON.parse(newSchemaJSON))
+    const schemaJSONKeys = Object.keys(newSchemaJSON)
     const newFormDeclared = schemaJSONKeys.reduce((acc, key) => {
       if (key in formItems) {
         acc[key] = formItems[key]
@@ -178,7 +178,7 @@ export default function EditTab({
   )
 
   const formRows = schemaJSON ? (
-    Object.entries(JSON.parse(schemaJSON) as Record<string, TSchemaField>).map(([key, value]) => {
+    Object.entries(schemaJSON).map(([key, value]) => {
       const itemDeclared = form?.formDeclared?.[key]
       const itemDetected = form?.formDetected?.[key]
 

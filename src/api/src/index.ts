@@ -2,9 +2,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
 import listEndpoints from 'express-list-endpoints'
-import { sequelize } from './models'
 import apiRouter from './routes/api'
-import seedTemplates from './seeders/initTemplates'
 import { startPolling } from './services/aws/sqs/poller'
 
 dotenv.config({ path: '../../.env' })
@@ -57,23 +55,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 })
 
 if (NODE_ENV !== 'test') {
-  console.log('Syncronizing database schema:')
-  sequelize.sync()
-    .then(() => {
-      console.log('Successfully syncronized database schema.')
-      return seedTemplates() // Must complete before remaining logic can occur (see below)
-    })
-    .then(() => { // Allows seedTemplates() to complete before proceeding (see above)
-      app.listen(API_PORT, API_HOST, () => {
-        console.log(`Server listening on ${API_HOST}:${API_PORT}`)
-        startPolling()
-      })
-      console.log('API endpoints are:')
-      console.log(listEndpoints(app))
-    })
-    .catch(() => {
-      console.error('Error syncronizing database schema. API will not load as a result.')
-    })
+  app.listen(API_PORT, API_HOST, () => {
+    console.log(`Server listening on ${API_HOST}:${API_PORT}`)
+    startPolling()
+  })
+  console.log('API endpoints are:')
+  console.log(listEndpoints(app))
 }
 
 export default app

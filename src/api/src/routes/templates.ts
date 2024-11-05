@@ -8,7 +8,7 @@ templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
   try {
     const templates = await TemplateModel.findAll({
       where: { isDeleted: false },
-      attributes: ['id', 'name'],
+      attributes: ['id', 'name', 'schemaFieldCount'],
     })
     return res.json(templates)
   } catch (err) {
@@ -23,7 +23,7 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
 
   try {
     const template = await TemplateModel.findAll({
-      attributes: ['id', 'name', 'schemaJSON'],
+      attributes: ['id', 'name', 'schemaFieldCount', 'schemaJSON'],
       where: {
         id,
       },
