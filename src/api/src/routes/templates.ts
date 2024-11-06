@@ -26,7 +26,7 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
 
   try {
     const template = await TemplateModel.findOne({
-      attributes: ['id', 'formSchema', 'formSchemaCount', 'name'],
+      attributes: ['id', 'formSchema', 'formSchemaCount', 'formSchemaOrder', 'name'],
       where: {
         id,
         isDeleted: false,

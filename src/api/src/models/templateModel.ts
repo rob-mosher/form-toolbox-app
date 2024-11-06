@@ -12,6 +12,7 @@ class TemplateModel extends Model<TTemplate, TTemplateCreationAttributes> implem
   public isDeleted!: TTemplate['isDeleted']
   public formSchema!: TTemplate['formSchema']
   public formSchemaCount!: number
+  public formSchemaOrder!: string[]
   public name!: TTemplate['name']
 }
 
@@ -36,6 +37,11 @@ const initTemplateModel = (sequelize: Sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      formSchemaOrder: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+        defaultValue: [],
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -44,6 +50,17 @@ const initTemplateModel = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: 'Templates',
+      hooks: {
+        // TODO: Add additional validation.
+        beforeValidate: (template: TemplateModel) => {
+          // Ensure formSchemaOrder matches formSchema keys
+          const schemaKeys = Object.keys(template.formSchema)
+          if (!template.formSchemaOrder || template.formSchemaOrder.length !== schemaKeys.length) {
+            // eslint-disable-next-line no-param-reassign
+            template.formSchemaOrder = schemaKeys
+          }
+        },
+      },
     },
   )
 

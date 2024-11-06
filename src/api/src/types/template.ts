@@ -14,6 +14,7 @@ export interface TTemplate {
   // formSchema is stored as JSONB and automatically parsed by Sequelize
   formSchema: Record<string, TFormSchema>;
   formSchemaCount: number;
+  formSchemaOrder: string[];
   name: string;
 }
 

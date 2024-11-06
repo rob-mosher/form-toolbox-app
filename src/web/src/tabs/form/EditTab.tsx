@@ -1,6 +1,8 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import axios from 'axios'
-import { Dispatch, SetStateAction, useState } from 'react'
+import {
+  Dispatch, SetStateAction, useEffect, useState,
+} from 'react'
 import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
@@ -37,7 +39,27 @@ export default function EditTab({
   templates,
   userTabOverrideKey,
 }: EditTabProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<TForm['templateId']>(form?.templateId || '')
+  const [selectedTemplateId, setSelectedTemplate] = useState<TForm['templateId']>(form?.templateId || '')
+  const [currentTemplate, setCurrentTemplate] = useState<TTemplate | null>(null)
+
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      if (form?.templateId) {
+        try {
+          const response = await axios.get(
+            `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${form.templateId}`,
+          )
+          setCurrentTemplate(response.data)
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error fetching template:', err)
+          toast.error('Error fetching template data')
+        }
+      }
+    }
+
+    fetchTemplate()
+  }, [form?.templateId])
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const keyBoundingBox = {
@@ -79,16 +101,16 @@ export default function EditTab({
 
   const handleApply = async () => {
     // TODO: refactor to inline warning, ie non-toast.
-    if (!selectedTemplate || selectedTemplate.trim().length < 1) {
+    if (!selectedTemplateId || selectedTemplateId.trim().length < 1) {
       toast.warning('No template selected.')
       return
     }
 
     try {
       const setTemplateIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-      await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplate } })
+      await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplateId } })
 
-      const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
+      const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplateId}`
       const response = await axios.get(getTemplateDataUrl)
       const newFormSchema = response.data.formSchema
 
@@ -106,7 +128,7 @@ export default function EditTab({
         return {
           ...nonNullPrevForm,
           formDeclared: mappedFormDeclared as Record<string, TFormItem>,
-          templateId: selectedTemplate,
+          templateId: selectedTemplateId,
         }
       })
       // toast.success('Template updated successfully.')
@@ -163,7 +185,7 @@ export default function EditTab({
         className='mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
         id='template-select'
         onChange={handleChangeTemplate}
-        value={selectedTemplate}
+        value={selectedTemplateId}
       >
         <option value='' disabled>
           Select Template
@@ -177,8 +199,46 @@ export default function EditTab({
     </>
   )
 
-  const formRows = formSchema ? (
-    Object.entries(formSchema).map(([key, value]) => {
+  const renderOrderedFields = () => {
+    if (!currentTemplate) {
+      return <div>Loading template...</div>
+    }
+
+    const unorderedFields = new Set<string>()
+
+    const sortedKeys = Object.keys(formSchema)
+      .sort((a, b) => {
+        const orderA = currentTemplate.formSchemaOrder.indexOf(a)
+        const orderB = currentTemplate.formSchemaOrder.indexOf(b)
+
+        // Collect unordered fields
+        if (orderA === -1) unorderedFields.add(a)
+        if (orderB === -1) unorderedFields.add(b)
+
+        // If both are not in order, sort alphabetically
+        if (orderA === -1 && orderB === -1) {
+          return a.localeCompare(b)
+        }
+
+        // If only one is not in order, put it at the end
+        if (orderA === -1) return 1
+        if (orderB === -1) return -1
+
+        // Normal case: both are in order
+        return orderA - orderB
+      })
+
+    // Log unordered fields once
+    if (unorderedFields.size > 0) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Template ${currentTemplate.id} has form data not present in formSchemaOrder. Placing at end, not necessarily in this order:`,
+        Array.from(unorderedFields),
+      )
+    }
+
+    return sortedKeys.map((key) => {
+      const value = formSchema[key]
       const itemDeclared = form?.formDeclared?.[key]
       const itemDetected = form?.formDetected?.[key]
 
@@ -218,9 +278,11 @@ export default function EditTab({
         </div>
       )
     })
-  ) : (
-    <div>Please select and apply a template from above.</div>
-  )
+  }
+
+  const formRowsOrdered = formSchema && currentTemplate
+    ? renderOrderedFields()
+    : <div>Please select and apply a template from above.</div>
 
   return (
     <div data-tab='edit'>
@@ -243,7 +305,7 @@ export default function EditTab({
         </Divider>
 
         <div className='space-y-4'>
-          { formRows }
+          { formRowsOrdered }
         </div>
 
       </form>
