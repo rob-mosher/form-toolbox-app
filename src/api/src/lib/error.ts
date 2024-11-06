@@ -6,9 +6,13 @@ type ErrorInfo = {
 
 export const createError = (errorInfo: ErrorInfo) => {
   const { err, method, status = 500 } = errorInfo
+  const isErrorObject = typeof err === 'object'
+
   return {
-    log: `${method} error: ${typeof err === 'object' ? JSON.stringify(err) : err}`,
-    message: { err: `Error occurred in ${require.main!.filename}.${method}. Check server logs for more details.` },
+    log: `Error occurred in ${method}: ${isErrorObject ? JSON.stringify(err) : err}`,
+    message: {
+      error: isErrorObject ? 'An internal server error occurred' : err,
+    },
     status,
   }
 }
