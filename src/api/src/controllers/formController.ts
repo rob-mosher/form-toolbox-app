@@ -28,7 +28,7 @@ const getForm: RequestHandler = async (req, res, next) => {
     const form = await FormModel.findOne({
       where: {
         id,
-        ...(res.locals.allowDeleted ? {} : { isDeleted: false }),
+        ...(res.locals.showDeleted ? {} : { isDeleted: false }),
       },
     })
 
@@ -40,7 +40,7 @@ const getForm: RequestHandler = async (req, res, next) => {
       }))
     }
 
-    if (!res.locals.allowDeleted && form.isDeleted) {
+    if (!res.locals.showDeleted && form.isDeleted) {
       return next(createError({
         err: 'Form is marked as deleted',
         method: `${__filename}:getForm`,

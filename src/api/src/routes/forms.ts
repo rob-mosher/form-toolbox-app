@@ -135,8 +135,10 @@ formsRouter.get(
 
 formsRouter.delete(
   '/:id',
+  // showDeleted allows for idempotent deletion, since the fetching of already-deleted forms will
+  // return successfully.
   (req: Request, res: Response, next: NextFunction) => {
-    res.locals.allowDeleted = true
+    res.locals.showDeleted = true
     next()
   },
   formController.getForm,
