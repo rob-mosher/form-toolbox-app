@@ -142,7 +142,7 @@ export default function FormEdit() {
         if (fetchedForm.templateId) {
           try {
             const formSchemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
-            setFormSchema(formSchemaResponse.data[0].formSchema)
+            setFormSchema(formSchemaResponse.data.formSchema)
           } catch (error) {
             // eslint-disable-next-line no-console
             console.error('Error fetching formSchema:', error)

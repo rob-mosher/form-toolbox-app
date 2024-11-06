@@ -22,12 +22,22 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
   const { id } = req.params
 
   try {
-    const template = await TemplateModel.findAll({
+    const template = await TemplateModel.findOne({
       attributes: ['id', 'formSchema', 'formSchemaCount', 'name'],
       where: {
         id,
+        isDeleted: false,
       },
     })
+
+    if (!template) {
+      return next(createError({
+        err: 'Template not found',
+        method: `${__filename}:templateRouter.get /:id`,
+        status: 404,
+      }))
+    }
+
     return res.json(template)
   } catch (err) {
     console.error(err)

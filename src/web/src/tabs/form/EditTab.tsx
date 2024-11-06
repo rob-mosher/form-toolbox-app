@@ -90,7 +90,7 @@ export default function EditTab({
 
       const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplate}`
       const response = await axios.get(getTemplateDataUrl)
-      const newFormSchema = response.data[0].formSchema
+      const newFormSchema = response.data.formSchema
 
       setFormSchema(newFormSchema)
       setForm((prevForm): TForm => {

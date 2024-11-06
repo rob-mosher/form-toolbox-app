@@ -25,7 +25,12 @@ const getForm: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params
 
-    const form = await FormModel.findByPk(id)
+    const form = await FormModel.findOne({
+      where: {
+        id,
+        ...(res.locals.allowDeleted ? {} : { isDeleted: false }),
+      },
+    })
 
     if (!form) {
       return next(createError({
