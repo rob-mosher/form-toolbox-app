@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express'
+import { createError } from '../lib'
 import { FormModel, TemplateModel } from '../models'
 
 const templateRouter = express.Router()
@@ -12,9 +13,11 @@ templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
     })
     return res.json(templates)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ err: (err as Error).message })
-    return next(err) // TODO: see how this is handled in the other routes
+    return next(createError({
+      err: err as Error,
+      method: `${__filename}:templateRouter.get /`,
+      status: 500,
+    }))
   }
 })
 
@@ -40,9 +43,11 @@ templateRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
 
     return res.json(template)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ err: (err as Error).message })
-    return next(err) // TODO: see how this is handled in the other routes
+    return next(createError({
+      err: err as Error,
+      method: `${__filename}:templateRouter.get /:id`,
+      status: 500,
+    }))
   }
 })
 
