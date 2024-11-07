@@ -2,8 +2,8 @@ import { createContext, ReactNode } from 'react'
 import type { TUserPrefs } from '../../types'
 
 interface TGlobalStateContext {
-  isContentFullSize: boolean;
-  setIsContentFullSize: (value: boolean) => void;
+  isCanvasFullSize: boolean;
+  setIsCanvasFullSize: (value: boolean) => void;
 
   isFormListReloadNeeded: boolean;
   setIsFormListReloadNeeded: (value: boolean) => void;

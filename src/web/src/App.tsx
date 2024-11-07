@@ -10,7 +10,7 @@ import Modal from './modals/lib/Modal'
 export default function App() {
   const { isModalOpen, modalContent, hideModal } = useGlobalState()
 
-  const { isContentFullSize } = useGlobalState()
+  const { isCanvasFullSize } = useGlobalState()
 
   return (
     <div className='flex h-screen w-screen flex-col font-sans'>
@@ -18,7 +18,7 @@ export default function App() {
       <main
         className={mergeClassName(
           'relative mt-[60px] flex grow flex-col pt-4 px-6',
-          isContentFullSize && 'overflow-hidden px-0',
+          isCanvasFullSize && 'overflow-hidden px-0',
         )}
       >
         <Outlet />

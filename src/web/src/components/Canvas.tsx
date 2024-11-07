@@ -1,20 +1,20 @@
 import { BoundingBox as TBoundingBox } from '@aws-sdk/client-textract'
 import { useRef, useEffect } from 'react'
-import ContentToolbar from './ContentToolbar'
+import CanvasToolbar from './CanvasToolbar'
 import { userFormHighlightColors } from '../lib'
 import { TUserPrefs } from '../types'
 
-type ContentProps = {
+type CanvasProps = {
   imageUrls: string[];
   focusedBoundingBox?: TBoundingBox[];
   userFormHighlightKey: TUserPrefs['form']['highlightKey'];
 };
 
-export default function Content({
+export default function Canvas({
   imageUrls,
   focusedBoundingBox = [],
   userFormHighlightKey,
-}: ContentProps) {
+}: CanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const imageRef = useRef<HTMLImageElement | null>(null)
 
@@ -65,9 +65,9 @@ export default function Content({
 
   return (
     <div className='flex size-full flex-col items-center justify-start'>
-      {/* Below needed for 'sticky' to remain within ContentToolbar */}
+      {/* Below needed for 'sticky' to remain within CanvasToolbar */}
       <div className='flex w-full grow flex-col'>
-        <ContentToolbar />
+        <CanvasToolbar />
         {/* w-full _might_ be needed */}
         <div className='flex grow flex-col justify-center gap-12 border-r p-12'>
           {imageUrls.map((url, index) => {

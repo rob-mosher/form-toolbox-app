@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CogSixTooth, InformationCircle, PencilSquare } from '../assets'
-import Content from '../components/Content'
+import Canvas from '../components/Canvas'
 import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { useGlobalState } from '../context/useGlobalState'
@@ -40,7 +40,7 @@ export default function FormEdit() {
   const [templates, setTemplates] = useState<TTemplateOption[]>([])
   const { userPrefs, setUserPrefs } = useGlobalState()
   const { formId } = useParams<FormEditParams>()
-  const { setIsContentFullSize } = useGlobalState()
+  const { setIsCanvasFullSize } = useGlobalState()
   const navigate = useNavigate()
 
   const updateUserFormBgKey = useCallback(
@@ -89,12 +89,12 @@ export default function FormEdit() {
   )
 
   useEffect(() => {
-    // Enable full-size content mode when this component mounts
-    setIsContentFullSize(true)
+    // Enable full-size canvas mode when this component mounts
+    setIsCanvasFullSize(true)
 
-    // Disable full-size content mode when this component unmounts
-    return () => setIsContentFullSize(false)
-  }, [setIsContentFullSize])
+    // Disable full-size canvas mode when this component unmounts
+    return () => setIsCanvasFullSize(false)
+  }, [setIsCanvasFullSize])
 
   useEffect(() => {
     const formApiUrl = `${API_ENDPOINT}/api/forms/${formId}`
@@ -185,10 +185,10 @@ export default function FormEdit() {
     { id: 'settings', content: 'Settings', icon: <CogSixTooth /> },
   ]
 
-  let tabContent
+  let tabCanvas
   switch (activeTab) {
     case 'edit':
-      tabContent = (
+      tabCanvas = (
         <EditTab
           form={form}
           formId={formId!} // regarding '!', formId is part of the URL via useParams
@@ -202,11 +202,11 @@ export default function FormEdit() {
       )
       break
     case 'info':
-      tabContent = <InfoTab form={form} />
+      tabCanvas = <InfoTab form={form} />
       break
 
     case 'settings':
-      tabContent = (
+      tabCanvas = (
         <SettingsTab
           updateUserFormBgKey={updateUserFormBgKey}
           updateUserFormHighlightKey={updateUserFormHighlightKey}
@@ -221,7 +221,7 @@ export default function FormEdit() {
     default:
       // eslint-disable-next-line no-console
       console.warn(`Invalid tab '${activeTab}'`)
-      tabContent = (
+      tabCanvas = (
         <div className='text-center text-red-700'>
           Invalid tab
         </div>
@@ -236,7 +236,7 @@ export default function FormEdit() {
           userFormBgColors[userPrefs.form.bgKey].className,
         )}
         >
-          <Content
+          <Canvas
             focusedBoundingBox={focusedBoundingBox}
             imageUrls={imageUrls}
             userFormHighlightKey={userPrefs.form.highlightKey}
@@ -245,7 +245,7 @@ export default function FormEdit() {
         <div className='col-span-3 mr-3 overflow-x-hidden overflow-y-scroll'>
           <Tab tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
           <div className='border border-gray-300 p-3.5'>
-            {tabContent}
+            {tabCanvas}
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import {
   ChevronDown, Cursor, MagnifyingGlass, MagnifyingGlassMinus, MagnifyingGlassPlus,
 } from '../assets'
 
-export default function ContentToolbar() {
+export default function CanvasToolbar() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     // eslint-disable-next-line no-console
