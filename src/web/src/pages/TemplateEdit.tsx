@@ -15,7 +15,7 @@ import {
   userFormHighlightColors,
   userTabOverrideColors,
 } from '../lib'
-// import EditTab from '../tabs/form/EditTab'
+import EditTab from '../tabs/template/EditTab'
 import InfoTab from '../tabs/template/InfoTab'
 // import SettingsTab from '../tabs/form/SettingsTab'
 import type {
@@ -32,7 +32,7 @@ type TemplateEditParams = {
 }
 
 export default function TemplateEdit() {
-  const [activeTab, setActiveTab] = useState('info')
+  const [activeTab, setActiveTab] = useState('edit')
   const [focusedBoundingBox, setFocusedBoundingBox] = useState<TBoundingBox[]>([])
   const [template, setTemplate] = useState<TTemplate | null>(null)
   // const [formSchema, setFormSchema] = useState<Record<string, TFormSchema>>({})
@@ -187,20 +187,20 @@ export default function TemplateEdit() {
 
   let tabCanvas
   switch (activeTab) {
-    // case 'edit':
-    //   tabCanvas = (
-    //     <EditTab
-    //       form={form}
-    //       formId={formId!} // regarding '!', formId is part of the URL via useParams
-    //       formSchema={formSchema}
-    //       onBoundingBoxFocus={handleBoundingBoxFocus}
-    //       setForm={setForm}
-    //       setFormSchema={setFormSchema}
-    //       templates={templates}
-    //       userTabOverrideKey={userPrefs.tab.overrideKey}
-    //     />
-    //   )
-    //   break
+    case 'edit':
+      tabCanvas = (
+        <EditTab
+          template={template}
+          templateId={templateId!} // regarding '!', templateId is part of the URL via useParams
+          // formSchema={formSchema}
+          // onBoundingBoxFocus={handleBoundingBoxFocus}
+          // setForm={setForm}
+          // setFormSchema={setFormSchema}
+          // templates={templates}
+          // userTabOverrideKey={userPrefs.tab.overrideKey}
+        />
+      )
+      break
     case 'info':
       tabCanvas = <InfoTab template={template} />
       break
