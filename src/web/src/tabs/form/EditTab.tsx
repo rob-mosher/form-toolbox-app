@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
-import { mergeClassName, userTabOverrideColors } from '../../lib'
+import { API_ENDPOINT, mergeClassName, userTabOverrideColors } from '../../lib'
 import type {
   TForm, TFormItem, TFormSchema, TTemplate, TTemplateOption, TUserPrefs,
 } from '../../types'
@@ -47,7 +47,7 @@ export default function EditTab({
       if (form?.templateId) {
         try {
           const response = await axios.get(
-            `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${form.templateId}`,
+            `${API_ENDPOINT}/api/templates/${form.templateId}`,
           )
           setCurrentTemplate(response.data)
         } catch (err) {
@@ -107,10 +107,10 @@ export default function EditTab({
     }
 
     try {
-      const setTemplateIdUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+      const setTemplateIdUrl = `${API_ENDPOINT}/api/forms/${formId}`
       await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplateId } })
 
-      const getTemplateDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${selectedTemplateId}`
+      const getTemplateDataUrl = `${API_ENDPOINT}/api/templates/${selectedTemplateId}`
       const response = await axios.get(getTemplateDataUrl)
       const newFormSchema = response.data.formSchema
 
@@ -166,7 +166,7 @@ export default function EditTab({
 
   const handleSave = async () => {
     try {
-      const setFormDataUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+      const setFormDataUrl = `${API_ENDPOINT}/api/forms/${formId}`
       await axios.put(setFormDataUrl, { updates: { formDeclared: form.formDeclared } })
       toast.success('Form saved!')
     } catch (err) {

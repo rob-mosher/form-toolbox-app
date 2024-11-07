@@ -6,6 +6,7 @@ import { Eye, PencilSquare, Trash } from '../assets'
 import CommonButtons from '../components/CommonButtons'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context/useGlobalState'
+import { API_ENDPOINT } from '../lib'
 import ModalDeleteForm from '../modals/ModalDeleteForm'
 import type { TForm } from '../types'
 
@@ -22,10 +23,10 @@ export default function FormList() {
   } = useGlobalState()
   const navigate = useNavigate()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
+  const apiUrl = `${API_ENDPOINT}/api/forms`
 
   const loadForms = useCallback(() => {
-    axios.get(url)
+    axios.get(apiUrl)
       .then((resp) => {
         setForms(resp.data)
       })
@@ -36,7 +37,7 @@ export default function FormList() {
         // eslint-disable-next-line no-console
         console.error('Unable to load forms:', error)
       })
-  }, [url])
+  }, [apiUrl])
 
   const handleDelete = (formId: TForm['id'] | null) => {
     if (formId === null) {
@@ -45,7 +46,7 @@ export default function FormList() {
       return
     }
 
-    axios.delete(`${url}/${formId}`)
+    axios.delete(`${apiUrl}/${formId}`)
       .then(() => {
         toast.success('Form deleted successfully')
         hideModal()

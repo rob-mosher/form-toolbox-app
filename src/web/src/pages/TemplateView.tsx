@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Heading from '../components/Heading'
 import TemplateDetails from '../components/TemplateDetails'
+import { API_ENDPOINT } from '../lib'
 import type { TTemplate } from '../types'
 
 type TemplateViewParams = {
@@ -15,10 +16,10 @@ export default function TemplateView() {
 
   const { templateId } = useParams<TemplateViewParams>()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${templateId}`
+  const apiUrl = `${API_ENDPOINT}/api/templates/${templateId}`
 
   useEffect(() => {
-    axios.get<TTemplate>(url)
+    axios.get<TTemplate>(apiUrl)
       .then((resp) => {
         setTemplate(resp.data)
       })
@@ -29,7 +30,7 @@ export default function TemplateView() {
         // eslint-disable-next-line no-console
         console.error('Unable to load template:', error)
       })
-  }, [url])
+  }, [apiUrl])
 
   if (!template) {
     return <Heading as='h2'>Template Details Loading...</Heading>

@@ -9,7 +9,11 @@ import Heading from '../components/Heading'
 import Tab from '../components/Tab'
 import { useGlobalState } from '../context/useGlobalState'
 import {
-  mergeClassName, userFormBgColors, userFormHighlightColors, userTabOverrideColors,
+  API_ENDPOINT,
+  mergeClassName,
+  userFormBgColors,
+  userFormHighlightColors,
+  userTabOverrideColors,
 } from '../lib'
 import EditTab from '../tabs/form/EditTab'
 import InfoTab from '../tabs/form/InfoTab'
@@ -93,9 +97,9 @@ export default function FormEdit() {
   }, [setIsContentFullSize])
 
   useEffect(() => {
-    const formApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
-    const templateApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/`
-    const imageApiUrl = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}/image-urls`
+    const formApiUrl = `${API_ENDPOINT}/api/forms/${formId}`
+    const templateApiUrl = `${API_ENDPOINT}/api/templates/`
+    const imageApiUrl = `${API_ENDPOINT}/api/forms/${formId}/image-urls`
 
     // Get templates
     axios.get<TTemplate[]>(templateApiUrl)
@@ -141,7 +145,7 @@ export default function FormEdit() {
         // If templateId is set, set the formSchema
         if (fetchedForm.templateId) {
           try {
-            const formSchemaResponse = await axios.get(`//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates/${fetchedForm.templateId}`)
+            const formSchemaResponse = await axios.get(`${API_ENDPOINT}/api/templates/${fetchedForm.templateId}`)
             setFormSchema(formSchemaResponse.data.formSchema)
           } catch (error) {
             // eslint-disable-next-line no-console

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { Eye, PencilSquare, Trash } from '../assets'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context'
+import { API_ENDPOINT } from '../lib'
 import ModalDeleteTemplate from '../modals/ModalDeleteTemplate'
 import type { TTemplate } from '../types'
 
@@ -13,10 +14,10 @@ export default function TemplateList() {
   const { hideModal, showModal } = useGlobalState()
   const navigate = useNavigate()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates`
+  const apiUrl = `${API_ENDPOINT}/api/templates`
 
   const loadTemplates = useCallback(() => {
-    axios.get(url)
+    axios.get(apiUrl)
       .then((resp) => {
         setTemplates(resp.data)
       })
@@ -27,7 +28,7 @@ export default function TemplateList() {
         // eslint-disable-next-line no-console
         console.error('Unable to load templates:', error)
       })
-  }, [url])
+  }, [apiUrl])
 
   const handleDelete = (templateId: TTemplate['id'] | null) => {
     if (templateId === null) {
@@ -36,7 +37,7 @@ export default function TemplateList() {
       return
     }
 
-    axios.delete(`${url}/${templateId}`)
+    axios.delete(`${apiUrl}/${templateId}`)
       .then(() => {
         toast.success('Template deleted successfully')
         hideModal()

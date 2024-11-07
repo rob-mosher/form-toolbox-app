@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import FormDetails from '../components/FormDetails'
 import Heading from '../components/Heading'
+import { API_ENDPOINT } from '../lib'
 import type { TForm } from '../types'
 
 type FormViewParams = {
@@ -15,10 +16,10 @@ export default function FormView() {
 
   const { formId } = useParams<FormViewParams>()
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/${formId}`
+  const apiUrl = `${API_ENDPOINT}/api/forms/${formId}`
 
   useEffect(() => {
-    axios.get<TForm>(url)
+    axios.get<TForm>(apiUrl)
       .then((resp) => {
         setForm(resp.data)
       })
@@ -29,7 +30,7 @@ export default function FormView() {
         // eslint-disable-next-line no-console
         console.error('Unable to load form:', error)
       })
-  }, [url])
+  }, [apiUrl])
 
   if (!form) {
     return <Heading as='h2'>Form Details Loading...</Heading>

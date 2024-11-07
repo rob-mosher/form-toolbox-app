@@ -6,6 +6,7 @@ import { toast, Id as ToastId } from 'react-toastify'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
 import { useGlobalState } from '../context'
+import { API_ENDPOINT } from '../lib'
 
 type ModalDeleteFormProps = {
   hideModal: () => void,
@@ -23,7 +24,7 @@ export default function ModalUploadForm({
 
   // setAcceptedMimeTypes
   useEffect(() => {
-    const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms/accepted-mime-types`
+    const url = `${API_ENDPOINT}/api/forms/accepted-mime-types`
     axios.get<string[]>(url)
       .then((resp) => {
         setAcceptedMimeTypes(resp.data)
@@ -52,7 +53,7 @@ export default function ModalUploadForm({
     // eslint-disable-next-line no-use-before-define
     validateFilePromise(filePointer)
       .then((formData) => {
-        const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/forms`
+        const url = `${API_ENDPOINT}/api/forms`
 
         return axios.request(
           {

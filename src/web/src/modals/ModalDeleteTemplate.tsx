@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { XMark } from '../assets'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
+import { API_ENDPOINT } from '../lib'
 import type { TTemplate } from '../types'
 
 type ModalDeleteTemplateProps = {
@@ -23,12 +24,12 @@ export default function ModalDeleteTemplate({
     </p>
   ))
 
-  const url = `//${import.meta.env.VITE_API_HOST || '127.0.0.1'}:${import.meta.env.VITE_API_PORT || 3000}/api/templates`
+  const apiUrl = `${API_ENDPOINT}/api/templates`
 
   useEffect(() => {
     const checkIfCanDelete = async () => {
       try {
-        const response = await axios.get(`${url}/${templateId}/can-delete`)
+        const response = await axios.get(`${apiUrl}/${templateId}/can-delete`)
         setCanDeleteTemplate(response.data.canDelete)
       } catch (error) {
         // eslint-disable-next-line no-console
