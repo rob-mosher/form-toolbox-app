@@ -7,7 +7,9 @@ import { toast } from 'react-toastify'
 import Button from '../../components/Button'
 import Divider from '../../components/Divider'
 import Heading from '../../components/Heading'
-import { API_ENDPOINT, mergeClassName, userTabOverrideColors } from '../../lib'
+import {
+  API_ENDPOINT, mergeClassName, userTabOverrideColors, sortFormSchemaKeysByOrder,
+} from '../../lib'
 import type {
   TForm, TFormItem, TFormSchema, TTemplate, TTemplateOption, TUserPrefs,
 } from '../../types'
@@ -204,40 +206,10 @@ export default function EditTab({
       return <div>Loading template...</div>
     }
 
-    const unorderedFields = new Set<string>()
+    const { formSchemaOrder } = currentTemplate
+    const sortedFormSchemaKeys = sortFormSchemaKeysByOrder(formSchema, formSchemaOrder)
 
-    const sortedKeys = Object.keys(formSchema)
-      .sort((a, b) => {
-        const orderA = currentTemplate.formSchemaOrder.indexOf(a)
-        const orderB = currentTemplate.formSchemaOrder.indexOf(b)
-
-        // Collect unordered fields
-        if (orderA === -1) unorderedFields.add(a)
-        if (orderB === -1) unorderedFields.add(b)
-
-        // If both are not in order, sort alphabetically
-        if (orderA === -1 && orderB === -1) {
-          return a.localeCompare(b)
-        }
-
-        // If only one is not in order, put it at the end
-        if (orderA === -1) return 1
-        if (orderB === -1) return -1
-
-        // Normal case: both are in order
-        return orderA - orderB
-      })
-
-    // Log unordered fields once
-    if (unorderedFields.size > 0) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `Template ${currentTemplate.id} has form data not present in formSchemaOrder. Placing at end, not necessarily in this order:`,
-        Array.from(unorderedFields),
-      )
-    }
-
-    return sortedKeys.map((key) => {
+    return sortedFormSchemaKeys.map((key) => {
       const value = formSchema[key]
       const itemDeclared = form?.formDeclared?.[key]
       const itemDetected = form?.formDetected?.[key]
