@@ -110,7 +110,7 @@ export default function EditTab({
 
     try {
       const setTemplateIdUrl = `${API_ENDPOINT}/api/forms/${formId}`
-      await axios.put(setTemplateIdUrl, { updates: { templateId: selectedTemplateId } })
+      await axios.patch(setTemplateIdUrl, { updates: { templateId: selectedTemplateId } })
 
       const getTemplateDataUrl = `${API_ENDPOINT}/api/templates/${selectedTemplateId}`
       const response = await axios.get(getTemplateDataUrl)
@@ -169,7 +169,7 @@ export default function EditTab({
   const handleSave = async () => {
     try {
       const setFormDataUrl = `${API_ENDPOINT}/api/forms/${formId}`
-      await axios.put(setFormDataUrl, { updates: { formDeclared: form.formDeclared } })
+      await axios.patch(setFormDataUrl, { updates: { formDeclared: form.formDeclared } })
       toast.success('Form saved!')
     } catch (err) {
       // eslint-disable-next-line no-console

@@ -147,7 +147,7 @@ formsRouter.delete(
     try {
       if (res.locals.form.isDeleted) {
         console.log('formsRouter.delete: Form was previously marked as deleted, but returning successfully to preserve idempotency')
-        return res.sendStatus(200)
+        return res.sendStatus(200) // TODO: Consider changing to 204
       }
 
       res.locals.form.formDeclared = null
@@ -182,12 +182,13 @@ formsRouter.get(
   },
 )
 
-formsRouter.put(
+formsRouter.patch(
   '/:id',
   formController.getForm,
 
   async (req: Request, res: Response, next: NextFunction) => {
     const { updates } = req.body
+    // TODO: Move control logic to formController?
     const allowedUpdates = new Set([
       'formDeclared',
       'templateId',
@@ -217,16 +218,16 @@ formsRouter.put(
       }
 
       if (!res.locals.form.changed()) {
-        console.log('formsRouter.put: No valid data needed to be changed, but returning successfully to preserve idempotency')
-        return res.sendStatus(201)
+        console.log('formsRouter.patch: No valid data needed to be changed, but returning successfully to preserve idempotency')
+        return res.sendStatus(200) // TODO: Consider changing to 204
       }
 
       await res.locals.form.save()
-      return res.sendStatus(201)
+      return res.sendStatus(200)
     } catch (err) {
       return next(createError({
         err: `Error updating form: ${(err as Error).message}`,
-        method: `${__filename}:formsRouter.put /:id`,
+        method: `${__filename}:formsRouter.patch /:id`,
         status: 400,
       }))
     }
