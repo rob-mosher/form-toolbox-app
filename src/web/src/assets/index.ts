@@ -1,3 +1,4 @@
+export * from './Bars2'
 export * from './ChevronDown'
 export * from './CogSixTooth'
 export * from './Cursor'

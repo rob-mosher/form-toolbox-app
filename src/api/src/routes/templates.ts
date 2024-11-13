@@ -1,10 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express'
+import templateController from '../controllers/templateController'
 import { createError } from '../lib'
 import { FormModel, TemplateModel } from '../models'
 
 const templateRouter = express.Router()
 
-// For efficiency, only include the id and name when providing all template.
+// For efficiency, only include the id, name, and formSchemaCount when retreiving multiple templates
 templateRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const templates = await TemplateModel.findAll({
@@ -79,6 +80,12 @@ templateRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
     return next(error)
   }
 })
+
+templateRouter.patch(
+  '/:id',
+  templateController.getTemplate,
+  templateController.updateTemplate,
+)
 
 templateRouter.get('/:id/can-delete', async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params
